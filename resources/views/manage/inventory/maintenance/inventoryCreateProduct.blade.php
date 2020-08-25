@@ -115,8 +115,8 @@
                                         <label> Supplier </label> <span class="text-red">*</span>
                                         <select class="form-control" name="item_supplier" required>
                                             <option value="">-- Select Supplier --</option>
-                                            @foreach($supplier_data as $warehouse)
-                                            <option value="{{ $warehouse->warehouse_id }}">{{ $warehouse->warehouse_code }} - {{ $warehouse->warehouse_description }}</option>
+                                            @foreach($supplier_data as $supplier)
+                                            <option value="{{ $supplier->supplier_id }}">{{ $supplier->supplier_code }} - {{ $supplier->supplier_description }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -147,9 +147,9 @@
                     <h3 class="box-title"><i class="fa fa-list"></i> Sales </h3>
                 </div>
                 <div class="box-body">
-                    <div class="row">
+                    <div class="row pro-pt-3">
                         <div class="col-md-12">
-                            <div class="row pro-pb-3 pro-pt-3">
+                            <div class="row pro-pb-2 hide" id="variation-1-display">
                                 <div class="col-md-8 col-md-offset-2">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
@@ -159,7 +159,7 @@
                                             <div class="form-group">
                                                 <label>Description <span class="text-red">*</span></label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" name="variant_name_1" autocomplete="variant-name" required>
+                                                    <input type="text" class="form-control" name="variant_name_1" id="variant_name_1" autocomplete="variant-name" placeholder="Colors, Sizes, Dimensions, Flavors, etc.">
                                                     <span class="input-group-btn">
                                                         <button type="button" class="btn btn-info btn-flat btn-append-option" data-variant="1" data-target="#append-variation-1"><i class="fa fa-plus"></i></button>
                                                     </span>
@@ -198,15 +198,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row pro-pb-3" id="variation-2-display"></div>
-                            <div class="row pro-pb-3" id="variation-button">
+                            <div class="row pro-pb-2" id="variation-2-display"></div>
+                            <div class="row pro-pb-2 hide" id="variation-button">
                                 <div class="col-md-8 col-md-offset-2">
                                     <div class="panel panel-default pro-p-2">
-                                        <button type="button" class="btn btn-info btn-block" id="add-variation-button"><i class="fa fa-plus"></i> ADD VARIATION </button>
+                                        <button type="button" class="btn btn-info btn-block" id="add-variation-button"><i class="fa fa-plus"></i> Add Variation </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row pro-pb-5">
+                            <div class="row pro-pb-2">
                                 <div class="col-md-8 col-md-offset-2">
                                     <div class="panel panel-default pro-p-2">
                                         <table class="table table-bordered table-condensed">
@@ -216,10 +216,13 @@
                                                         Purchase Price
                                                     </th>
                                                     <th class="text-center">
-                                                        Total Price
+                                                        Selling Price
                                                     </th>
                                                     <th class="text-center">
-                                                        Total Quantity
+                                                        Quantity
+                                                    </th>
+                                                    <th class="text-center">
+                                                        Unit Cost
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -229,14 +232,24 @@
                                                         <input type="text" class="form-control text-center input-currency" id="total_purchase" name="total_purchase" value="0.00">
                                                     </td>
                                                     <td class="no-padding">
-                                                        <input type="text" class="form-control text-center input-currency" id="total_sales" name="total_sales" value="0.00" readonly>
+                                                        <input type="text" class="form-control text-center input-currency" id="total_sales" name="total_sales" value="0.00">
                                                     </td>
                                                     <td class="no-padding">
-                                                        <input type="text" class="form-control text-center input-number" id="total_quantity" name="total_quantity" value="0" readonly>
+                                                        <input type="text" class="form-control text-center input-number" id="total_quantity" name="total_quantity" value="0">
+                                                    </td>
+                                                    <td class="no-padding">
+                                                        <input type="text" class="form-control text-center input-number" id="total_unit_cost" name="total_unit_cost" value="0.00" readonly>
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pro-pb-2">
+                                <div class="col-md-8 col-md-offset-2">
+                                    <div class="panel panel-default pro-p-2">
+                                        <button type="button" class="btn btn-info btn-block" id="enable-variation-button"> Enable Variation </button>
                                     </div>
                                 </div>
                             </div>
@@ -322,8 +335,6 @@
         </div>
     </div>
 
-    
-
     <div class="row">
         <div class="col-md-12">
             <div class="box box-solid">
@@ -371,7 +382,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-solid">
-                <div class="box-header with-border text-right">
+                <div class="box-tools text-right pro-pb-2 pro-pt-2 pro-pr-2">
                     <button type="submit" class="btn btn-flat btn-default" value="drafts"><i class="fa fa-download"></i> Save to Drafts </button>
                     <button type="submit" class="btn btn-flat btn-primary" value="pending"><i class="fa fa-check"></i> Submit for Approval </button>
                 </div>
@@ -430,6 +441,7 @@
         $('#total_sales').val(parseFloat(total_quantity).toFixed(2));
 
         formatCurrency($('#total_sales'));
+        computeUnitCost();
     }
 
     function computeTotalQuantity()
@@ -445,6 +457,7 @@
         $('#total_quantity').val(parseInt(totalQuantity));
 
         computeTotalPrice();
+        computeUnitCost();
     }
 
     var countStart = 1;
@@ -512,9 +525,39 @@
 
         $('#append-product-image').append(tableRow);
     }
+
+    function computeUnitCost()
+    {
+        var totalSales = parseFloat($('#total_sales').val().replace(/,/g,''));
+        var totalQuantity = parseFloat($('#total_quantity').val().replace(/,/g,''));
+        $('#total_unit_cost').val((totalSales * totalQuantity).toFixed(2));
+        formatCurrency($('#total_unit_cost'));
+    }
     
     $(function(){
 
+        $('#total_sales').on('input', function(){
+            computeUnitCost();
+        });
+
+        $('#total_quantity').on('input', function(){
+            computeUnitCost();
+        });
+
+        $('#enable-variation-button').on('click', function(){
+            /* Variant 1 Display Show */
+            $('#variation-1-display').removeClass('hide');
+            /* Set Variant 1 as Reuired Field */
+            $('#variant_name_1').attr('required',true)
+            /* Button for Variant to Display Show */
+            $('#variation-button').removeClass('hide');
+            /* Validate Ipputs*/
+            $('#total_purchase').val('0.00');
+            $('#total_sales').val('0.00').attr('readonly', true);
+            $('#total_quantity').val(0).attr('readonly', true);
+            $(this).closest('.row').addClass('hide');
+        });
+       
         $('.close-modal-add-group').on('click', function(){
             var productGroup = $('#selected_group').val();
             if($.trim(productGroup).length == 0) {

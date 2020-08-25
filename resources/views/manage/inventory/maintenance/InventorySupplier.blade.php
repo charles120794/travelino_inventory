@@ -10,23 +10,220 @@
 
     @include('layouts.alerts.errors.alerts')
 
+    <div class="box box-solid">
+        <div class="box-header">
+            <h3 class="box-title pull-left">
+                <span class="fa fa-angle-double-right fa-fw"></span><b>{{ strtoupper($windowName) }}</b>  
+            </h3>
+        </div>
+    </div>
+
+    <div class="box box-solid">
+        <div class="box-body">
+            <form class="form-horizontal" action="" method="get" id="form-search">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" name="search" autocomplete="search-supplier" placeholder="Search Supplier" value="{{ request()->get('search') }}">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="box-footer text-right">
+            <button type="button" class="btn btn-warning btn-flat" onclick="$('#form-search').submit()"><i class="fa fa-search"></i> Search </button>
+            <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#modaladdsupplier"><i class="fa fa-plus"></i> Create </button>
+        </div>
+    </div>
+
     <div class="box box-primary">
-        <div class="box-body" style="min-height: 75vh;">
-            <div class="panel panel-default">
-                <div class="panel-heading clearfix bg-white">
-                    <h3 class="panel-title pull-left">
-                        <span class="fa fa-angle-double-right fa-fw"></span><b>{{ strtoupper($windowName) }}</b>  
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    
-                </div>
-            </div>
+        <div class="box-body no-padding">
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="bg-gray-light" style="height: 50px;">
+                        <th class="text-center" style="vertical-align: middle;">Code</th>
+                        <th class="text-center" style="vertical-align: middle;">Description</th>
+                        <th class="text-center" style="vertical-align: middle;">Mobile / Phone No.</th>
+                        <th class="text-center" style="vertical-align: middle;">Contact Position</th>
+                        <th class="text-center" style="vertical-align: middle;">E-mail</th>
+                        <th class="text-center" style="vertical-align: middle;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($supplier as $key => $value)
+                    <tr>
+                        <td style="vertical-align: middle;">{{ $value->supplier_code }}</td>
+                        <td style="vertical-align: middle;">{{ $value->supplier_description }}</td>
+                        <td style="vertical-align: middle;">{{ $value->supplierContact['contact_number'] }}</td>
+                        <td style="vertical-align: middle;">{{ $value->supplierContact['contact_position'] }}</td>
+                        <td style="vertical-align: middle;">{{ $value->supplierContact['contact_email'] }}</td>
+                        <td class="text-center">
+                            <button class="btn btn-primary btn-flat"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td class="text-center" colspan="6"> No result's found </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 
 </section>
 
+@include('manage.inventory.maintenance.modal.modaladdsupplier')
+
 @include('manage.system.accounts.scripts.UsersDashboardScript')
+
+@push('scripts')
+
+<script type="text/javascript">
+
+    $(function(){
+
+        $('#search-currency').on('input', function(){
+            var inputSearch = $.trim($(this).val().toUpperCase().replace(/ /g,''));
+            var selectedCurrency = $('.selected-currency').length;
+            var displayNovalue = [];
+            $('.selected-currency').each(function(){
+                var searchString = $.trim($(this).text().toUpperCase().replace(/ /g,''));
+                if(searchString.search(inputSearch) >= 0) {
+                    $(this).removeClass('hide');
+                } else {
+                    $(this).addClass('hide');
+                    displayNovalue.push(1);
+                }
+            });
+            if(displayNovalue.length === selectedCurrency) {
+                $('.no-selected-currency').removeClass('hide');
+            }
+        });
+
+        $('#search-contact').on('input', function(){
+            var inputSearch = $.trim($(this).val().toUpperCase().replace(/ /g,''));
+            var selectedContact = $('.selected-contact').length;
+            var displayNovalue = [];
+            $('.selected-contact').each(function(){
+                var searchString = $.trim($(this).text().toUpperCase().replace(/ /g,''));
+                if(searchString.search(inputSearch) >= 0) {
+                    $(this).removeClass('hide');
+                } else {
+                    $(this).addClass('hide');
+                    displayNovalue.push(1);
+                }
+            });
+            if(displayNovalue.length === selectedContact) {
+                $('.no-selected-contact').removeClass('hide');
+            }
+        });
+
+        $('#search-address').on('input', function(){
+            var inputSearch = $.trim($(this).val().toUpperCase().replace(/ /g,''));
+            var selectedAddress = $('.selected-address').length;
+            var displayNovalue = [];
+            $('.selected-address').each(function(){
+                var searchString = $.trim($(this).text().toUpperCase().replace(/ /g,''));
+                if(searchString.search(inputSearch) >= 0) {
+                    $(this).removeClass('hide');
+                } else {
+                    $(this).addClass('hide');
+                    displayNovalue.push(1);
+                }
+            });
+            if(displayNovalue.length === selectedAddress) {
+                $('.no-selected-address').removeClass('hide');
+            }
+        });
+
+        
+
+
+        $('.selected-currency').on('click', function(event){
+
+            var objectData = $(this).data('object');
+            
+            if(Object.keys(objectData).length > 0) {
+                $('#currency_id').val(objectData['currency_id']);
+                $('#currency_name').val(objectData['currency_description']).attr('readonly', true);
+            } else {
+                $('#currency_id').val("");
+                $('#currency_name').val("").attr('readonly', true);
+            }
+           
+            event.preventDefault();
+
+        });
+
+        $('.selected-contact').on('click', function(event){
+
+            var objectData = $(this).data('object');
+            
+            if(Object.keys(objectData).length > 0) {
+                $('#contact_id').val(objectData['contact_id']);
+                $('#contact_person').val(objectData['contact_description']).attr('readonly', true);
+                $('#position').val(objectData['contact_position']).attr('readonly', true);
+                $('#number').val(objectData['contact_number']).attr('readonly', true);
+                $('#email').val(objectData['contact_email']).attr('readonly', true);
+            } else {
+                $('#contact_id').val("");
+                $('#contact_person').val("").attr('readonly', false);
+                $('#position').val("").attr('readonly', false);
+                $('#number').val("").attr('readonly', false);
+                $('#email').val("").attr('readonly', false);
+            }
+           
+            event.preventDefault();
+
+        });
+
+        $('.selected-address').on('click', function(event){
+
+            var objectData = $(this).data('object');
+
+            if(Object.keys(objectData).length > 0) {
+                $('#address_id').val(objectData['address_id']);
+                $('#building_no').val(objectData['address_number']).attr('readonly', true);
+                $('#street').val(objectData['address_street']).attr('readonly', true);
+                $('#barangay').val(objectData['address_barangay']).attr('readonly', true);
+                $('#city').val(objectData['address_city']).attr('readonly', true);
+                $('#zip').val(objectData['address_zip']).attr('readonly', true);
+            } else {
+                $('#address_id').val("");
+                $('#building_no').val("").attr('readonly', false);
+                $('#street').val("").attr('readonly', false);
+                $('#barangay').val("").attr('readonly', false);
+                $('#city').val("").attr('readonly', false);
+                $('#zip').val("").attr('readonly', false);
+            }
+           
+            event.preventDefault();
+
+        });
+        
+        var countStart = 1;
+
+        $(document).on('click','.add-group-option',function(){
+            
+            var count = countStart++; 
+
+            var uniqid = Math.round(Math.random()*100000000000000);
+
+            var input1 = $('<label>Code</label> <span class="text-red">*</span>');
+            var input2 = $('<input type="text" class="form-control" name="option[' + count + '][code]" autocomplete="unit-code" maxlength="50" value="' + uniqid + '" required>');
+            var input3 = $('<label>Description</label> <span class="text-red">*</span>');
+            var input4 = $('<input type="text" class="form-control" name="option[' + count + '][description]" autocomplete="unit-description" maxlength="100" required>');
+            var html1 = $('<div></div>').attr('class','form-group').append(input1,input2);
+            var html2 = $('<div></div>').attr('class','form-group').append(input3,input4,'<hr>');
+
+            $('#groupoptions').append(html1,html2);
+
+        });
+
+    });
+
+</script>
+
+@endpush
 
 @endsection

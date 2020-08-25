@@ -10,7 +10,7 @@ trait InventoryVariationTrait
 {
 	public function inventory_create_variant($method, $id, $request)
 	{
-		if($request->has('variant_name_1')) {
+		if(!is_null($request->input('variant_name_1'))) {
 
 			$itemVariant = new InventoryTableVariant;
 
@@ -40,7 +40,7 @@ trait InventoryVariationTrait
 			}
 		}
 
-		if($request->has('variant_name_2')) {
+		if(!is_null($request->input('variant_name_2'))) {
 
 			$itemVariant = new InventoryTableVariant;
 

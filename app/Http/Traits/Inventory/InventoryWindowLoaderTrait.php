@@ -101,6 +101,15 @@ trait InventoryWindowLoaderTrait
 
 	public function inventory_supplier($window)
 	{
-		return $this->myViewLoader($window);
+		$address  = $this->address_data();
+		$contact  = $this->contact_data();
+		$supplier = $this->supplier_data();
+		$currency = $this->currency_data();
+
+		return $this->myViewLoader($window)
+					->with('address',$address)
+					->with('contact',$contact)
+					->with('currency',$currency)
+					->with('supplier',$supplier);
 	}
 }

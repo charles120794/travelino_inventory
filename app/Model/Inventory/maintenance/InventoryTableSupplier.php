@@ -14,4 +14,9 @@ class InventoryTableSupplier extends Model
 
 	public $timestamps = false;
 
+	public function supplierContact()
+	{
+		return $this->hasOne(new InventoryTableContact,'contact_id','supplier_contact');
+	}
+
 }

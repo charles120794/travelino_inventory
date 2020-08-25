@@ -87,15 +87,17 @@ function formatCurrency(input, blur) {
   	var input_val = input.val();
 
   	// don't validate empty input
-  	if($.trim(input_val) === ""){ 
+  	if($.trim(input_val) === "" || $.trim(input_val).match(/\./g) >= 0){
   		return input.val('0.00');
   	}
-  
+    
   	// original length
   	var original_len = input_val.length;
 
   	// initial caret position 
   	var caret_pos = input.prop("selectionStart");
+
+    // console.log(input_val.match(/\./g));
 
   	if (input_val.match(/\./g).length > 1) {
   		var caret_dot_pos = 1;
@@ -149,8 +151,8 @@ function formatCurrency(input, blur) {
     	}
   	}
 
-		// send updated string to input
-		input.val(input_val);
+	// send updated string to input
+	input.val(input_val);
   	// put caret back in the right position
   	var updated_len = input_val.length;
 

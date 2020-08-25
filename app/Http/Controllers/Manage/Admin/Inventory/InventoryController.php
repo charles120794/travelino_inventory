@@ -22,6 +22,7 @@ class InventoryController extends Controller
 	use \App\Http\Traits\Inventory\Maintenance\InventoryActiveGroupTrait;
 	use \App\Http\Traits\Inventory\Maintenance\InventoryAddressTrait;
 	use \App\Http\Traits\Inventory\Maintenance\InventoryContactTrait;
+	use \App\Http\Traits\Inventory\Maintenance\InventoryCurrencyTrait;
 	use \App\Http\Traits\Inventory\Maintenance\InventoryDepartmentTrait;
 	use \App\Http\Traits\Inventory\Maintenance\InventoryItemTrait;
 	use \App\Http\Traits\Inventory\Maintenance\InventoryItemGroupTrait;
