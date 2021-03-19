@@ -40,10 +40,11 @@
                 <thead>
                     <tr class="bg-gray-light" style="height: 50px;">
                         <th class="text-center" style="vertical-align: middle;">Code</th>
-                        <th class="text-center" style="vertical-align: middle;">Description</th>
-                        <th class="text-center" style="vertical-align: middle;">Mobile / Phone No.</th>
-                        <th class="text-center" style="vertical-align: middle;">Contact Position</th>
+                        <th class="text-center" style="vertical-align: middle;">Name</th>
+                        <th class="text-center" style="vertical-align: middle;">Contact</th>
+                        <th class="text-center" style="vertical-align: middle;">Position</th>
                         <th class="text-center" style="vertical-align: middle;">E-mail</th>
+                        <th class="text-center" style="vertical-align: middle;">Address</th>
                         <th class="text-center" style="vertical-align: middle;">Action</th>
                     </tr>
                 </thead>
@@ -55,9 +56,12 @@
                         <td style="vertical-align: middle;">{{ $value->contact_number }}</td>
                         <td style="vertical-align: middle;">{{ $value->contact_position }}</td>
                         <td style="vertical-align: middle;">{{ $value->contact_email }}</td>
-                        <td class="text-center">
-                            <button class="btn btn-primary btn-flat"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                        <td style="vertical-align: middle;" class="text-center">
+                            <button class="btn btn-info btn-flat modal-show-address" data-address="{{ $value->contactAddress }}"><i class="fa fa-eye"></i></button>
+                        </td>
+                        <td style="vertical-align: middle;" class="text-center">
+                            <button type="button" class="btn btn-primary btn-flat modal-edit-contact" data-id="{{ $value->contact_id }}"><i class="fa fa-edit"></i></button>
+                            <a href="{{ route('inventory.route',['path' => $path, 'action' => 'delete-contact', 'id' => encrypt($value->contact_id)]) }}" class="btn btn-danger btn-flat btn-del-validate"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                     @empty
@@ -74,6 +78,10 @@
 
 @include('manage.inventory.maintenance.modal.modaladdcontact')
 
+@include('manage.inventory.maintenance.modal.modaleditcontact')
+
+@include('manage.inventory.maintenance.modal.modalshowaddress')
+
 @include('manage.system.accounts.scripts.UsersDashboardScript')
 
 @push('scripts')
@@ -81,6 +89,45 @@
 <script type="text/javascript">
 
     $(function(){
+
+        $('.btn-del-validate').on('click', function(event){
+            if(!confirm('Are you sure you want to delete this row?')) {
+                event.preventDefault();
+            }
+        });
+
+        $('.modal-edit-contact').on('click', function(){
+            var id = $(this).data('id');
+            $('#modaleditcontact').modal('show');
+            $.ajax({
+                url : "{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-contact', 'id' => encrypt(1)]) }}",
+                type : 'get',
+                data : {id:id},
+                success : function (data){
+                    $('input[name="contact_id"]').val(data.contact_id);
+                    $('input[name="contact_description"]').val(data.contact_description);
+                    $('input[name="contact_number"]').val(data.contact_number);
+                    $('input[name="contact_email"]').val(data.contact_email);
+                    $('input[name="contact_position"]').val(data.contact_position);
+                    $('input[name="address_id"]').val(data.contact_address.address_id);
+                    $('input[name="address_number"]').val(data.contact_address.address_number);
+                    $('input[name="address_street"]').val(data.contact_address.address_street);
+                    $('input[name="address_barangay"]').val(data.contact_address.address_barangay);
+                    $('input[name="address_city"]').val(data.contact_address.address_city);
+                    $('input[name="address_zip"]').val(data.contact_address.address_zip);
+                }
+            });
+        });
+
+        $('.modal-show-address').on('click', function(){
+            var data_address = $(this).data('address');
+            $('#modalshowaddress').modal('show');
+            $('input[name="address_number"]').val(data_address.address_number);
+            $('input[name="address_street"]').val(data_address.address_street);
+            $('input[name="address_barangay"]').val(data_address.address_barangay);
+            $('input[name="address_city"]').val(data_address.address_city);
+            $('input[name="address_zip"]').val(data_address.address_zip);
+        });
         
         var countStart = 1;
 

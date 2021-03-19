@@ -5,6 +5,10 @@
 	background-color: blue; 
 }
 
+.v-align-middle {
+    vertical-align: middle !important;
+}
+
 
 
 /*

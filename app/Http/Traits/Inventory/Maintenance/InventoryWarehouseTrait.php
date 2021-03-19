@@ -26,16 +26,46 @@ trait InventoryWarehouseTrait
 		if($request->has('option')) {
 			foreach ($request->get('option') as $key => $value) {
 				InventoryTableWarehouse::insert([
-					'warehouse_address'     => $value['address'],
-					'warehouse_contact'     => $value['contact'],
 					'warehouse_code'        => $value['code'],
 					'warehouse_description' => $value['description'],
+					// 'warehouse_address'     => $value['address'],
+					// 'warehouse_contact'     => $value['contact'],
 					'created_by'            => $this->thisUser()->users_id,
 					'created_date'          => (new CommenService)->dateTimeToday('Y-m-d h:i:s'),
 					'order_level'           => (new CommenService)->orderLevel(new InventoryTableWarehouse),
 				]);
 			}
 			$request->session()->flash('success','Warehouse(s) successfully created');
+			return back();
+		}
+	}
+
+	public function inventory_update_warehouse($method, $id, $request)
+	{
+		InventoryTableWarehouse::where('warehouse_id', $request->warehouse_id)->update([
+			'warehouse_description'   => $request->warehouse_description,
+			'updated_by'              => $this->thisUser()->users_id,
+			'updated_date'            => (new CommenService)->dateTimeToday('Y-m-d h:i:s'),
+		]);
+
+		$request->session()->flash('success','Warehouse successfully updated');
+		return back();
+	}
+
+	public function inventory_delete_warehouse($method, $id, $request)
+	{
+		$validateExist = (new InventoryTableWarehouse)
+							->where('warehouse_id', decrypt($id))
+							->whereHas('productWarehouse')
+							->count();
+
+		if($validateExist > 0) {
+			$request->session()->flash('failed','Cannot delete Warehouse in used');
+			return back();
+		} else {
+			InventoryTableWarehouse::where('warehouse_id', decrypt($id))->delete();
+
+			$request->session()->flash('success','Warehouse successfully deleted');
 			return back();
 		}
 	}

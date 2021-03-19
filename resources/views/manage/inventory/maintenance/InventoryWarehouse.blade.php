@@ -47,11 +47,11 @@
                 <tbody>
                     @forelse($warehouse as $key => $value)
                     <tr>
-                        <td style="vertical-align: middle;">{{ $value->warehouse_code }}</td>
-                        <td style="vertical-align: middle;">{{ $value->warehouse_description }}</td>
-                        <td class="text-center">
-                            <button class="btn btn-primary btn-flat"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                        <td class="v-align-middle" style="width: 20%;">{{ $value->warehouse_code }}</td>
+                        <td class="v-align-middle">{{ $value->warehouse_description }}</td>
+                        <td style="vertical-align: middle;" class="text-center">
+                            <button type="button" class="btn btn-primary btn-flat modal-edit-warehouse" data-id="{{ $value->warehouse_id }}"><i class="fa fa-edit"></i></button>
+                            <a href="{{ route('inventory.route',['path' => $path, 'action' => 'delete-warehouse', 'id' => encrypt($value->warehouse_id)]) }}" class="btn btn-danger btn-flat btn-del-validate"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                     @empty
@@ -68,14 +68,29 @@
 
 @include('manage.inventory.maintenance.modal.modaladdwarehouse')
 
+@include('manage.inventory.maintenance.modal.modaleditwarehouse')
+
 @include('manage.system.accounts.scripts.UsersDashboardScript')
 
 @push('scripts')
-<script type="text/javascript">
 
-    
+<script type="text/javascript">
     
     $(function(){
+
+        $('.btn-del-validate').on('click', function(event){
+            if(!confirm('Are you sure you want to delete this row?')) {
+                event.preventDefault();
+            }
+        });
+
+        $('.modal-edit-warehouse').on('click', function(){
+            var id = $(this).data('id');
+            var description = $(this).parent('td').prev().html();
+            $('#modaleditwarehouse').modal('show');
+            $('#warehouse_id').val(id);
+            $('#warehouse_description').val(description);
+        });
         
         var countStart = 1;
 

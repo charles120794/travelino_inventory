@@ -43,14 +43,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="exampleInputEmail1"> Date From </label>
-                                <input type="date" class="form-control" name="issue_code">
+                                <label> Date From </label>
+                                <input type="date" class="form-control" name="date_from">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="exampleInputPassword1"> Date To </label>
-                                <input type="date" class="form-control" name="issue_date">
+                                <label> Date To </label>
+                                <input type="date" class="form-control" name="date_to">
                             </div>
                         </div>
                     </div>
@@ -70,11 +70,11 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr class="bg-gray-light" style="height: 50px;">
-                                <th class="text-center" style="vertical-align: middle;">Image</th>
-                                <th class="text-center" style="vertical-align: middle;">Description</th>
-                                <th class="text-center" style="vertical-align: middle;">Quantity</th>
-                                <th class="text-center" style="vertical-align: middle;">Gross Cost</th>
-                                <th class="text-center" style="vertical-align: middle;">Action</th>
+                                <th class="v-align-middle text-center">Image</th>
+                                <th class="v-align-middle text-center">Description</th>
+                                <th class="v-align-middle text-center">Stock</th>
+                                <th class="v-align-middle text-right">Cost</th>
+                                <th class="v-align-middle text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,10 +82,10 @@
                             <tr>
                                 <td class="text-center"><img src="{{ Storage::url($product->item_image) }}" style="width: 100px;"></td>
                                 <td style="vertical-align: middle;">{{ $product->item_description }}</td>
-                                <td class="text-center" style="vertical-align: middle;">{{ $product->item_quantity }}</td>
-                                <td class="text-center" style="vertical-align: middle;">{{ number_format($product->item_selling_price,2) }}</td>
-                                <td class="text-center" style="vertical-align: middle;">
-                                    <button class="btn btn-info btn-flat"><i class="fa fa-eye"></i></button>
+                                <td class="v-align-middle text-center">{{ $product->item_quantity }}</td>
+                                <td class="v-align-middle text-right">{{ number_format($product->item_selling_price,2) }}</td>
+                                <td class="v-align-middle text-center">
+                                    <button class="btn btn-info btn-flat btn-modal-view" data-id="{{ $product->item_id }}"><i class="fa fa-eye"></i></button>
                                     <button class="btn btn-primary btn-flat"><i class="fa fa-edit"></i></button>
                                     <button class="btn btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                                 </td>
@@ -102,11 +102,26 @@
 
 @include('manage.system.accounts.scripts.UsersDashboardScript')
 
+@include('manage.inventory.maintenance.modal.modalshowproductdetails')
+
 @push('scripts')
 
 <script type="text/javascript">
     
     $(function(){
+
+        $('.btn-modal-view').on('click', function(){
+            $('#modalshowproductdetails').modal('show');
+            $.ajax({
+                url : '{{ route('inventory.route',['path' => $path, 'action' => 'show-product-details', 'id' => encrypt(1)])}}',
+                type : 'post',
+                data : {id:$(this).data('id')},
+                dataType : 'html',
+                success : function(data){
+                    $('#modalshowproductdetails #productdetails').html(data);
+                }
+            });
+        });
 
         $('.select-address').on('click', function(event){
             event.preventDefault();

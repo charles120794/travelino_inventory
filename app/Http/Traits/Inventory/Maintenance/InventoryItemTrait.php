@@ -41,15 +41,23 @@ trait InventoryItemTrait
 
 	protected function product_data()
 	{
-		return InventoryTableItem::with('itemGroup')->with('itemImages')->with('itemVariants')->with('itemSupplier')->get();
+		return InventoryTableItem::with('itemGroup')->with('itemImages')->with('itemVariants')->with('itemUnit')->with('itemSupplier')->orderBy('item_id','asc')->get();
+	}
+
+	public function inventory_show_product_details($method, $id, $request)
+	{
+		$product =  InventoryTableItem::where('item_id',$request->id)->first();
+		return view('manage.inventory.maintenance.includes.productdetails',['product' => $product]);
 	}
 
 	public function inventory_create_item_page($method, $id, $request)
 	{
+		$units      = $this->unit_data();
 		$supplier   = $this->supplier_data();
 		$warehouse  = $this->warehouse_data();
 
 		return $this->myViewMethodLoader($method, $this->product_group_data())
+					->with('units', $units)
 					->with('supplier_data', $supplier)
 					->with('warehouse_data', $warehouse);
 	}

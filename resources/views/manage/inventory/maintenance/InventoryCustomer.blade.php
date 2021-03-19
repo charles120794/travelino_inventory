@@ -23,14 +23,14 @@
             <form class="form-horizontal" action="" method="get" id="form-search">
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <input type="text" class="form-control" name="search" autocomplete="search-supplier" placeholder="Search Supplier" value="{{ request()->get('search') }}">
+                        <input type="text" class="form-control" name="search" autocomplete="search-customer" placeholder="Search Customer" value="{{ request()->get('search') }}">
                     </div>
                 </div>
             </form>
         </div>
         <div class="box-footer text-right">
             <button type="button" class="btn btn-warning btn-flat" onclick="$('#form-search').submit()"><i class="fa fa-search"></i> Search </button>
-            <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#modaladdsupplier"><i class="fa fa-plus"></i> Create </button>
+            <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#modaladdcustomer"><i class="fa fa-plus"></i> Create </button>
         </div>
     </div>
 
@@ -40,7 +40,7 @@
                 <thead>
                     <tr class="bg-gray-light" style="height: 50px;">
                         <th class="v-align-middle text-center">Code</th>
-                        <th class="v-align-middle text-center">Supplier Name</th>
+                        <th class="v-align-middle text-center">Customer Name</th>
                         <th class="v-align-middle text-center">E-mail</th>
                         <th class="v-align-middle text-center">Contact</th>
                         <th class="v-align-middle text-center">Address</th>
@@ -48,20 +48,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($supplier as $key => $value)
+                    @forelse($customer as $key => $value)
                     <tr>
-                        <td class="v-align-middle">{{ $value->supplier_code }}</td>
-                        <td class="v-align-middle">{{ $value->supplier_description }}</td>
-                        <td class="v-align-middle">{{ $value->supplierContact['contact_email'] }}</td>
+                        <td class="v-align-middle">{{ $value->customer_code }}</td>
+                        <td class="v-align-middle">{{ $value->customer_description }}</td>
+                        <td class="v-align-middle">{{ $value->customerContact['contact_email'] }}</td>
                         <td class="v-align-middle text-center">
-                            <button class="btn btn-info btn-flat modal-show-contact" data-contact="{{ $value->supplierContact }}"><i class="fa fa-eye"></i></button>
+                            <button class="btn btn-info btn-flat modal-show-contact" data-contact="{{ $value->customerContact }}"><i class="fa fa-eye"></i></button>
                         </td>
                         <td class="v-align-middle text-center">
-                            <button class="btn btn-info btn-flat modal-show-address" data-address="{{ $value->supplierAddress }}"><i class="fa fa-eye"></i></button>
+                            <button class="btn btn-info btn-flat modal-show-address" data-address="{{ $value->customerAddress }}"><i class="fa fa-eye"></i></button>
                         </td>
                         <td class="v-align-middle text-center">
-                            <button type="button" class="btn btn-primary btn-flat modal-edit-supplier" data-id="{{ $value->supplier_id }}"><i class="fa fa-edit"></i></button>
-                            <a href="{{ route('inventory.route',['path' => $path, 'action' => 'delete-supplier', 'id' => encrypt($value->supplier_id)]) }}" class="btn btn-danger btn-flat btn-del-validate"><i class="fa fa-trash"></i></a>
+                            <button type="button" class="btn btn-primary btn-flat modal-edit-customer" data-id="{{ $value->customer_id }}"><i class="fa fa-edit"></i></button>
+                            <a href="{{ route('inventory.route',['path' => $path, 'action' => 'delete-customer', 'id' => encrypt($value->customer_id)]) }}" class="btn btn-danger btn-flat btn-del-validate"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                     @empty
@@ -76,9 +76,9 @@
 
 </section>
 
-@include('manage.inventory.maintenance.modal.modaladdsupplier')
+@include('manage.inventory.maintenance.modal.modaladdcustomer')
 
-@include('manage.inventory.maintenance.modal.modaleditsupplier')
+@include('manage.inventory.maintenance.modal.modaleditcustomer')
 
 @include('manage.inventory.maintenance.modal.modalshowaddress')
 
@@ -92,32 +92,29 @@
 
     $(function(){
 
-        $('.modal-edit-supplier').on('click', function(){
+        $('.modal-edit-customer').on('click', function(){
             var id = $(this).data('id');
-            $('#modaleditsupplier').modal('show');
+            $('#modaleditcustomer').modal('show');
             $.ajax({
-                url : "{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-supplier', 'id' => encrypt(1)]) }}",
+                url : "{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-customer', 'id' => encrypt(1)]) }}",
                 type : 'get',
                 data : {id:id},
                 success : function (data){
-                    $('input[name="supplier_id"]').val(data.supplier_id);
-                    $('input[name="supplier_description"]').val(data.supplier_description);
-                    $('input[name="supplier_tin"]').val(data.supplier_tin);
-                    $('input[name="supplier_business_style"]').val(data.supplier_business_style);
-                    $('input[name="supplier_tax"]').val(data.supplier_tax);
+                    $('input[name="customer_id"]').val(data.customer_id);
+                    $('input[name="customer_description"]').val(data.customer_description);
 
-                    $('input[name="contact_id"]').val(data.supplier_contact.contact_id);
-                    $('input[name="contact_description"]').val(data.supplier_contact.contact_description);
-                    $('input[name="contact_number"]').val(data.supplier_contact.contact_number);
-                    $('input[name="contact_email"]').val(data.supplier_contact.contact_email);
-                    $('input[name="contact_position"]').val(data.supplier_contact.contact_position);
+                    $('input[name="contact_id"]').val(data.customer_contact.contact_id);
+                    $('input[name="contact_description"]').val(data.customer_contact.contact_description);
+                    $('input[name="contact_number"]').val(data.customer_contact.contact_number);
+                    $('input[name="contact_email"]').val(data.customer_contact.contact_email);
+                    $('input[name="contact_position"]').val(data.customer_contact.contact_position);
 
-                    $('input[name="address_id"]').val(data.supplier_address.address_id);
-                    $('input[name="address_number"]').val(data.supplier_address.address_number);
-                    $('input[name="address_street"]').val(data.supplier_address.address_street);
-                    $('input[name="address_barangay"]').val(data.supplier_address.address_barangay);
-                    $('input[name="address_city"]').val(data.supplier_address.address_city);
-                    $('input[name="address_zip"]').val(data.supplier_address.address_zip);
+                    $('input[name="address_id"]').val(data.customer_address.address_id);
+                    $('input[name="address_number"]').val(data.customer_address.address_number);
+                    $('input[name="address_street"]').val(data.customer_address.address_street);
+                    $('input[name="address_barangay"]').val(data.customer_address.address_barangay);
+                    $('input[name="address_city"]').val(data.customer_address.address_city);
+                    $('input[name="address_zip"]').val(data.customer_address.address_zip);
                 }
             });
         });
@@ -201,6 +198,9 @@
             }
         });
 
+        
+
+
         $('.selected-currency').on('click', function(event){
 
             var objectData = $(this).data('object');
@@ -214,6 +214,7 @@
             }
            
             event.preventDefault();
+
         });
 
         $('.selected-contact').on('click', function(event){
@@ -235,6 +236,7 @@
             }
            
             event.preventDefault();
+
         });
 
         $('.selected-address').on('click', function(event){
@@ -258,6 +260,7 @@
             }
            
             event.preventDefault();
+
         });
         
         var countStart = 1;
@@ -276,6 +279,7 @@
             var html2 = $('<div></div>').attr('class','form-group').append(input3,input4,'<hr>');
 
             $('#groupoptions').append(html1,html2);
+
         });
 
     });

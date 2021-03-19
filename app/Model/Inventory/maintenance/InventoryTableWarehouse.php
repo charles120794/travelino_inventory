@@ -14,4 +14,9 @@ class InventoryTableWarehouse extends Model
 
 	public $timestamps = false;
 
+	public function productWarehouse()
+	{
+		return $this->hasMany(new InventoryTableItem,'item_warehouse','warehouse_id');
+	}
+
 }

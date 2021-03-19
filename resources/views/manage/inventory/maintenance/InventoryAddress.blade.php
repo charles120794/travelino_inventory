@@ -23,7 +23,7 @@
             <form class="form-horizontal" action="" method="get" id="form-search">
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <input type="text" class="form-control" name="search" autocomplete="search-address" placeholder="Search Number, Street, Barangay, City, ZIP Code" value="{{ request()->get('search') }}">
+                        <input type="text" class="form-control" name="search" autocomplete="search-address" placeholder="Search Address" value="{{ request()->get('search') }}">
                     </div>
                 </div>
             </form>
@@ -39,25 +39,27 @@
             <table class="table table-bordered">
                 <thead>
                     <tr class="bg-gray-light" style="height: 50px;">
-                        <th class="text-center" style="vertical-align: middle;">Number</th>
-                        <th class="text-center" style="vertical-align: middle;">Street</th>
-                        <th class="text-center" style="vertical-align: middle;">Barangay</th>
-                        <th class="text-center" style="vertical-align: middle;">City</th>
-                        <th class="text-center" style="vertical-align: middle;">ZIP Code</th>
-                        <th class="text-center" style="vertical-align: middle;">Action</th>
+                        <th class="text-center v-align-middle">Building No.</th>
+                        <th class="text-center v-align-middle">Street</th>
+                        <th class="text-center v-align-middle">Barangay</th>
+                        <th class="text-center v-align-middle">City</th>
+                        <th class="text-center v-align-middle">Contact</th>
+                        <th class="text-center v-align-middle">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($address as $key => $value)
                     <tr>
-                        <td style="vertical-align: middle;">{{ $value->address_number }}</td>
-                        <td style="vertical-align: middle;">{{ $value->address_street }}</td>
-                        <td style="vertical-align: middle;">{{ $value->address_barangay }}</td>
-                        <td style="vertical-align: middle;">{{ $value->address_city }}</td>
-                        <td style="vertical-align: middle;">{{ $value->address_zip }}</td>
-                        <td class="text-center">
-                            <button class="btn btn-primary btn-flat"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                        <td class="v-align-middle">{{ $value->address_number }}</td>
+                        <td class="v-align-middle">{{ $value->address_street }}</td>
+                        <td class="v-align-middle">{{ $value->address_barangay }}</td>
+                        <td class="v-align-middle">{{ $value->address_city }}</td>
+                        <td class="v-align-middle text-center">
+                            <button class="btn btn-info btn-flat modal-show-contact" data-contact="{{ $value->addressContact }}"><i class="fa fa-eye"></i></button>
+                        </td>
+                        <td class="v-align-middle text-center">
+                            <button type="button" class="btn btn-primary btn-flat modal-edit-address" data-id="{{ $value->address_id }}"><i class="fa fa-edit"></i></button>
+                            <a href="{{ route('inventory.route',['path' => $path, 'action' => 'delete-address', 'id' => encrypt($value->address_id)]) }}" class="btn btn-danger btn-flat btn-del-validate"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                     @empty
@@ -74,6 +76,10 @@
 
 @include('manage.inventory.maintenance.modal.modaladdaddress')
 
+@include('manage.inventory.maintenance.modal.modaleditaddress')
+
+@include('manage.inventory.maintenance.modal.modalshowcontact')
+
 @include('manage.system.accounts.scripts.UsersDashboardScript')
 
 @push('scripts')
@@ -81,6 +87,44 @@
 <script type="text/javascript">
 
     $(function(){
+
+        $('.btn-del-validate').on('click', function(event){
+            if(!confirm('Are you sure you want to delete this row?')) {
+                event.preventDefault();
+            }
+        });
+
+        $('.modal-edit-address').on('click', function(){
+            var id = $(this).data('id');
+            $('#modaleditaddress').modal('show');
+            $.ajax({
+                url : "{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-address', 'id' => encrypt(1)]) }}",
+                type : 'get',
+                data : {id:id},
+                success : function (data){
+                    $('#address_id').val(data.address_id);
+                    $('#address_number').val(data.address_number);
+                    $('#address_street').val(data.address_street);
+                    $('#address_barangay').val(data.address_barangay);
+                    $('#address_city').val(data.address_city);
+                    $('#address_zip').val(data.address_zip);
+                    $('#contact_id').val(data.address_contact.contact_id);
+                    $('#contact_description').val(data.address_contact.contact_description);
+                    $('#contact_number').val(data.address_contact.contact_number);
+                    $('#contact_email').val(data.address_contact.contact_email);
+                    $('#contact_position').val(data.address_contact.contact_position);
+                }
+            });
+        });
+
+        $('.modal-show-contact').on('click', function(){
+            var data_contact = $(this).data('contact');
+            $('#modalshowcontact').modal('show');
+            $('#show_contact_description').val(data_contact.contact_description);
+            $('#show_contact_number').val(data_contact.contact_number);
+            $('#show_contact_email').val(data_contact.contact_email);
+            $('#show_contact_position').val(data_contact.contact_position);
+        });
         
         var countStart = 1;
 
@@ -91,9 +135,9 @@
             var uniqid = Math.round(Math.random()*100000000000000);
 
             var input1 = $('<label>Code</label> <span class="text-red">*</span>');
-            var input2 = $('<input type="text" class="form-control" name="option[' + count + '][code]" autocomplete="unit-code" maxlength="50" value="' + uniqid + '" required>');
+            var input2 = $('<input type="text" class="form-control" name="address[' + count + '][code]" autocomplete="unit-code" maxlength="50" value="' + uniqid + '" required>');
             var input3 = $('<label>Description</label> <span class="text-red">*</span>');
-            var input4 = $('<input type="text" class="form-control" name="option[' + count + '][description]" autocomplete="unit-description" maxlength="100" required>');
+            var input4 = $('<input type="text" class="form-control" name="address[' + count + '][description]" autocomplete="unit-description" maxlength="100" required>');
             var html1 = $('<div></div>').attr('class','form-group').append(input1,input2);
             var html2 = $('<div></div>').attr('class','form-group').append(input3,input4,'<hr>');
 

@@ -38,19 +38,19 @@ class InventoryServiceProvider extends ServiceProvider
         /////////////////       ACTIVITY        //////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////
         $this->app->singleton('InventoryIssuanceReturnTrait', function () {
-            return \App\Http\Traits\Inventory\InventoryIssuanceReturnTrait::class;
+            return \App\Http\Traits\Inventory\Activity\InventoryIssuanceReturnTrait::class;
         });
 
         $this->app->singleton('InventoryIssuanceTrait', function () {
-            return \App\Http\Traits\Inventory\InventoryIssuanceTrait::class;
+            return \App\Http\Traits\Inventory\Activity\InventoryIssuanceTrait::class;
         });
 
         $this->app->singleton('InventoryPhysicalCountTrait', function () {
-            return \App\Http\Traits\Inventory\InventoryPhysicalCountTrait::class;
+            return \App\Http\Traits\Inventory\Activity\InventoryPhysicalCountTrait::class;
         });
 
         $this->app->singleton('InventoryStockTransferTrait', function () {
-            return \App\Http\Traits\Inventory\InventoryStockTransferTrait::class;
+            return \App\Http\Traits\Inventory\Activity\InventoryStockTransferTrait::class;
         });
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,6 +74,10 @@ class InventoryServiceProvider extends ServiceProvider
 
         $this->app->singleton('InventoryItemGroupTrait', function () {
             return \App\Http\Traits\Inventory\Maintenance\InventoryItemGroupTrait::class;
+        });
+
+        $this->app->singleton('InventoryCustomerTrait', function () {
+            return \App\Http\Traits\Inventory\Maintenance\InventoryCustomerTrait::class;
         });
 
         $this->app->singleton('InventorySupplierTrait', function () {

@@ -26,7 +26,12 @@ class InventoryTableItem extends Model
 
 	public function itemVariants()
 	{
-		return $this->hasMany(new InventoryTableVariant,'variant_item','item_id');
+		return $this->hasMany(new InventoryTableVariant,'variant_item','item_id')->where('variant_parent','0')->where('variant_type', '1')->with('variantChild');
+	}
+
+	public function itemUnit()
+	{
+		return $this->hasOne(new InventoryTableUnit,'unit_id','item_unit');
 	}
 
 	public function itemSupplier()

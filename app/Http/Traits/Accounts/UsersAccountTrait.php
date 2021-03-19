@@ -120,17 +120,17 @@ trait UsersAccountTrait
 						$request->input('personal_address_id') ;
 
 	    app('Users')->where('users_id', decrypt($id))->update([
-	    	'firstname' => $request->input('firstname'),
-	    	'middlename' => $request->input('middlename'),
-	    	'lastname' => $request->input('lastname'),
+	    	'firstname'               => $request->input('firstname'),
+	    	'middlename'              => $request->input('middlename'),
+	    	'lastname'                => $request->input('lastname'),
 	    	'business_email'          => $request->input('contact_business_email'),
 	    	'business_contact_phone'  => $request->input('contact_business_phone'),
 	    	'personal_email'          => $request->input('contact_personal_email'),
 	    	'personal_contact_phone'  => $request->input('contact_personal_phone'),
-	    	'personal_address_id'        => $personalAddressID,
+	    	'personal_address_id'     => $personalAddressID,
 	    	'birth_date'              => $request->input('personal_birth_date'),
-	    	'updated_by' => $this->thisUser()->users_id,
-	    	'updated_date' => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
+	    	'updated_by'              => $this->thisUser()->users_id,
+	    	'updated_date'            => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
 	    ]);
 
 	    $billingAddressID = (is_null($request->input('billing_address_id'))) ?
@@ -138,18 +138,18 @@ trait UsersAccountTrait
 	    				$request->input('billing_address_id') ;
 
 	    app('UsersBilling')->where('users_id', decrypt($id))->update([
-	    	'consumer_description' => $request->input('billing_description'),
-	    	'consumer_address'     => $billingAddressID,
-	    	'consumer_tin'         => $request->input('billing_tin'),
-	    	'consumer_tax_rate'    => $request->input('billing_tax_rate'),
-	    	'consumer_currency'    => $request->input('billing_currency'),
-	    	'consumer_website'     => $request->input('billing_website'),
-	    	'consumer_email'       => $request->input('billing_email'),
+	    	'consumer_address'          => $billingAddressID,
+	    	'consumer_description'      => $request->input('billing_description'),
+	    	'consumer_tin'              => $request->input('billing_tin'),
+	    	'consumer_tax_rate'         => $request->input('billing_tax_rate'),
+	    	'consumer_currency'         => $request->input('billing_currency'),
+	    	'consumer_website'          => $request->input('billing_website'),
+	    	'consumer_email'            => $request->input('billing_email'),
 	    	'consumer_contact_person'   => $request->input('billing_contact_person'),
 	    	'consumer_contact_phone'    => $request->input('billing_contact_phone'),
 	    	'consumer_contact_position' => $request->input('billing_contact_position'),
-	    	'updated_by' => $this->thisUser()->users_id,
-	    	'updated_date' => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
+	    	'updated_by'                => $this->thisUser()->users_id,
+	    	'updated_date'              => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
 	    ]);
 
 	    Session::flash('success', 'Users Account Information successfully updated.');

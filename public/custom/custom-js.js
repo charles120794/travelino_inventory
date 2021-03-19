@@ -59,12 +59,24 @@ $.each(inputCurrency, function(key, value){
 //   return /^[0-9a-f]*$/i.test(value); });
 
 /* New Currency Format as of 07-29-2020 */
-$(".input-currency").on({
+$(document).on('input','.input-number', function(){
+  setInputFilter($(this)[0], function(value) { return /^-?\d*$/.test(value); });
+});
+
+$(document).on('input','.input-currency', function(){
+  formatCurrency($(this));
+});
+
+$(document).on('blur','.input-currency', function(){
+  formatCurrency($(this), "blur");
+});
+
+$('.input-currency').on({
     input: function() {
-      	formatCurrency($(this));
+    	formatCurrency($(this));
     },
     blur: function() { 
-      	formatCurrency($(this), "blur");
+    	formatCurrency($(this), "blur");
     },
 });
 

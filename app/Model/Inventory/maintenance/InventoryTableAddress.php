@@ -14,4 +14,9 @@ class InventoryTableAddress extends Model
 
 	public $timestamps = false;
 
+	public function addressContact()
+	{
+		return $this->hasOne(new InventoryTableContact,'contact_id','address_contact');
+	}
+
 }

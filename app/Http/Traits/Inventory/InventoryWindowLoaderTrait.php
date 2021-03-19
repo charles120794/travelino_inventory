@@ -14,9 +14,29 @@ trait InventoryWindowLoaderTrait
 		return $this->myViewLoader($window);
 	}
 
+	public function inventory_cashier($window)
+	{
+		$customer = $this->customer_data();
+
+		$product  = $this->product_data();
+
+		return $this->myViewLoader($window)
+					->with('customer', $customer)
+					->with('product', $product);
+	}
+
 	public function inventory_issuance($window)
 	{
-		return $this->myViewLoader($window);
+		$contact = $this->contact_data();
+
+		$product = $this->product_data();
+
+		$department = $this->department_data();
+
+		return $this->myViewLoader($window)
+					->with('contact',$contact)
+					->with('product',$product)
+					->with('department',$department);
 	}
 
 	public function inventory_issuance_retrun($window)
@@ -94,9 +114,12 @@ trait InventoryWindowLoaderTrait
 
 	public function inventory_contact($window)
 	{
+		$address = $this->address_data();
 		$contact = $this->contact_data();
 
-		return $this->myViewLoader($window)->with('contact',$contact);
+		return $this->myViewLoader($window)
+					->with('address',$address)
+					->with('contact',$contact);
 	}
 
 	public function inventory_supplier($window)
@@ -111,5 +134,19 @@ trait InventoryWindowLoaderTrait
 					->with('contact',$contact)
 					->with('currency',$currency)
 					->with('supplier',$supplier);
+	}
+
+	public function inventory_customer($window)
+	{
+		$address  = $this->address_data();
+		$contact  = $this->contact_data();
+		$customer = $this->customer_data();
+		$currency = $this->currency_data();
+
+		return $this->myViewLoader($window)
+					->with('address',$address)
+					->with('contact',$contact)
+					->with('currency',$currency)
+					->with('customer',$customer);
 	}
 }

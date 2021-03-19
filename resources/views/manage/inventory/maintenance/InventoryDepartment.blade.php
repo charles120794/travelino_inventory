@@ -39,19 +39,19 @@
             <table class="table table-bordered">
                 <thead>
                     <tr class="bg-gray-light" style="height: 50px;">
-                        <th class="text-center" style="vertical-align: middle;">Code</th>
-                        <th class="text-center" style="vertical-align: middle;">Description</th>
-                        <th class="text-center" style="vertical-align: middle;">Action</th>
+                        <th class="v-align-middle text-center" style="width: 20%;">Code</th>
+                        <th class="v-align-middle text-center">Description</th>
+                        <th class="v-align-middle text-center" style="width: 20%;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($department as $key => $value)
                     <tr>
-                        <td style="vertical-align: middle;">{{ $value->department_code }}</td>
-                        <td style="vertical-align: middle;">{{ $value->department_description }}</td>
-                        <td class="text-center">
-                            <button class="btn btn-primary btn-flat"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                        <td class="v-align-middle">{{ $value->department_code }}</td>
+                        <td class="v-align-middle">{{ $value->department_description }}</td>
+                        <td class="v-align-middle" class="text-center">
+                            <button type="button" class="btn btn-primary btn-flat modal-edit-department" data-id="{{ $value->department_id }}"><i class="fa fa-edit"></i></button>
+                            <a href="{{ route('inventory.route',['path' => $path, 'action' => 'delete-department', 'id' => encrypt($value->department_id)]) }}" class="btn btn-danger btn-flat btn-del-validate"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                     @empty
@@ -68,6 +68,8 @@
 
 @include('manage.inventory.maintenance.modal.modaladddepartment')
 
+@include('manage.inventory.maintenance.modal.modaleditdepartment')
+
 @include('manage.system.accounts.scripts.UsersDashboardScript')
 
 @push('scripts')
@@ -75,6 +77,20 @@
 <script type="text/javascript">
 
     $(function(){
+
+        $('.btn-del-validate').on('click', function(event){
+            if(!confirm('Are you sure you want to delete this row?')) {
+                event.preventDefault();
+            }
+        });
+
+        $('.modal-edit-department').on('click', function(){
+            var id = $(this).data('id');
+            var description = $(this).parent('td').prev().html();
+            $('#modaleditdepartment').modal('show');
+            $('#department_id').val(id);
+            $('#department_description').val(description);
+        });
         
         var countStart = 1;
 

@@ -14,4 +14,9 @@ class InventoryTableUnit extends Model
 
 	public $timestamps = false;
 
+	public function productUnit()
+	{
+		return $this->hasMany(new InventoryTableItem,'item_unit','unit_id');
+	}
+
 }

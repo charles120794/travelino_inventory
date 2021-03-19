@@ -168,25 +168,13 @@
                                             <table class="table table-bordered table-condensed">
                                                 <thead>
                                                     <tr class="bg-gray-light">
-                                                        <th class="text-center col-sm-3">Option</th>
-                                                        <th class="text-center col-sm-3">Price</th>
-                                                        <th class="text-center col-sm-3">Quantity</th>
-                                                        <th class="text-center col-sm-3" colspan="2">Unit</th>
+                                                        <th class="text-center col-sm-12" colspan="2">Option</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="append-variation-1">
-                                                    <tr>
-                                                        <td class="no-padding">
-                                                            <input type="text" class="form-control text-center" name="option1[0][option]" autocomplete="option-name">
-                                                        </td>
-                                                        <td class="no-padding">
-                                                            <input type="text" class="form-control text-center input-currency input-price" oninput="computeTotalPrice($(this))" onblur="computeTotalPrice($(this),'blur')" name="option1[0][selling_price]" value="0.00" autocomplete="option-price">
-                                                        </td>
-                                                        <td class="no-padding">
-                                                            <input type="text" class="form-control text-center input-number input-quantity" oninput="computeTotalQuantity($(this))" name="option1[0][quantity]" placeholder="Qty." autocomplete="option-quantity">
-                                                        </td>
-                                                        <td class="no-padding">
-                                                            <input type="text" class="form-control text-center" name="option1[0][unit]" placeholder="Unit" autocomplete="option-unit">
+                                                    <tr class="variant1-option">
+                                                        <td class="no-padding col-sm-12">
+                                                            <input type="text" class="form-control" name="option1[0][option]" autocomplete="option-name">
                                                         </td>
                                                         <td class="no-padding">
                                                             <button class="btn btn-default btn-flat" disabled><i class="fa fa-remove"></i></button>
@@ -207,7 +195,7 @@
                                 </div>
                             </div>
                             <div class="row pro-pb-2">
-                                <div class="col-md-8 col-md-offset-2">
+                                <div class="col-md-12">
                                     <div class="panel panel-default pro-p-2">
                                         <table class="table table-bordered table-condensed">
                                             <thead>
@@ -216,13 +204,13 @@
                                                         Purchase Price
                                                     </th>
                                                     <th class="text-center">
-                                                        Selling Price
+                                                        Seling Price
                                                     </th>
                                                     <th class="text-center">
                                                         Quantity
                                                     </th>
                                                     <th class="text-center">
-                                                        Unit Cost
+                                                        Unit
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -238,7 +226,12 @@
                                                         <input type="text" class="form-control text-center input-number" id="total_quantity" name="total_quantity" value="0">
                                                     </td>
                                                     <td class="no-padding">
-                                                        <input type="text" class="form-control text-center input-number" id="total_unit_cost" name="total_unit_cost" value="0.00" readonly>
+                                                        <select class="form-control" name="item_unit" required>
+                                                            <option value="">-- Select Unit --</option>
+                                                            @foreach($units as $unit)
+                                                            <option value="{{ $unit->unit_id }}">{{ $unit->unit_code }} - {{ $unit->unit_description }}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -246,7 +239,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row pro-pb-2">
+                            <div class="row pro-pb-2 hide">
                                 <div class="col-md-8 col-md-offset-2">
                                     <div class="panel panel-default pro-p-2">
                                         <button type="button" class="btn btn-info btn-block" id="enable-variation-button"> Enable Variation </button>
@@ -468,7 +461,7 @@
 
         var dataVariant = $(event).data('variant');
 
-        var tableInp1 = $('<input>').attr('class','form-control text-center')
+        var tableInp1 = $('<input>').attr('class','form-control')
                                     .attr('name','option' + dataVariant + '[' + counter  + '][option]')
                                     .attr('autocomplete','option-name');
 
@@ -500,7 +493,8 @@
         var tableCol4 = $('<td></td>').attr('class','no-padding').html(tableInp4);
         var tableCol5 = $('<td></td>').attr('class','no-padding').html(tableInp5);
 
-        var tableRow = $('<tr></tr>').append(tableCol1,tableCol2,tableCol3,tableCol4,tableCol5);
+        // var tableRow = $('<tr></tr>').append(tableCol1,tableCol2,tableCol3,tableCol4,tableCol5);
+        var tableRow = $('<tr></tr>').append(tableCol1,tableInp5);
 
         $($(event).data('target')).append(tableRow);
     }
