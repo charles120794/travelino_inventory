@@ -8,7 +8,7 @@
 	                <h4 class="modal-title"><i class="fa fa-plus"></i> Product Group </h4>
 	            </div>
 	            <div class="modal-body">
-	            	<input type="hidden" name="option[0][group_parent]" id="modalgroupparent">
+	            	<input type="hidden" name="option[0][group_parent]" value="0" id="modalgroupparent">
     				<div class="form-group">
     			      	<label>Group Type</label>
     			      	<select class="form-control" name="option[0][group_type]">

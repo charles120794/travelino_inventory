@@ -14,10 +14,11 @@ trait InventoryDepartmentTrait
 		$department = new InventoryTableDepartment;
 
 		$department = $department->when(!is_null(request()->get('search')), function($query) {
-			return $query->where('department_code','like','%'.request()->get('search').'%')->orWhere('department_description','like','%'.request()->get('search').'%');
+			return $query->where('department_code','like','%'.request()->get('search').'%')
+				  	   ->orWhere('department_description','like','%'.request()->get('search').'%');
 		});
 
-		return $department->orderBy('order_level','asc')->get();
+		return $department->orderBy('department_description','asc')->paginate(10);
 	}
 
 	public function inventory_create_department($method, $id, $request)

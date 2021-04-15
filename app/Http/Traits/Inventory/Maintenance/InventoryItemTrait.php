@@ -3,11 +3,10 @@
 namespace App\Http\Traits\Inventory\Maintenance;
 
 use Session;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use App\Model\Inventory\maintenance\InventoryTableItem;
 use App\Model\Inventory\maintenance\InventoryTableItemGroup;
 use App\Model\Inventory\maintenance\InventoryTableItemImages;
+use App\Http\Controllers\Common\CommonServiceController as CommenService;
 
 trait InventoryItemTrait
 {
@@ -36,18 +35,25 @@ trait InventoryItemTrait
 		/* To Dispplay as Catetory Type */
 		/* Copy this code */
 		// return implode(' / ', array_reverse($this->foreachdataflatten($childGroup)));
-
 	}
 
-	protected function product_data()
+	protected function product_data($page = null)
 	{
-		return InventoryTableItem::with('itemGroup')->with('itemImages')->with('itemVariants')->with('itemUnit')->with('itemSupplier')->orderBy('item_id','asc')->get();
+		return (new InventoryTableItem)
+					->with('itemGroup')
+					->with('itemImages')
+					->with('itemVariants')
+					->with('itemUnit')
+					->with('itemSupplier')
+					->orderBy('item_id','asc')
+					->paginate(10,['*'],'page',$page);
 	}
 
 	public function inventory_show_product_details($method, $id, $request)
 	{
-		$product =  InventoryTableItem::where('item_id',$request->id)->first();
-		return view('manage.inventory.maintenance.includes.productdetails',['product' => $product]);
+		$product = InventoryTableItem::where('item_id', $request->id)->first();
+
+		return $this->myViewMethodLoader($method)->with('product', $product);
 	}
 
 	public function inventory_create_item_page($method, $id, $request)
@@ -65,41 +71,39 @@ trait InventoryItemTrait
 	public function inventory_create_item($method, $id, $request)
 	{
 
-		$itemProduct = new InventoryTableItem;
+		$itemProductID = (new InventoryTableItem)->insertGetId([
+			'item_group'            => $request->input('item_group'),
+			'item_supplier'         => $request->input('item_supplier'),
+			'item_warehouse'        => $request->input('item_warehouse'),
+			'item_image'            => collect($request->media)->first()['product_image'],
+			// $itemProduct->item_variant  = $request->input('item_variant');
+			'item_unit'             => $request->input('item_unit'),
+			'item_type'             => $request->input('item_type'),
+			'item_code'             => $request->input('item_code'),
+			'item_description'      => $request->input('item_description'),
+			'item_long_description' => $request->input('item_long_description'),
 
-		$itemProduct->item_group            = $request->input('item_group');
-		$itemProduct->item_supplier         = $request->input('item_supplier');
-		$itemProduct->item_warehouse        = $request->input('item_warehouse');
-		$itemProduct->item_image            = collect($request->media)->first()['product_image'];
-		// $itemProduct->item_variant  = $request->input('item_variant');
-		$itemProduct->item_type             = $request->input('item_type');
-		$itemProduct->item_code             = $request->input('item_code');
-		$itemProduct->item_description      = $request->input('item_description');
-		$itemProduct->item_long_description = $request->input('item_long_description');
-
-		$itemProduct->item_purchase_price   = str_replace(',', '', $request->input('total_purchase'));
-		$itemProduct->item_selling_price    = str_replace(',', '', $request->input('total_sales'));
-		$itemProduct->item_quantity         = str_replace(',', '', $request->input('total_quantity'));
-		
-		$itemProduct->item_min_quantity     = $request->input('item_min_quantity');
-		$itemProduct->item_expiry_date      = $request->input('expiry_date');
-		$itemProduct->item_purchase_date    = $request->input('item_purchase_date');
-		$itemProduct->item_condition        = $request->input('item_condition');
-		/* Credits */
-		$itemProduct->created_by            = $this->thisUser()->users_id;
-		$itemProduct->created_date          = (new Carbon)->now();
-
-		if( $itemProduct->save() ) {
-
-			$this->inventory_create_variant($method, $itemProduct->item_id, $request);
-
-			$this->inventory_create_item_images($method, $itemProduct->item_id, $request);
+			'item_purchase_price'   => str_replace(',', '', $request->input('total_purchase')),
+			'item_selling_price'    => str_replace(',', '', $request->input('total_sales')),
+			'item_quantity'         => str_replace(',', '', $request->input('total_quantity')),
 			
+			'item_min_quantity'     => $request->input('item_min_quantity'),
+			'item_expiry_date'      => $request->input('item_expiry_date'),
+			'item_purchase_date'    => $request->input('item_purchase_date'),
+			'item_condition'        => $request->input('item_condition'),
+			/* Credits */
+			'created_by'            => $this->thisUser()->users_id,
+			'created_date'          => (new CommenService)->dateTimeToday('Y-m-d h:i:s'),
+		]);
+
+		if( $itemProductID ) {
+			// $this->inventory_create_variant($method, $itemProductID, $request);
+			$this->inventory_create_item_images($method, $itemProductID, $request);
 		}
 
 		$request->session()->flash('success','Product successfully created.');
+		
 		return back();
-
 	}
 
 	public function inventory_create_item_images($method, $id, $request)

@@ -4,6 +4,8 @@ namespace App\Model\Inventory\maintenance;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Inventory\Activity\InventoryActivityCashierDetails;
+use App\Model\Inventory\Activity\InventoryActivityBasket;
 
 class InventoryTableItem extends Model
 {
@@ -32,6 +34,21 @@ class InventoryTableItem extends Model
 	public function itemUnit()
 	{
 		return $this->hasOne(new InventoryTableUnit,'unit_id','item_unit');
+	}
+
+	public function itemQuantity()
+	{
+		return $this->hasMany(new InventoryActivityCashierDetails,'cashier_item','item_id');
+	}
+
+	public function itemBasket()
+	{
+		return $this->hasMany(new InventoryActivityBasket,'basket_item_id','item_id');
+	}
+
+	public function itemCashier()
+	{
+		return $this->hasMany(new InventoryActivityCashierDetails,'cashier_item','item_id');
 	}
 
 	public function itemSupplier()

@@ -3,10 +3,10 @@
 namespace App\Http\Traits\Inventory\Maintenance;
 
 use Session;
-use Illuminate\Http\Request;
 use App\Model\Inventory\maintenance\InventoryTableContact;
 use App\Model\Inventory\maintenance\InventoryTableAddress;
 use App\Model\Inventory\maintenance\InventoryTableSupplier;
+use App\Http\Controllers\Common\CommonServiceController as CommenService;
 
 trait InventorySupplierTrait
 {
@@ -21,7 +21,7 @@ trait InventorySupplierTrait
 						 ->orWhere('supplier_business_style','like','%'.request()->get('search').'%');
 		});
 
-		return $supplier->orderBy('order_level','asc')->get();
+		return $supplier->orderBy('supplier_description','asc')->paginate(10);
 	}
 
 	public function inventory_retrieve_supplier($method, $id, $request)
@@ -31,7 +31,6 @@ trait InventorySupplierTrait
 
 	public function inventory_create_supplier($method, $id, $request)
 	{
-
 		if(!is_null($request->input('contact'))) {
 
 			$this->inventory_insert_contact($request);
@@ -68,6 +67,9 @@ trait InventorySupplierTrait
 			'supplier_business_style' => $request->input('business_style'),
 			'supplier_tax_type'       => $request->input('tax'),
 			'supplier_currency'       => $request->input('currency_id'),
+			'created_by'              => $this->thisUser()->users_id,
+			'created_date'            => (new CommenService)->dateTimeToday('Y-m-d h:i:s'),
+			'order_level'             => (new CommenService)->orderLevel(new InventoryTableSupplier),
 		]);
 	}
 

@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <form action="{{ route('inventory.route',['path' => $path, 'action' => 'create-issuance', 'id' => encrypt(1) ]) }}"> @csrf
+    <form method="post" action="{{ route('inventory.route',['path' => $path, 'action' => 'create-issuance', 'id' => encrypt(1) ]) }}"> @csrf
 
     <div class="row">
         <div class="col-md-9">

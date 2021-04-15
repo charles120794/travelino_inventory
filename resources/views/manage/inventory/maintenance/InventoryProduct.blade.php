@@ -73,7 +73,8 @@
                                 <th class="v-align-middle text-center">Image</th>
                                 <th class="v-align-middle text-center">Description</th>
                                 <th class="v-align-middle text-center">Stock</th>
-                                <th class="v-align-middle text-right">Cost</th>
+                                <th class="v-align-middle text-right">Purchase Price</th>
+                                <th class="v-align-middle text-right">Selling Price</th>
                                 <th class="v-align-middle text-center">Action</th>
                             </tr>
                         </thead>
@@ -83,7 +84,8 @@
                                 <td class="text-center"><img src="{{ Storage::url($product->item_image) }}" style="width: 100px;"></td>
                                 <td style="vertical-align: middle;">{{ $product->item_description }}</td>
                                 <td class="v-align-middle text-center">{{ $product->item_quantity }}</td>
-                                <td class="v-align-middle text-right">{{ number_format($product->item_selling_price,2) }}</td>
+                                <td class="v-align-middle text-right text-bold text-red">&#8369;{{ number_format($product->item_purchase_price,2) }}</td>
+                                <td class="v-align-middle text-right text-bold text-blue">&#8369;{{ number_format($product->item_selling_price,2) }}</td>
                                 <td class="v-align-middle text-center">
                                     <button class="btn btn-info btn-flat btn-modal-view" data-id="{{ $product->item_id }}"><i class="fa fa-eye"></i></button>
                                     <button class="btn btn-primary btn-flat"><i class="fa fa-edit"></i></button>
@@ -93,6 +95,9 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <div class="box-body pull-right">
+                        {{ $product_data->links('vendor.pagination.bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         </div>

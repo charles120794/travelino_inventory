@@ -20,10 +20,10 @@
 
     <div class="box box-solid">
         <div class="box-body">
-            <form class="form-horizontal" action="" method="get" id="form-search">
+            <form class="form-horizontal" method="get" id="form-search">
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <input type="text" class="form-control" name="search" autocomplete="search-contact" placeholder="Search Code, Description, Number, Position, E-mail" value="{{ request()->get('search') }}">
+                        <input type="text" class="form-control" name="search" autocomplete="search-contact" placeholder="Search Contacts" value="{{ request()->get('search') }}">
                     </div>
                 </div>
             </form>
@@ -71,6 +71,7 @@
                     @endforelse
                 </tbody>
             </table>
+            {{ $contact->links('vendor.pagination.m_custom_pagination') }}
         </div>
     </div>
 

@@ -11,7 +11,6 @@ trait MainGate
 
 	public function activeAdmin($path , $action = null, $id = null, Request $request)
 	{
-
         if($this->validateUsersModuleAccess()) {
 
             if(count($this->validateUsersWindowExists()) > 0) {
@@ -56,35 +55,41 @@ trait MainGate
             Session::flash('failed','Error #002 - You do not have permission to access this module, Contact your system administrator for more info.');
             return back();
         }
-
 	}
 
 	public function activemethod($request)
 	{
-	
-	    if($this->validateUsersWindowMethodAccess()) {
+	    $usersWindowMethod = $this->validateUsersWindowExists()->subClassMethod()
+								->where('method_name', active_action())
+								->where('status','1')
+								->first();
 
-    	    $windowMethod = $this->validateUsersWindowExists()->subClassMethod()
-    								->where('method_name', active_action())
-    								->where('status','1')
-    								->first();
+		if($usersWindowMethod['method_type'] == 'common') {
 
-	    	if(method_exists(app($windowMethod->method_traits), $windowMethod->method_function)) {   
+	    	return $this->proceedToMethodAccess($usersWindowMethod);
 
-    			$method = $windowMethod->method_function;
+		} else if($this->validateUsersWindowMethodAccess()) {
 
-    			return $this->$method($windowMethod, active_id(), $request);
-	    	    
-	    	} else {
-	    	    Session::flash('failed','Role Access Failed: The page you are looking for does not belong to this module.');
-	    	    return back();
-	    	}
+	    	return $this->proceedToMethodAccess($usersWindowMethod);
 
 	    } else {
 	    	Session::flash('failed','Role Access Failed: You do not have permission to proceed.');
 	    	return back();
 	    }
+	}
 
+	public function proceedToMethodAccess($method)
+	{
+    	if(method_exists(app($method['method_traits']), $method['method_function'])) {   
+
+			$function = $method['method_function'];
+
+			return $this->$function($method, active_id(), request());
+    	    
+    	} else {
+    	    Session::flash('failed','Role Access Failed: The page you are looking for does not belong to this module.');
+    	    return back();
+    	}
 	}
 
 	public function validateUsersModuleAccess()
@@ -92,19 +97,15 @@ trait MainGate
 	    $usersActiveModule = $this->usersAllModule($this->thisUser()->users_id, $this->thisUser()->company_id);
 
 	    $usersModuleAccess = array_pluck($usersActiveModule,'module_prefix');
-
-	    if(active_module() == 'common') {
-	    	return true;
-	    } else {
-	    	return ( count($usersActiveModule ) > 0 ) ? in_array(active_module(), $usersModuleAccess) : false ;
-	    }
+	    
+    	return ( count($usersActiveModule ) > 0 ) ? in_array(active_module(), $usersModuleAccess) : false ;
 	}
 
 	public function validateUsersWindowExists()
 	{
-		$moduleId = $this->getModulePrefix()->module_id;
+		$module = $this->getModulePrefix();
 
-	    return app('SystemWindow')->where('menu_path', active_path())->where('module_id', $moduleId)->first();
+	    return app('SystemWindow')->where('menu_path', active_path())->where('module_id', $module->module_id)->first();
 	}
 
 	public function validateUsersWindowAccess()
@@ -113,24 +114,16 @@ trait MainGate
 
 	    $usersWindowAccess = array_pluck($usersActiveWindow, 'menu_path');
 
-	    if(active_module() == 'common') {
-	    	return true;
-	    } else {
-	    	return (count($usersActiveWindow) > 0 ) ? in_array(active_path(), $usersWindowAccess) : false ;
-	    }
+    	return (count($usersActiveWindow) > 0 ) ? in_array(active_path(), $usersWindowAccess) : false ;
 	}
 
 	public function validateUsersWindowMethodAccess() 
 	{
 	    $usersActiveWindowMethod = $this->usersActiveWindowMethod($this->thisUser());
-	    /* Collecting all users active window method in array type */
+	    
 	    $usersWindowAccess = array_pluck($usersActiveWindowMethod,'method_name');
-	    /* By passing all Common Functions */
-	    if(active_module() == 'common') {
-	    	return true;
-	    } else {
-	    	return (count($usersActiveWindowMethod) > 0 ) ? in_array(active_action(), $usersWindowAccess) : false ;
-	    }
+	    
+    	return (count($usersActiveWindowMethod) > 0 ) ? in_array(active_action(), $usersWindowAccess) : false ;
 	}
 
 }

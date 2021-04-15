@@ -13,9 +13,7 @@ trait ModuleCommonAccessTrait
 	{
 		return $this->getModulePrefix();
 	}
-	/* 
-	 * System Module
-	 */
+	/* * System Module */
 	public function getModulePrefix()
 	{
 		$activeModulePrefix = str_replace('/','',request()->route()->getPrefix());
@@ -71,12 +69,14 @@ trait ModuleCommonAccessTrait
 		return (!is_null($group)) ? $moduleGroup->where('group_id', $group)->first() : $moduleGroup->orderBy('order_level','asc')->get() ;
 	}
 
-	/* For Module Window */
+	/* For Window Module */
 	public function getWindowActivePath()
 	{
-		$activePath = str_replace('/', '', request()->route()->parameter('path'));
+		$module = $this->getModulePrefix(); 
 
-		return app('SystemWindow')->where('menu_status','1')->where('menu_path', $activePath)->first();
+		$pathss = str_replace('/', '', request()->route()->parameter('path'));
+
+		return app('SystemWindow')->where('menu_status','1')->where('module_id', $module->module_id)->where('menu_path', $pathss)->first();
 	}
 	
 }

@@ -15,10 +15,11 @@ trait InventoryUnitMeasureTrait
 		$unit = new InventoryTableUnit;
 
 		$unit = $unit->when(!is_null(request()->get('search')), function($query) {
-			return $query->where('unit_code','like','%'.request()->get('search').'%')->orWhere('unit_description','like','%'.request()->get('search').'%');
+			return $query->where('unit_code','like','%'.request()->get('search').'%')
+					   ->orWhere('unit_description','like','%'.request()->get('search').'%');
 		});
 
-		return $unit->orderBy('order_level','asc')->get();
+		return $unit->orderBy('unit_description','asc')->paginate(10);
 	}
 
 	public function inventory_create_unit_measure($method, $id, $request)

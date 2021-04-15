@@ -329,12 +329,17 @@ trait UsersAccountTrait
 	public function accounts_toggle_users_account($method, $id = null, $request)
 	{
 	    if($this->thisUser()->users_id != decrypt($id)) {
-	        app('Users')->where('users_id', decrypt($id))->update([
-	            'status' => $request->status,
-	            'updated_by' => $this->thisUser()->users_id,
+
+	    	$collect = [
+	            'status'       => $request->status,
+	            'updated_by'   => $this->thisUser()->users_id,
 	            'updated_date' => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
-	        ]);
+	        ];
+
+	        app('Users')->where('users_id', decrypt($id))->update($collect);
+
 	        return response()->json(['message' => 'Account successfully updated']);
+
 	    } else {
 	    	return response()->json(['message' => 'Cannot update your own account to Inactive.']);
 	    }

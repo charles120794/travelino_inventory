@@ -2,16 +2,34 @@
 
 namespace App\Http\Traits\Inventory;
 
+use DB;
+use Carbon\Carbon;
 use Session;
 use Illuminate\Http\Request;
 use App\Model\Inventory\maintenance\InventoryTableItemGroup;
 use Illuminate\Support\Arr;
+use App\Model\Inventory\maintenance\InventoryTableCustomer;
 
 trait InventoryWindowLoaderTrait
 {
 	public function inventory_dashboard($window)
 	{
-		return $this->myViewLoader($window);
+
+		$date_range = (request()->has('df') && request()->has('dt')) ? 
+
+						date('F d, Y', strtotime(request()->get('df'))) . ' - ' . date('F d, Y',strtotime(request()->get('dt'))) : date('F d, Y') ;
+
+		$total_expense  = $this->inventory_cashier_total_expenses_price();
+		$total_revenue  = $this->inventory_cashier_total_revenue_price();
+		$total_income   = $this->inventory_cashier_total_income_price();
+		$total_qty_sold = $this->inventory_cashier_total_quantity_sold();
+
+		return $this->myViewLoader($window)
+					->with('total_expense', $total_expense)
+					->with('total_revenue', $total_revenue)
+					->with('total_income', $total_income)
+					->with('total_qty_sold', $total_qty_sold)
+					->with('date_range', $date_range);
 	}
 
 	public function inventory_cashier($window)
@@ -20,8 +38,11 @@ trait InventoryWindowLoaderTrait
 
 		$product  = $this->product_data();
 
+		$currency = $this->currency_data();
+
 		return $this->myViewLoader($window)
 					->with('customer', $customer)
+					->with('currency', $currency)
 					->with('product', $product);
 	}
 
@@ -148,5 +169,15 @@ trait InventoryWindowLoaderTrait
 					->with('contact',$contact)
 					->with('currency',$currency)
 					->with('customer',$customer);
+	}
+
+	public function inventory_reports($window)
+	{
+		$total_income = $this->inventory_cashier_total_purchases_price();
+		$total_expense = $this->inventory_cashier_total_expenses_price();
+
+		return $this->myViewLoader($window)
+					->with('total_income',$total_income)
+					->with('total_expense',$total_expense);
 	}
 }

@@ -29,9 +29,9 @@ trait InventoryCurrencyTrait
 				InventoryTableCurrency::insert([
 					'currency_code'        => $value['code'],
 					'currency_description' => $value['description'],
-					'created_by'          => $this->thisUser()->users_id,
-					'created_date'        => (new CommenService)->dateTimeToday('Y-m-d h:i:s'),
-					'order_level'         => (new CommenService)->orderLevel(new InventoryTableCurrency),
+					'created_by'           => $this->thisUser()->users_id,
+					'created_date'         => (new CommenService)->dateTimeToday('Y-m-d h:i:s'),
+					'order_level'          => (new CommenService)->orderLevel(new InventoryTableCurrency),
 				]);
 			}
 			$request->session()->flash('success','Contact(s) successfully created');

@@ -13,29 +13,22 @@ trait InventoryItemGroupTrait
 
 	public function inventory_create_item_group($method, $id, $request)
 	{
-		// $this->validate($request,[
-		// 	'group_type' => 'required',
-		// 	'group_parent' => 'required',
-		// 	'group_description' => 'required|max:100',
-		// ]);
-
 		foreach ($request->option as $key => $value) {
 
-			$inventoryTableItemGroup = InventoryTableItemGroup::where('group_id', $value['group_parent'])->first();
+			$inventoryTableItemGroup = (new InventoryTableItemGroup)->where('group_id', $value['group_parent'])->first();
 			
 			$group_level = (count($inventoryTableItemGroup) > 0) ? $inventoryTableItemGroup->group_level + 1 : 1 ;
 
 			InventoryTableItemGroup::insert([
-				'group_level' => $group_level,
-				'group_type' => $value['group_type'],
-				'group_parent' => $value['group_parent'],
-				'group_code' => strtoupper(substr($value['group_description'], 0,3)),
+				'group_level'       => $group_level,
+				'group_type'        => $value['group_type'],
+				'group_parent'      => $value['group_parent'],
+				'group_code'        => strtoupper(substr($value['group_description'], 0,3)),
 				'group_description' => $value['group_description'],
-				'order_level' => (new CommenService)->orderLevel(new InventoryTableItemGroup),
-				'created_by' => $this->thisUser()->users_id,
-				'created_date' => (new Carbon)->now(),
+				'created_by'        => $this->thisUser()->users_id,
+				'created_date'      => (new Carbon)->now(),
+				'order_level'       => (new CommenService)->orderLevel(new InventoryTableItemGroup),
 			]);
-
 		}
 
 		$request->session('flash','Group successfully created');
@@ -44,21 +37,25 @@ trait InventoryItemGroupTrait
 
 	public function inventory_search_item_group($method, $id, $request)
 	{
-		$group_data = InventoryTableItemGroup::where('status','1')
-							->where('group_id', $request->group_id)
-							->with('groupDetails')->orderBy('order_level','asc')->first();
+		$group_data = (new InventoryTableItemGroup)
+							->where('status','1')
+							->where('group_id', $request->input('group_id'))
+							->orderBy('order_level','asc')
+							->first();
 
-		return $this->myViewMethodLoader($method,[
-			'group_data_id' => $request->group_id,
-			'group_parent' => $request->group_parent,
-			'group_level' => $request->group_id,
-			'group_data' => $group_data,
-		]);
+		$retrieve = [
+			'group_data'    => $group_data,
+			'group_parent'  => $request->input('group_parent'),
+			'group_data_id' => $request->input('group_id'),
+			'group_level'   => $request->input('group_id'),
+		];
+
+		return $this->myViewMethodLoader($method,$retrieve);
 	}
 
 	public function inventory_update_item_group($method, $id, $request)
 	{
-		// return $request->all();
+
 		foreach ($request->group as $key => $value) {
 			InventoryTableItemGroup::where('group_id', $key)->update([
 				'group_type'        => $value['type'],
@@ -72,7 +69,7 @@ trait InventoryItemGroupTrait
 		return back();
 	}
 	
-	protected function product_group_data()
+	public function product_group_data()
 	{
 		$group_data = InventoryTableItemGroup::where('status','1')->orderBy('order_level','asc')->get();
 

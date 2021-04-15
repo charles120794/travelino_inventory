@@ -24,12 +24,14 @@ trait InventoryContactTrait
 
 		$contact = $contact->where('contact_address', '!=', NULL);
 
-		return $contact->orderBy('order_level','asc')->get();
+		return $contact->orderBy('contact_description','asc')->paginate(10);
 	}
 
 	public function inventory_retrieve_contact($method, $id, $request)
 	{
-		return (new InventoryTableContact)->where('contact_id', $request->id)->with('contactAddress')->first();
+		return (new InventoryTableContact)
+					->where('contact_id', $request->id)
+					->first();
 	}
 
 	public function inventory_create_contact($method, $id, $request)
@@ -50,7 +52,6 @@ trait InventoryContactTrait
 			$request->session()->flash('success','Contact(s) successfully created');
 			return back();
 		}
-		
 	}
 
 	public function inventory_insert_contact($request, $addressID = NULL)
@@ -86,14 +87,16 @@ trait InventoryContactTrait
 
 	public function inventory_save_update_contact($request)
 	{
-		return InventoryTableContact::where('contact_id', $request->contact_id)->update([
+		$collect = [
 			'contact_description' => $request->input('contact_description'),
 			'contact_number'      => $request->input('contact_number'),
 			'contact_email' 	  => $request->input('contact_email'),
 			'contact_position' 	  => $request->input('contact_position'),
 			'updated_by'          => $this->thisUser()->users_id,
 			'updated_date'        => (new CommenService)->dateTimeToday('Y-m-d h:i:s'),
-		]);
+		];
+
+		return (new InventoryTableContact)->where('contact_id', $request->contact_id)->update($collect);
 	}
 
 	public function inventory_delete_contact($method, $id, $request)

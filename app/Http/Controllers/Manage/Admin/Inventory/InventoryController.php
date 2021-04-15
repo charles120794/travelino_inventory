@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 class InventoryController extends Controller 
 {
+	use \App\Http\Traits\Inventory\InventoryDashboardTrait; 
 	use \App\Http\Traits\Inventory\InventoryWindowLoaderTrait; 
 	use \App\Http\Traits\Inventory\InventoryMethodLoaderTrait; 
 
@@ -17,6 +18,8 @@ class InventoryController extends Controller
 	use \App\Http\Traits\Inventory\Activity\InventoryIssuanceTrait;
 	use \App\Http\Traits\Inventory\Activity\InventoryPhysicalCountTrait;
 	use \App\Http\Traits\Inventory\Activity\InventoryStockTransferTrait;
+	use \App\Http\Traits\Inventory\Activity\InventoryCashierTrait;
+	use \App\Http\Traits\Inventory\Activity\InventoryBasketTrait;
 
 	/* Table and Maintenance */
 	use \App\Http\Traits\Inventory\Maintenance\InventoryActiveGroupTrait;
@@ -34,6 +37,7 @@ class InventoryController extends Controller
 	use \App\Http\Traits\Inventory\Maintenance\InventoryVariationTrait; 
 
 	/* Report Trait */
+	use \App\Http\Traits\Inventory\Report\InventoryCashierReportTrait;
 	use \App\Http\Traits\Inventory\Report\InventoryFirstInReportTrait;
 	use \App\Http\Traits\Inventory\Report\InventoryFirstOutReportTrait;
 	use \App\Http\Traits\Inventory\Report\InventoryHistorycalReportTrait;

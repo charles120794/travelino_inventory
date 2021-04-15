@@ -3,7 +3,6 @@
 namespace App\Http\Traits\Inventory\Maintenance;
 
 use Session;
-use Illuminate\Http\Request;
 use App\Model\Inventory\maintenance\InventoryTableAddress;
 use App\Model\Inventory\maintenance\InventoryTableContact;
 use App\Http\Controllers\Common\CommonServiceController as CommenService;
@@ -24,12 +23,14 @@ trait InventoryAddressTrait
 
 		$address = $address->where('address_contact', '!=', NULL);
 
-		return $address->orderBy('order_level','asc')->get();
+		return $address->orderBy('address_number','asc')->paginate(10);
 	}
 
 	public function inventory_retrieve_address($method, $id, $request)
 	{
-		return (new InventoryTableAddress)->where('address_id',$request->id)->with('addressContact')->first();
+		return (new InventoryTableAddress)
+						->where('address_id', $request->id)
+						->first();
 	}
 
 	public function inventory_create_address($method, $id, $request)
@@ -56,7 +57,8 @@ trait InventoryAddressTrait
 	public function inventory_insert_address($request, $contactID = NULL)
 	{
 		foreach ($request->get('address') as $key => $value) {
-			InventoryTableAddress::insert([
+
+			$collect = [
 				'address_contact'  => $contactID,
 				'address_complete' => $value['number'] . ' ' . $value['street'] . ', ' . $value['barangay'] . ' ' . $value['city'] . ' | ' . $value['zip'],
 				'address_code'     => $value['code'],
@@ -68,7 +70,9 @@ trait InventoryAddressTrait
 				'created_by'       => $this->thisUser()->users_id,
 				'created_date'     => (new CommenService)->dateTimeToday('Y-m-d h:i:s'),
 				'order_level'      => (new CommenService)->orderLevel(new InventoryTableAddress),
-			]);
+			];
+
+			(new InventoryTableAddress)->insert($collect);
 		}
 	}
 
@@ -80,7 +84,9 @@ trait InventoryAddressTrait
 
 			$request->session()->flash('success' , 'Address successfully updated');
 			return back();
+
 		} else {
+
 			$request->session()->flash('success' , 'No changes has been made');
 			return back();
 		}
@@ -88,8 +94,15 @@ trait InventoryAddressTrait
 
 	public function inventory_save_update_address($request)
 	{
-		return (new InventoryTableAddress)->where('address_id',$request->address_id)->update([
-			'address_complete' => $request->input('address_number') . ' ' . $request->input('address_street') . ', ' . $request->input('address_barangay') . ' ' .  $request->input('address_city') . ' | ' . $request->input('address_zip') ,
+
+		$address_1 = $request->input('address_number');
+		$address_2 = $request->input('address_street');
+		$address_3 = $request->input('address_barangay');
+		$address_4 = $request->input('address_city');
+		$address_5 = $request->input('address_zip');
+
+		$collect = [
+			'address_complete' => $address_1 . ' ' . $address_2 . ', ' . $address_3 . ' ' .  $address_4 . ' | ' . $address_5 ,
 			'address_number'   => $request->input('address_number'),
 			'address_street'   => $request->input('address_street'),
 			'address_barangay' => $request->input('address_barangay'),
@@ -97,7 +110,11 @@ trait InventoryAddressTrait
 			'address_zip'      => $request->input('address_zip'),
 			'updated_by'       => $this->thisUser()->users_id,
 			'updated_date'     => (new CommenService)->dateTimeToday('Y-m-d h:i:s'),
-		]);
+		];
+
+		return (new InventoryTableAddress)
+					->where('address_id', $request->address_id)
+					->update($collect);
 	}
 
 	public function inventory_delete_address($method, $id, $request)

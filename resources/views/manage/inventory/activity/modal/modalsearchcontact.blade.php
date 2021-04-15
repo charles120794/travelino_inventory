@@ -10,22 +10,22 @@
     			<table class="table table-bordered table-hover">
 	                <thead>
 	                    <tr class="bg-gray-light" style="height: 50px;">
-	                        <th class="text-center" style="vertical-align: middle;">Code</th>
-	                        <th class="text-center" style="vertical-align: middle;">Description</th>
-	                        <th class="text-center" style="vertical-align: middle;">Mobile / Phone No.</th>
-	                        <th class="text-center" style="vertical-align: middle;">Contact Position</th>
-	                        <th class="text-center" style="vertical-align: middle;">E-mail</th>
-	                        <th class="text-center" style="vertical-align: middle;">Action</th>
+	                        <th class="text-center v-align-middle">Code</th>
+	                        <th class="text-center v-align-middle">Description</th>
+	                        <th class="text-center v-align-middle">Mobile / Phone No.</th>
+	                        <th class="text-center v-align-middle">Contact Position</th>
+	                        <th class="text-center v-align-middle">E-mail</th>
+	                        <th class="text-center v-align-middle">Action</th>
 	                    </tr>
 	                </thead>
 	                <tbody>
 	                    @forelse($contact as $key => $value)
 	                    <tr>
-	                        <td style="vertical-align: middle;">{{ $value->contact_code }}</td>
-	                        <td style="vertical-align: middle;">{{ $value->contact_description }}</td>
-	                        <td style="vertical-align: middle;">{{ $value->contact_number }}</td>
-	                        <td style="vertical-align: middle;">{{ $value->contact_position }}</td>
-	                        <td style="vertical-align: middle;">{{ $value->contact_email }}</td>
+	                        <td class="v-align-middle">{{ $value->contact_code }}</td>
+	                        <td class="v-align-middle">{{ $value->contact_description }}</td>
+	                        <td class="v-align-middle">{{ $value->contact_number }}</td>
+	                        <td class="v-align-middle">{{ $value->contact_position }}</td>
+	                        <td class="v-align-middle">{{ $value->contact_email }}</td>
 	                        <td class="text-center">
 	                            <button class="btn btn-primary btn-flat selected-contact" data-contact="{{ $value->contact_id }}" data-description="{{ $value->contact_description }}">Select</button>
 	                        </td>

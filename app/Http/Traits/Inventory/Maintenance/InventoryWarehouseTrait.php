@@ -14,11 +14,11 @@ trait InventoryWarehouseTrait
 		$warehouse = new InventoryTableWarehouse;
 
 		$warehouse = $warehouse->when(!is_null(request()->get('search')), function($query) {
-			return $query->where('warehouse_code','like','%'.request()->get('search').'%')->orWhere('warehouse_description','like','%'.request()->get('search').'%');
+			return $query->where('warehouse_code','like','%'.request()->get('search').'%')
+					   ->orWhere('warehouse_description','like','%'.request()->get('search').'%');
 		});
 
-		return $warehouse->orderBy('order_level','asc')->get();
-
+		return $warehouse->orderBy('warehouse_description','asc')->paginate(10);
 	}
 
 	public function inventory_create_warehouse($method, $id, $request)
@@ -42,11 +42,13 @@ trait InventoryWarehouseTrait
 
 	public function inventory_update_warehouse($method, $id, $request)
 	{
-		InventoryTableWarehouse::where('warehouse_id', $request->warehouse_id)->update([
-			'warehouse_description'   => $request->warehouse_description,
-			'updated_by'              => $this->thisUser()->users_id,
-			'updated_date'            => (new CommenService)->dateTimeToday('Y-m-d h:i:s'),
-		]);
+		$collect = [
+			'warehouse_description' => $request->warehouse_description,
+			'updated_by'            => $this->thisUser()->users_id,
+			'updated_date'          => (new CommenService)->dateTimeToday('Y-m-d h:i:s'),
+		];
+
+		(new InventoryTableWarehouse)->where('warehouse_id', $request->warehouse_id)->update($collect);
 
 		$request->session()->flash('success','Warehouse successfully updated');
 		return back();

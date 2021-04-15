@@ -15,7 +15,7 @@
                 </div>
                 <div class="tab-content">
                     <div class="tab-pane fade" id="upload">
-                        <form method="post" action="{{ route('common.route',['path' => 'common-method-function', 'action' => 'upload-image-content', 'id' => encrypt('') ]) }}" id="form-upload-image" enctype="multipart/form-data">
+                        <form method="post" action="{{ route('settings.route',['path' => 'settings', 'action' => 'upload-image-content', 'id' => encrypt('') ]) }}" id="form-upload-image" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="box box-solid">
                                 <div class="box-header with-border">
@@ -54,7 +54,7 @@
     $(document).ready(function(){
  
         $.ajax({
-            url : '{{ route('common.route', ['path' => 'common-method-function', 'action' => 'retrieve-images', 'id' => encrypt('') ]) }}',
+            url : '{{ route('settings.route', ['path' => 'settings', 'action' => 'retrieve-images', 'id' => encrypt('') ]) }}',
             type : 'post',
             dataType : 'html',
             success : function(data){

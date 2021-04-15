@@ -4,6 +4,7 @@ namespace App\Model\Inventory\maintenance;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Inventory\Activity\InventoryActivityCashier;
 
 class InventoryTableCustomer extends Model
 {
@@ -13,6 +14,11 @@ class InventoryTableCustomer extends Model
 	protected $primaryKey = 'customer_id';
 
 	public $timestamps = false;
+
+	public function customerCashier()
+	{
+		return $this->hasMany(new InventoryActivityCashier,'cashier_customer_id','customer_id');
+	}
 
 	public function customerAddress()
 	{

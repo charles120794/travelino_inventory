@@ -22,7 +22,7 @@ trait InventoryCustomerTrait
 						 ->orWhere('customer_business_style','like','%'.request()->get('search').'%');
 		});
 
-		return $customer->orderBy('order_level','asc')->get();
+		return $customer->orderBy('customer_description','asc')->paginate(10);
 	}
 
 	public function inventory_retrieve_customer($method, $id, $request)
@@ -69,6 +69,9 @@ trait InventoryCustomerTrait
 			'customer_business_style' => $request->input('business_style'),
 			'customer_tax_type'       => $request->input('tax'),
 			'customer_currency'       => $request->input('currency_id'),
+			'created_by'              => $this->thisUser()->users_id,
+			'created_date'            => (new CommenService)->dateTimeToday('Y-m-d h:i:s'),
+			'order_level'             => (new CommenService)->orderLevel(new InventoryTableCustomer),
 		]);
 	}
 

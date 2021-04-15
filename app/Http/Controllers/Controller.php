@@ -19,8 +19,9 @@ use App\Http\Traits\Common\SystemCommonSideBarTrait as SideBarTrait;
 
 class Controller extends BaseController
 {
-    use DispatchesJobs, ValidatesRequests, AuthorizesRequests,
-        MainGateTrait, UsersCommonTrait, UsersInformationTrait, ModuleTrait, SystemTrait, SideBarTrait;
+    use DispatchesJobs, ValidatesRequests, AuthorizesRequests;
+
+    use MainGateTrait, UsersInformationTrait, UsersCommonTrait, ModuleTrait, SystemTrait, SideBarTrait;
 
     public function myViewLoader($window, $array = [])
     {

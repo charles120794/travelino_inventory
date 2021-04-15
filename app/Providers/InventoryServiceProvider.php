@@ -26,6 +26,10 @@ class InventoryServiceProvider extends ServiceProvider
         //////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////       TRAITS        ////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////
+        $this->app->singleton('InventoryDashboardTrait', function () {
+            return \App\Http\Traits\Inventory\InventoryDashboardTrait::class;
+        });
+        
         $this->app->singleton('InventoryWindowLoaderTrait', function () {
             return \App\Http\Traits\Inventory\InventoryWindowLoaderTrait::class;
         });
@@ -51,6 +55,10 @@ class InventoryServiceProvider extends ServiceProvider
 
         $this->app->singleton('InventoryStockTransferTrait', function () {
             return \App\Http\Traits\Inventory\Activity\InventoryStockTransferTrait::class;
+        });
+
+        $this->app->singleton('InventoryCashierTrait', function () {
+            return \App\Http\Traits\Inventory\Activity\InventoryCashierTrait::class;
         });
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +111,10 @@ class InventoryServiceProvider extends ServiceProvider
         //////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////       REPORT        ////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////
+        $this->app->singleton('InventoryCashierReportTrait', function () {
+            return \App\Http\Traits\Inventory\Report\InventoryCashierReportTrait::class;
+        });
+
         $this->app->singleton('InventoryFirstInReportTrait', function () {
             return \App\Http\Traits\Inventory\Report\InventoryFirstInReportTrait::class;
         });
