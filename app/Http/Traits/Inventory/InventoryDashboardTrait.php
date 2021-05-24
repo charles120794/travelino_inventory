@@ -212,12 +212,12 @@ trait InventoryDashboardTrait
 
 			return $value['item_quantity_sold'] == null;
 
-		})->take(10)->sortBy('item_description')->sortBy('item_purchase_date');
+		})->sortBy('item_description')->sortBy('item_purchase_date')->take(10);
 
 		return $this->myViewMethodLoader($method)->with('products', $products);
 	}
 
-	public function inventory_dashboard_retrieve_latest_customers($method, $id, $request)
+	public function inventory_dashboard_retrieve_top_customers($method, $id, $request)
 	{
 		$customers = (new InventoryTableCustomer)
 							->whereHas('customerCashier')
@@ -245,8 +245,45 @@ trait InventoryDashboardTrait
 
 							}])->get(10);
 
-		$filter_customers = collect($customers)->take(10)->sortByDesc('total_cost');
+		$filter_customers = collect($customers)->sortByDesc('total_cost')->take(10);
 
 		return $this->myViewMethodLoader($method)->with('customers', $filter_customers);
+	}
+
+	public function inventory_dashboard_retrieve_recent_customers($method, $id, $request)
+	{
+		$cashiers = (new InventoryActivityCashier)
+							->whereHas('cashierCustomer')
+							->withCount(['cashierDetails as total_quantity' => function($query){
+								$query->select(DB::raw("SUM(cashier_quantity) as total_quantity"));
+							}])
+							->withCount(['cashierDetails as total_cost' => function($query){
+								$query->select(DB::raw("SUM(cashier_selling_price) as total_cost"));
+							}])
+							->where('cashier_purchase_type','purchase')
+							->where('cashier_status_order','paid')
+							->orWhere('cashier_purchase_type','order')
+							->where('cashier_status_order','paid')
+							->get();
+
+		$filter_cashiers = collect($cashiers)->sortByDesc('cashier_date')->take(10);
+
+		return $this->myViewMethodLoader($method)->with('cashiers', $filter_cashiers);
+	}
+
+	public function inventory_dashboard_retrieve_customer_details($method, $id, $request)
+	{
+		$customer = (new InventoryTableCustomer)->with('customerContact')->with('customerAddress')->find(decrypt($request->get('id')));
+
+		return $this->myViewMethodLoader($method)->with('customer', $customer);
+	}
+
+	public function inventory_dashboard_retrieve_customer_cashier_details($method, $id, $request)
+	{
+		$cashier = (new InventoryActivityCashier)
+							->where('cashier_id', decrypt($request->get('id')))
+							->first();
+
+		return $this->myViewMethodLoader($method)->with('cashier', $cashier);
 	}
 }

@@ -20,6 +20,12 @@
                 <span class="text-red-700 px-2 text-sm font-medium">{{ $message }}</span>
                 @enderror
             </div>
+            <div class="block border-b-2 border-gray-400 focus-within:border-teal-500 py-3 px-2">
+                <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                <label class="form-check-label text-teal-600" for="remember">
+                    {{ __('Remember Me') }}
+                </label>
+            </div>
             <div class="text-right pt-4 pb-4 mt-4">
                 <button type="submit" class="w-full focus:shadow-outline focus:outline-none bg-teal-700 hover:bg-teal-700 border-teal-700 hover:border-teal-700 text-sm border-4 text-white py-2 px-3 rounded font-medium">
                     Login

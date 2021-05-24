@@ -4,6 +4,7 @@ namespace App\Model\Inventory\maintenance;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Inventory\Activity\InventoryActivityCashierDetails;
 
 class InventoryTableUnit extends Model
 {
@@ -17,6 +18,11 @@ class InventoryTableUnit extends Model
 	public function productUnit()
 	{
 		return $this->hasMany(new InventoryTableItem,'item_unit','unit_id');
+	}
+
+	public function cashierDetails()
+	{
+		return $this->hasMany(new InventoryActivityCashierDetails,'unit_id','cashier_unit_id');
 	}
 
 }

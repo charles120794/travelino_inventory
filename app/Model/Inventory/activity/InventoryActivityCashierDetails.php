@@ -4,6 +4,7 @@ namespace App\Model\Inventory\Activity;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Inventory\maintenance\InventoryTableUnit;
 use App\Model\Inventory\maintenance\InventoryTableItem;
 
 class InventoryActivityCashierDetails extends Model
@@ -14,6 +15,11 @@ class InventoryActivityCashierDetails extends Model
 	protected $primaryKey = 'cashier_id';
 
 	public $timestamps = false;
+
+	public function cashierItemUnit()
+	{
+		return $this->hasOne(new InventoryTableUnit,'unit_id','cashier_unit_id');
+	}
 
 	public function cashier()
 	{

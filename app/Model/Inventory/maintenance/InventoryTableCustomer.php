@@ -20,14 +20,14 @@ class InventoryTableCustomer extends Model
 		return $this->hasMany(new InventoryActivityCashier,'cashier_customer_id','customer_id');
 	}
 
-	public function customerAddress()
-	{
-		return $this->hasOne(new InventoryTableAddress,'address_id','customer_address');
-	}
-
 	public function customerContact()
 	{
 		return $this->hasOne(new InventoryTableContact,'contact_id','customer_contact');
 	}
 
+	public function customerAddress()
+	{
+		return $this->hasOne(new InventoryTableAddress,'address_id','customer_address');
+	}
+	
 }

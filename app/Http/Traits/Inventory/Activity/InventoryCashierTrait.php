@@ -28,6 +28,19 @@ trait InventoryCashierTrait
 								->first()->toJson();
 	}
 
+	public function inventory_cashier_create_receipt_history($method, $id, $request)
+	{
+		$cashiers = (new InventoryActivityCashier);
+
+		$cashiers = $cashiers->where('cashier_purchase_type','purchase')->where('cashier_status_order','paid');
+
+		$cashiers = $cashiers->orWhere('cashier_purchase_type','order')->where('cashier_status_order','paid');
+
+		$cashiers = $cashiers->take(10)->get();
+
+		return $this->myViewMethodLoader($method)->with('cashiers', $cashiers);
+	}
+
 	public function inventory_cashier_customer($method = [], $id = '', $request = [])
 	{
 		$customers = (new InventoryTableCustomer)->orderBy('customer_description','asc');
@@ -93,16 +106,12 @@ trait InventoryCashierTrait
 
 		return $items->orderBy('item_description','asc')->get();
 	}
-
-	public function convert_item_to_json()
-	{
-		return $this->cashier_product_data();
-	}
-
+	
 	public function inventory_cashier_product($method, $id, $request)
 	{
 		$search   = $request->get('search');
-		$products = $this->cashier_product_data($request);
+
+		$products = $this->cashier_product_data();
 
 		$item_products = collect($products)->filter(function($value, $key) {
 		    return ($value['item_quantity'] - $value['item_quantity_sold'] - $value['item_quantity_checkout']) > 0 ;
@@ -111,6 +120,17 @@ trait InventoryCashierTrait
 		$item_products_paginated = $this->paginate($item_products);
 
 		return $this->myViewMethodLoader($method)->with('products', $item_products_paginated)->with('search', $search);
+	}
+
+	public function inventory_cashier_product_json()
+	{
+		$products = $this->cashier_product_data();
+
+		$filtered = collect($products)->filter(function($value, $key) {
+		    return ($value['item_quantity'] - $value['item_quantity_sold'] - $value['item_quantity_checkout']) > 0 ;
+		});
+
+		return collect($filtered)->take(10)->values();
 	}
 
 	public function paginate($items, $perPage = 10, $page = null, $options = [])

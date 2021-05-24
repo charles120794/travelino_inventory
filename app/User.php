@@ -47,11 +47,23 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_admin' => 'boolean',
+        'created_date' => 'F d, Y',
     ];
 
     public $primaryKey = 'users_id';
     
     public $timestamps = false;
+
+    // public function setEmailAttribute($value)
+    // {
+    //     $this->attributes['personal_email'] = $value;
+    // }
+
+    public function getFullNameAttribute($value)
+    {
+        return $value->status + $value->order_level + $value->number;
+    }
 
     public function companyInfo()
     {

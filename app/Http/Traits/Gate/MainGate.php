@@ -73,8 +73,10 @@ trait MainGate
 	    	return $this->proceedToMethodAccess($usersWindowMethod);
 
 	    } else {
-	    	Session::flash('failed','Role Access Failed: You do not have permission to proceed.');
-	    	return back();
+
+	    	return abort(404);
+	    	// Session::flash('failed','Role Access Failed: You do not have permission to proceed.');
+	    	// return back();
 	    }
 	}
 

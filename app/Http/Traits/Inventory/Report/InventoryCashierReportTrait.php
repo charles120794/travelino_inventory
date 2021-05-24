@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 trait InventoryCashierReportTrait
 {
-	public function inventory_print_preview_cashier($method, $id, $request)
+	public function inventory_print_cashier_receipt($method, $id, $request)
 	{
-		return view('manage.inventory.report.InventoryCashierReport');
+		return $this->myViewMethodLoader($method);
 	}
 }

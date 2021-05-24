@@ -81,8 +81,8 @@
 
             <div class="nav-tabs-custom">
                 <ul class="nav nav-stacked">
-                    <li class="active"><a href="#quick_views_1" class="btn-quick-views" data-toggle="tab"><i class="fa fa-inbox"></i> Orders </a></li>
-                    <li><a href="#quick_views_2" class="btn-quick-views" data-toggle="tab"><i class="fa fa-top"></i> Top Selling Products  </a></li>
+                    <li class="active"><a href="#quick_views_1" class="btn-quick-views" data-toggle="tab"><i class="fa fa-shopping-cart"></i> Orders </a></li>
+                    <li><a href="#quick_views_2" class="btn-quick-views" data-toggle="tab"><i class="fa fa-arrow-up"></i> Top Selling Products  </a></li>
                     <li><a href="#quick_views_3" class="btn-quick-views" data-toggle="tab"><i class="fa fa-undo"></i> Products Below Min. Level </a></li>
                     <li><a href="#quick_views_4" class="btn-quick-views" data-toggle="tab"><i class="fa fa-calendar"></i> Products with Expiration Date </a></li>
                     <li><a href="#quick_views_5" class="btn-quick-views" data-toggle="tab"><i class="fa fa-ban"></i> Out of Stock Products </a></li>
@@ -130,7 +130,12 @@
 
 @include('manage.inventory.dashboard.modal.modalnonmovingproductdate')
 
+@include('manage.inventory.dashboard.modal.modalshowcustomercashierdetails')
+
 @include('manage.inventory.dashboard.modal.modalshowproductdetails')
+
+@include('manage.inventory.dashboard.modal.modalshowcustomerdetails')
+
 
 @push('scripts')
 
@@ -200,6 +205,14 @@
 
     });
 
+    $(document).on('click', '#r_top_customers', function(){
+        return retrieve_top_customers('.products-widget-ff');
+    });
+
+    $(document).on('click', '#r_recent_customers', function(){
+        return retrieve_recent_customers('.products-widget-gg');
+    });
+
     $(document).on('click', '.btn-modal-product-details', function(){
         $('#modalshowproductdetails').modal('show');
         $.ajax({
@@ -208,7 +221,47 @@
             data : { id: $(this).data('id') },
             dataType : 'html',
             success : function(data){
-                $('#modalshowproductdetails #productdetails').html(data);
+                $('#productdetails').html(data);
+            }
+        });
+    });
+
+    $(document).on('click', '.btn-modal-customer-details', function(){
+        $('#modalshowcustomerdetails').modal('show');
+        $.ajax({
+            url : '{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-customer-details', 'id' => encrypt(1)])}}',
+            type : 'post',
+            data : { id: $(this).data('id') },
+            dataType : 'html',
+            success : function(data){
+                $('#customerdetails').html(data);
+                $('#customerdetails').fadeIn(500);
+            },
+            error: function (error) {
+                var button = $('<button></button>').attr('class','btn btn-primary btn-modal-customer-details').html('<i class="fa fa-refresh"></i> Reload Data');
+                var reloader = $('<div></div>').attr('class','text-center').append(button);
+                $('#customerdetails').html(reloader);
+            }
+        });
+    });
+
+    $(document).on('click', '.btn-modal-customer-cashier-details', function(){
+        $('#modalshowcustomercashierdetails').modal('show');
+        $.ajax({
+            url : '{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-customer-cashier-details', 'id' => encrypt(1)])}}',
+            type : 'post',
+            data : { id: $(this).data('id') },
+            dataType : 'html',
+            success : function(data){
+                $('#customercashierdetails').html(data);
+                $('#customercashierdetails').fadeIn(500);
+            },
+            error: function (error) {
+                var reloader = $('<div></div>').attr('class','alert alert-warning alert-dismissible').append(
+                    $('<button></button>').attr('class','close').attr('type','button').attr('data-dismiss','alert').attr('aria-hidden','true').text('x'),
+                    $('<h4></h4>').attr('class','text-center').append($('<i></i>').attr('class','fa fa-warning').text(' Page not found!'))
+                );
+                $('#customercashierdetails').html(reloader);
             }
         });
     });
@@ -310,7 +363,7 @@
     {
         $.ajax({
             type : 'get',
-            url : '{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-latest-customers', 'id' => encrypt(1)]) }}',
+            url : '{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-top-customers', 'id' => encrypt(1)]) }}',
             dataType : 'html',
             success : function (data) {
                 $(retrieve).html(data);
@@ -318,8 +371,31 @@
         });
     }
 
+    function retrieve_recent_customers(retrieve)
+    {
+        $.ajax({
+            type : 'get',
+            url : '{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-recent-customers', 'id' => encrypt(1)]) }}',
+            dataType : 'html',
+            success : function (data) {
+                $(retrieve).html(data);
+                print_cashier_receipt(data);
+            }
+        });
+    }
+
     function datezero(num){
         return (num < 10 ? '0' : '') + num;
+    }
+
+    function print_cashier_receipt(data)
+    {
+        var myWindow=window.open('','Print','width=500,height=500');
+            myWindow.document.write(data);
+            myWindow.document.close();
+            myWindow.focus();
+            myWindow.print();
+            myWindow.close();
     }
   
 </script>

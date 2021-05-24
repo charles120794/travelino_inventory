@@ -36,16 +36,16 @@
             </div>
         </div>
         <div class="tab-pane" id="recent_customers">
-            <div class="retrieve-recent-customers">
+            <div class="retrieve-recent-customers products-widget-gg">
                 <table class="table table-bordered table-condensed">
                     <thead>
                         <tr class="bg-gray-light no-wrap">
                             <th class="text-center" style="width: 10%;">Code</th>
-                            <th class="text-center" style="width: 30%;">Customer Name</th>
-                            <th class="text-center" style="width: 10%;">Date Purchase</th>
+                            <th class="text-center" style="width: 20%;">Customer Name</th>
+                            <th class="text-center" style="width: 10%;">Date Purchased</th>
                             <th class="text-center" style="width: 10%;">Purchase Type</th>
-                            <th class="text-center" style="width: 10%;">Total Quantity</th>
                             <th class="text-center" style="width: 10%;">Total Cost</th>
+                            <th class="text-center" style="width: 10%;">Total Quantity</th>
                             <th class="text-center" style="width: 10%;">Action</th>
                         </tr>
                     </thead>

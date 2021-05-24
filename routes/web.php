@@ -3,6 +3,33 @@
 use Faker\Generator as Faker;
 use App\Http\Controllers\Common\CommonServiceController as CommenService;
 use App\Model\Inventory\maintenance\InventoryTableCustomer;
+use App\User;
+
+
+Route::get('/bingo/cards', 'Bingo\BingoController@bingo');
+Route::get('/bingo/create', 'Bingo\BingoController@createCards');
+Route::get('/bingo/create/numbers', 'Bingo\BingoController@createCardsNumbers');
+
+
+
+Route::get('/login/to/api', function(){
+
+	$user =  User::find(1);
+
+	$user->created_date = $user->created_date;
+
+	return request()->cookie();
+	return response('Hello World')->cookie(
+	    'name', 'charles', 45
+	);
+
+	return Auth::once(['email' => 'wongcharlesdave@gmail.com', 'password' => 'charlesdave']);
+
+});
+
+Route::post('/hack/test', function(){
+	return 'hacked';
+});
 
 Route::get('/fake-customer', function(Faker $faker, $result = []){
 
@@ -78,8 +105,6 @@ Route::middleware(['auth'])->prefix('inventory')->group(function(){
     Route::get('/collect/customers', 'Manage\Admin\Inventory\InventoryController@html_collect_customers')->name('inventory.collect.customer');
 
     Route::get('/collect/customers/json', 'Manage\Admin\Inventory\InventoryController@html_collect_customers_json')->name('inventory.collect.customer.json');
-
-    Route::get('/collect/item/json', 'Manage\Admin\Inventory\InventoryController@convert_item_to_json')->name('inventory.collect.item.json');
 
     Route::post('/collect/customer/id/json', 'Manage\Admin\Inventory\InventoryController@json_collect_customer_by_id')->name('inventory.collect.customer.id');
 

@@ -66,6 +66,9 @@
                     <h3 class="panel-title pull-left">
                         <span class="fa fa-angle-double-right fa-fw"></span><b>{{ strtoupper($windowName) }}</b>  
                     </h3>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-primary btn-modal-recent"><i class="fa fa-list"></i> &nbsp; Recent Transaction </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -206,6 +209,8 @@
 </section>
 
 @include('manage.system.accounts.scripts.UsersDashboardScript')
+
+@include('manage.inventory.activity.modal.modalshowrecentcashier')
 
 @include('manage.inventory.activity.modal.modalsearchcustomer')
 
@@ -359,6 +364,13 @@
             }
         }); 
 
+        $('.btn-modal-recent').on('click', function(){
+
+            $('#modalshowrecentcashier').modal('show');
+
+            retrieve_recent_cashier();
+        });
+
     });
 
 
@@ -389,6 +401,19 @@
     }
 
     /* AJAX CALLBACK */
+
+    function retrieve_recent_cashier()
+    {
+        $.ajax({
+            type : 'get',
+            url : '{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-recent-cashier','id' => 1]) }}',
+            dataType : 'html',
+            success : function(data) {
+                $('#modal_load_recent_cashier').html(data);
+            }
+        });
+    }
+
     function ajax_call_customers_by_id(id)
     {
         $.ajax({
@@ -496,60 +521,70 @@
             /*for each item in the array...*/
             $.ajax({
                 type : 'get',
-                url : '{{ route('inventory.collect.item.json') }}',
+                url : '{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-product-json', 'id' => '1']) }}',
                 data : {page: 1, search : inp.val()},
                 dataType : 'json',
-                success : function(jsonData){
-
-                    var data = jsonData.data;
+                success : function(data){
 
                     for (i = 0; i < data.length; i++) {
-
-                        var search_word = $.trim(data[i].item_code.toUpperCase()) + ' ' + $.trim(data[i].item_description.toUpperCase());
+                        
                         /*check if the item starts with the same letters as the text field value:*/
-                        // if (data[i].item_description.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                            console.log(data.length)
-                        if (search_word.search(inp.val().toUpperCase()) >= 0) {
-                            /*create a DIV element for each matching element:*/
-                            var searched_word = data[i].item_code + ' ' + data[i].item_description;
+                        let text_code = data[i].item_code;
+                        let text_desc = data[i].item_description;
+                            
+                        let matched_searc = new RegExp(inp.val(),'i');
 
-                            b = document.createElement("DIV");
-                            /*make the matching letters bold:*/
-                            searched_start = search_word.search(inp.val().toUpperCase());
+                        let matching_code = text_code.match(matched_searc); 
+                        let matching_desc = text_desc.match(matched_searc); 
+                            
+                        let searched_code = text_code.replace(matching_code, '<span style="background-color: yellow;">' + matching_code + '</span>');
+                        let searched_desc = text_desc.replace(matching_desc, '<span style="background-color: yellow;">' + matching_desc + '</span>');
+                            
+                        // var searched_word = searched_code + ' ' + searched_desc;
 
-                            b.innerHTML = searched_word.substr(0,searched_start);
+                        // console.log(searched_code + ' ' + searched_desc);
 
-                            b.innerHTML += "<strong>" + searched_word.substr(searched_start, val.length) + "</strong>";
+                        // var searched_start = searched_word.search(inp.val().toUpperCase());
 
-                            b.innerHTML += searched_word.substr((searched_start + val.length));
-                            /*insert a input field that will hold the current array item's value:*/
-                            b.innerHTML += "<input type='hidden' name='input_selected_item' value='" + searched_word + "'>";
-                          
-                            b.setAttribute('class','input-item-result');
+                        b = document.createElement("DIV");
 
-                            b.setAttribute('onclick','return append_inputed_item(' + data[i].item_id + ')');
-                            // execute a function when someone clicks on the item value (DIV element):
-                            b.addEventListener("click", function(e) {
-                                /*insert the value for the autocomplete text field:*/
-                                // console.log()
-                                inp.val(this.getElementsByTagName("input")[0].value);
+                        // b.innerHTML  = searched_word.substr(0,searched_start);
+                        b.innerHTML  = searched_code + ' ' + searched_desc;
+                        // b.innerHTML += "<strong>" + searched_word.substr(searched_start, val.length) + "</strong>";
+                        // b.innerHTML += 'Hello';
 
-                                inp.focus().select();
-                                // inp.value = this.getElementsByTagName("input")[0].value;
-                                // close the list of autocompleted values,
-                                // (or any other open lists of autocompleted values:
-                                closeAllLists();
+                        // b.innerHTML += searched_word.substr((searched_start + val.length));
+                        /*insert a input field that will hold the current array item's value:*/
+                        b.innerHTML += "<input type='hidden' name='input_selected_item' value='" + searched_code + ' ' + searched_desc + "'>";
+                        b.innerHTML += "<input type='hidden' name='input_selected_item_code' value='" + data[i].item_code + "'>";
+                      
+                        b.setAttribute('class','input-item-result');
 
-                            });
+                        b.setAttribute('onclick','return append_inputed_item(' + data[i].item_id + ')');
+                        // execute a function when someone clicks on the item value (DIV element):
+                        b.addEventListener("click", function(e) {
+                            /*insert the value for the autocomplete text field:*/
+                            // console.log()
+                            inp.val(text_code + ' ' + text_desc);
 
-                            a.appendChild(b);
+                            inp.focus().select();
+                            // inp.value = this.getElementsByTagName("input")[0].value;
+                            // close the list of autocompleted values,
+                            // (or any other open lists of autocompleted values:
+                            closeAllLists();
 
-                        }
+                        });
+
+                        a.appendChild(b);
 
                     }
 
                     if(data.length == 1) {
-                        $('.input-item-result')[0].click();
+                        var inputed = inp.val();
+                        var searche = $('input[name="input_selected_item_code"]').val();
+                        if(inputed.length === searche.length) {
+                            $('.input-item-result')[0].click();
+                        }
                     }
 
                     if(data.length == 0) {
@@ -558,11 +593,11 @@
 
                         b.setAttribute('class','no-item-result')
 
-                        b.innerHTML += '<strong class="no-item-result-text">No result\'s found!</strong>';
+                        b.innerHTML += '<strong class="no-item-result-text"> No result\'s found! </strong>';
 
                         a.appendChild(b);
 
-                        inp.focus().select();
+                        // inp.focus().select();
 
                     }
 

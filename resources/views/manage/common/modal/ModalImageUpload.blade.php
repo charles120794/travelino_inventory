@@ -53,15 +53,15 @@
 
     $(document).ready(function(){
  
-        $.ajax({
-            url : '{{ route('settings.route', ['path' => 'settings', 'action' => 'retrieve-images', 'id' => encrypt('') ]) }}',
-            type : 'post',
-            dataType : 'html',
-            success : function(data){
-                $('#uploaded-image-content').html(data);
-                callBackUpdateMedia();
-            } 
-        });
+        // $.ajax({
+        //     url : '{{-- route('settings.route', ['path' => 'settings', 'action' => 'retrieve-images', 'id' => encrypt('') ]) --}}',
+        //     type : 'post',
+        //     dataType : 'html',
+        //     success : function(data){
+        //         $('#uploaded-image-content').html(data);
+        //         callBackUpdateMedia();
+        //     } 
+        // });
 
         $('#btn-upload').on('click', function(){
             $('#upload #form-upload-image').submit();
