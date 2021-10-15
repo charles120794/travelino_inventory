@@ -21,8 +21,8 @@
 						<input type="hidden" name="method[{{ $key }}][company_id]" value="{{ encrypt($companyId) }}">
 						<input type="hidden" name="method[{{ $key }}][module_id]" value="{{ encrypt($moduleId) }}">
 					</td>
-					<td style="vertical-align: middle;">{{ str_replace('_', ' ', $value->method_function) }}</td>
-					<td style="vertical-align: middle;">{{ str_replace('-', ' ', $value->method_name) }}</td>
+					<td style="vertical-align: middle;">{{ Str::title(str_replace('_', ' ', $value->method_function)) }}</td>
+					<td style="vertical-align: middle;">{{ Str::title(str_replace('-', ' ', $value->method_name)) }}</td>
 					<td style="vertical-align: middle;">{{ (is_null($value->method_blade)) ? 'CRUD' : 'DISPLAY' }}</td>
 				</tr>
 

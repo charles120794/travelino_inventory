@@ -20,8 +20,8 @@
 			<td style="vertical-align: middle;">{{ $value->companyInfo['company_code'] }}</td>
 			@endif
 			<td style="vertical-align: middle;">{{ $value->firstname }} {{ $value->middlename }} {{ $value->lastname }} </td>
-			<td style="vertical-align: middle;">{{ $value->email }}</td>
-			<td style="vertical-align: middle;">{{ $value->contact }}</td>
+			<td style="vertical-align: middle;">{{ $value->personal_email }}</td>
+			<td style="vertical-align: middle;">{{ $value->personal_contact_phone }}</td>
 			<td class="text-center" style="padding-top: 5px; padding-bottom: 0px; vertical-align: middle;"> 
 				<i class="{{ ($value->status == 1) ? 'fa fa-toggle-on text-orange' : 'fa fa-toggle-off text-red' }}" id="togglestatus{{ $value->users_id }}" onclick="return updateStatus(this.id,'{{ route('accounts.route',['path' => $path, 'action' => 'toggle-users-profile', 'id' => encrypt($value->users_id)]) }}')" style="font-size: 23px; cursor: pointer;"></i> 
 			</td>

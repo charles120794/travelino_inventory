@@ -21,36 +21,36 @@
 				<input type="text" class="form-control info-input" name="lastname" id="lname" value="{{ $thisUserAccount->lastname }}" required>
 			</div>
 			<hr>
-			<div class="form-group">
+{{-- 			<div class="form-group">
 				<label for="position_title" class="control-label"> Occupation: </label>
 				<span class="form-control info-text">{{ $thisUserAccount->position_title }}</span>
 				<input type="text" class="form-control info-input" name="position_title" id="position_title" value="{{ $thisUserAccount->position_title }}" required>
-			</div>
+			</div> --}}
 			<div class="form-group">
 				<label for="contact" class="control-label"> Contact No: </label>
-				<span class="form-control info-text">{{ $thisUserAccount->contact }}</span>
-				<input type="text" class="form-control info-input" name="contact" id="contact" value="{{ $thisUserAccount->contact }}" required>
+				<span class="form-control info-text">{{ $thisUserAccount->personal_contact_phone }}</span>
+				<input type="text" class="form-control info-input" name="contact" id="contact" value="{{ $thisUserAccount->personal_contact_phone }}" required>
 			</div>
 			<div class="form-group">
 				<label for="email" class="control-label"> Email Address: </label>
-				<span class="form-control info-text">{{ $thisUserAccount->email }}</span>
-				<input type="text" class="form-control info-input" name="email" id="email" value="{{ $thisUserAccount->email }}" required>
+				<span class="form-control info-text">{{ $thisUserAccount->personal_email }}</span>
+				<input type="text" class="form-control info-input" name="email" id="email" value="{{ $thisUserAccount->personal_email }}" required>
 			</div>
 			<div class="form-group">
 				<label for="birthdate" class="control-label"> Date of Birth: </label>
-				<span class="form-control info-text">{{ date('m/d/Y',strtotime($thisUserAccount->birthdate)) }}</span>
-				<input type="date" class="form-control info-input" name="birthdate" id="birthdate" value="{{ $thisUserAccount->birthdate }}" required>
+				<span class="form-control info-text">{{ date('F d, Y',strtotime($thisUserAccount->birth_date)) }}</span>
+				<input type="date" class="form-control info-input" name="birthdate" id="birthdate" value="{{ $thisUserAccount->birth_date }}" required>
 			</div>
 			<div class="form-group">
 				<label for="address" class="control-label"> Complete Address: </label>
 				<span class="form-control info-text">{{ $thisUserAccount->address }}</span>
 				<textarea class="form-control info-input" name="address" id="address" style="resize: vertical; min-height: 100px;" required>{{ $thisUserAccount->address }}</textarea>
 			</div>
-			<div class="form-group">
+{{-- 			<div class="form-group">
 				<label for="education" class="control-label"> Education: </label>
 				<span class="form-control info-text">{{ $thisUserAccount->education }}</span>
 				<textarea class="form-control info-input" name="education" id="education" style="resize: vertical; min-height: 100px;" required>{{ $thisUserAccount->education }}</textarea>
-			</div>
+			</div> --}}
 		</div>
 		<div class="box-footer">
 			<button type="submit" class="btn btn-info pull-right"><i class="fa fa-check"></i> Submit </button>

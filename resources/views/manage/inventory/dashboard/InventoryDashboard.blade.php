@@ -61,7 +61,7 @@
             <div class="box box-solid">
                 <div class="box-body text-center">
                     <h1 style="line-height: 0;">{{ number_format($total_qty_sold) }}</h1> 
-                    <h1 style="line-height: 1;"><small> Quantity </small></h1> 
+                    <h1 style="line-height: 1;"><small> Quantity Sold </small></h1> 
                 </div>
                 <div class="box-footer text-right">
                     <button type="button" class="btn btn-default btn-sm btn-flat"><i class="fa fa-print"></i> Print Preview </button>

@@ -10,7 +10,30 @@ Route::get('/bingo/cards', 'Bingo\BingoController@bingo');
 Route::get('/bingo/create', 'Bingo\BingoController@createCards');
 Route::get('/bingo/create/numbers', 'Bingo\BingoController@createCardsNumbers');
 
+/**
+ * 
+ */
 
+/**
+ * 
+ */
+
+/**
+ * 
+ */
+
+/**
+ * 
+ */
+
+
+Route::get('/pizza', 'Pizza\PizzaController@index');
+
+Route::get('/test-middleware', 'CreateUsersProfile@index');
+
+Route::get('/page-error', function(){
+	return 'Page Error';
+});
 
 Route::get('/login/to/api', function(){
 
@@ -19,6 +42,7 @@ Route::get('/login/to/api', function(){
 	$user->created_date = $user->created_date;
 
 	return request()->cookie();
+	
 	return response('Hello World')->cookie(
 	    'name', 'charles', 45
 	);

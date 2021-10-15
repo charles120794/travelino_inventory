@@ -40,7 +40,7 @@
 						@include('manage.system.accounts.forms.FormUsersInformation')
 					</div>
 					<div class="tab-pane" id="security">
-						@include('manage.system.accounts.forms.FormUsersCredential')
+						@include('manage.system.accounts.forms.FormUsersChangePassword')
 					</div>
 				</div> 
 

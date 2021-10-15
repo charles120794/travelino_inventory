@@ -24,7 +24,7 @@
 						COMPANY: 
 					</td>
 					<td style="padding: 0px;">
-						<select class="form-control input-sm" name="company" data-toggle="tooltip" title="Please select Company" required>
+						<select class="form-control input-sm" name="company" data-toggle="tooltip" title="Please select Company" tabindex="1" required>
 							<option value="">--SELECT COMPANY--</option>
 							@foreach($usersCompany as $key => $value)
 		                    <option value="{{ $value->company_id }}" @if(old('company') == $value->company_id) selected @endif> {{ strtoupper($value->company_code) }} - {{ strtoupper($value->company_name) }} {{ ($value->company_id == $thisUser->company_id) ? ' (DEFAULT COMPANY)' : ''}}</option>
@@ -35,7 +35,7 @@
 						USERNAME: 
 					</td>
 					<td style="padding: 0px;">
-						<input type="text" class="form-control input-sm" name="username" value="{{ old('username') }}" autocomplete="off" required>
+						<input type="text" class="form-control input-sm" name="username" value="{{ old('username') }}" autocomplete="off" tabindex="0" required>
 					</td>
 				</tr>
 				<tr>
@@ -43,13 +43,13 @@
 						FIRSTNAME:
 					</td>
 					<td style="padding: 0px;">
-						<input type="text" class="form-control input-sm" name="firstname" value="{{ old('firstname') }}" autocomplete="off" required>
+						<input type="text" class="form-control input-sm" name="firstname" value="{{ old('firstname') }}" autocomplete="off" tabindex="2" required>
 					</td>
 					<td style="font-weight: bold; font-size: 12px; vertical-align: middle; padding: 6px;">
 						PASSWORD: 
 					</td>
 					<td style="padding: 0px;">
-						<input type="password" class="form-control input-sm" name="password" autocomplete="off" required>
+						<input type="password" class="form-control input-sm" name="password" autocomplete="off" tabindex="10" required>
 					</td>
 				</tr>
 				<tr>
@@ -57,13 +57,13 @@
 						MIDDLENAME:
 					</td>
 					<td style="padding: 0px;">
-						<input type="text" class="form-control input-sm" name="middlename" value="{{ old('middlename') }}" autocomplete="off" required>
+						<input type="text" class="form-control input-sm" name="middlename" value="{{ old('middlename') }}" autocomplete="off" tabindex="3" required>
 					</td>
 					<td style="font-weight: bold; font-size: 12px; vertical-align: middle; padding: 6px;">
 						CONFIRM PASSWORD: 
 					</td>
 					<td style="padding: 0px;">
-						<input type="password" class="form-control input-sm" name="cpassword" autocomplete="off" required>
+						<input type="password" class="form-control input-sm" name="cpassword" autocomplete="off" tabindex="11" required>
 					</td>
 				</tr>
 				<tr>
@@ -71,13 +71,13 @@
 						LASTNAME:
 					</td>
 					<td style="padding: 0px;">
-						<input type="text" class="form-control input-sm" name="lastname" value="{{ old('lastname') }}" autocomplete="off" required>
+						<input type="text" class="form-control input-sm" name="lastname" value="{{ old('lastname') }}" autocomplete="off" tabindex="4" required>
 					</td>
 					<td style="font-weight: bold; font-size: 12px; vertical-align: middle; padding: 6px;">
 						EMAIL ADDRESS:
 					</td>
 					<td style="padding: 0px;">
-						<input type="email" class="form-control input-sm" name="email" value="{{ old('email') }}" autocomplete="off" required>
+						<input type="email" class="form-control input-sm" name="email" value="{{ old('email') }}" autocomplete="off" tabindex="12" required>
 					</td>
 				</tr>
 				<tr>
@@ -85,13 +85,13 @@
 						 BIRTHDATE: 
 					</td>
 					<td style="padding: 0px;">
-						<input type="date" class="form-control input-sm" name="birth_date" value="{{ old('birth_date') }}" required>
+						<input type="date" class="form-control input-sm" name="birth_date" value="{{ old('birth_date') }}" tabindex="5" required>
 					</td>
 					<td style="font-weight: bold; font-size: 12px; vertical-align: middle; padding: 6px;">
 						CONTACT NUMBER:
 					</td>
 					<td style="padding: 0px;">
-						<input type="text" class="form-control input-sm" name="contact_no" value="{{ old('contact_no') }}" autocomplete="off" required>
+						<input type="text" class="form-control input-sm" name="contact_no" value="{{ old('contact_no') }}" autocomplete="off" tabindex="13" required>
 					</td>
 				</tr>
 				<tr>
@@ -99,7 +99,7 @@
 						EDUCATION: 
 					</td>
 					<td style="padding: 0px;">
-						<input type="text" class="form-control input-sm" name="education" value="{{ old('education') }}" autocomplete="off" required>
+						<input type="text" class="form-control input-sm" name="education" value="{{ old('education') }}" autocomplete="off" tabindex="6" required>
 					</td>
 					<td style="font-weight: bold; font-size: 12px; vertical-align: middle; padding: 6px;">
 					</td>
@@ -111,7 +111,7 @@
 						POSITION:
 					</td>
 					<td style="padding: 0px;">
-						<input type="text" class="form-control input-sm" name="position_title" value="{{ old('position_title') }}" autocomplete="off" required>
+						<input type="text" class="form-control input-sm" name="position_title" value="{{ old('position_title') }}" autocomplete="off" tabindex="7" required>
 					</td>
 					<td style="font-weight: bold; font-size: 12px; vertical-align: middle; padding: 6px;">
 					</td>
@@ -123,7 +123,7 @@
 						ADDRESS:
 					</td>
 					<td style="padding: 0px;">
-						<textarea class="form-control input-sm" name="address" autocomplete="off" required>{{ old('address') }}</textarea>
+						<textarea class="form-control input-sm" name="address" autocomplete="off" tabindex="8" required>{{ old('address') }}</textarea>
 					</td>
 					<td style="font-weight: bold; font-size: 12px; vertical-align: middle; padding: 6px;">
 					</td>
