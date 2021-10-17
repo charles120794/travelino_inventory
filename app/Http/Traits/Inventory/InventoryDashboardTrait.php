@@ -278,11 +278,9 @@ trait InventoryDashboardTrait
 		return $this->myViewMethodLoader($method)->with('customer', $customer);
 	}
 
-	public function inventory_dashboard_retrieve_customer_cashier_details($method, $id, $request)
+	public function inventory_dashboard_retrieve_customer_cashier_headers($method, $id, $request)
 	{
-		$cashier = (new InventoryActivityCashier)
-							->where('cashier_id', decrypt($request->get('id')))
-							->first();
+		$cashier = (new InventoryActivityCashier)->where('cashier_id', decrypt($request->get('id')))->first();
 
 		return $this->myViewMethodLoader($method)->with('cashier', $cashier);
 	}

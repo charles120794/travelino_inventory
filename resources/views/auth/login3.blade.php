@@ -24,7 +24,7 @@
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
-                <a href="/"><b>Pro</b>Builder</a>
+                <a href="/"><b>FINMATEK</b></a>
             </div>
             <div class="login-box-body">
                 <p class="login-box-msg">Sign in to start your session</p>

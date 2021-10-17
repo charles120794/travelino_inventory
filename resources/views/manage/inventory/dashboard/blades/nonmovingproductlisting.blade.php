@@ -39,12 +39,12 @@
                 <td class="v-align-middle text-center"> <small>{{ number_format($item->item_quantity) }}</small> </td>
                 <td class="v-align-middle text-center"> <small>{{ $age_status }}</small> </td>
                 <td class="v-align-middle text-center"> 
-                    <button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>
+                    <button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i> Remove Item </button>
                 </td>
             </tr>
         @empty
             <tr>
-                <td class="text-center" colspan="6"> No Products in minimum Level </td>
+                <td class="text-center" colspan="6"> No Non-moving Products </td>
             </tr>
         @endforelse
     </tbody>

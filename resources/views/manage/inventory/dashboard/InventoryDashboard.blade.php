@@ -48,20 +48,76 @@
         <div class="col-md-3">
             <div class="box box-solid">
                 <div class="box-body text-center">
-                    <h1 style="line-height: 0;">&#8369;{{ number_format($total_income, 2) }}</h1> 
-                    <h1 style="line-height: 1;"><small> Profit </small></h1> 
+                    <h1 style="line-height: 0;">&#8369;{{ number_format($total_profits, 2) }}</h1> 
+                    <h1 style="line-height: 1;"><small> NET Amount </small></h1> 
                 </div>
                 <div class="box-footer text-right">
                     <button type="button" class="btn btn-default btn-sm btn-flat"><i class="fa fa-print"></i> Print Preview </button>
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-3">
             <div class="box box-solid">
                 <div class="box-body text-center">
-                    <h1 style="line-height: 0;">{{ number_format($total_qty_sold) }}</h1> 
+                    <h1 style="line-height: 0;">&#8369;{{ number_format($total_gross_a, 2) }}</h1> 
+                    <h1 style="line-height: 1;"><small> Gross Amount </small></h1> 
+                </div>
+                <div class="box-footer text-right">
+                    <button type="button" class="btn btn-default btn-sm btn-flat"><i class="fa fa-print"></i> Print Preview </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box box-primary">
+        <div class="box-header">
+            <h4 class="box-title pull-left text-blue"><b style="font-size: 2rem;"><i class="fa fa-angle-double-right fa-fw"></i> Inventory Report </b></h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="box box-solid">
+                <div class="box-body text-center">
+                    <h1 style="line-height: 0;">&#8369;{{ number_format($total_vat_amt, 2) }}</h1> 
+                    <h1 style="line-height: 1;"><small> VAT Amount </small></h1> 
+                </div>
+                <div class="box-footer text-right">
+                    <button type="button" class="btn btn-default btn-sm btn-flat"><i class="fa fa-print"></i> Print Preview </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="box box-solid">
+                <div class="box-body text-center">
+                    <h1 style="line-height: 0;">{{ number_format($total_qty_sol) }}</h1> 
                     <h1 style="line-height: 1;"><small> Quantity Sold </small></h1> 
+                </div>
+                <div class="box-footer text-right">
+                    <button type="button" class="btn btn-default btn-sm btn-flat"><i class="fa fa-print"></i> Print Preview </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="box box-solid">
+                <div class="box-body text-center">
+                    <h1 style="line-height: 0;">&#8369;{{ number_format($total_qty_cos, 2) }}</h1> 
+                    <h1 style="line-height: 1;"><small> Quantity Cost </small></h1> 
+                </div>
+                <div class="box-footer text-right">
+                    <button type="button" class="btn btn-default btn-sm btn-flat"><i class="fa fa-print"></i> Print Preview </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="box box-solid">
+                <div class="box-body text-center">
+                    <h1 style="line-height: 0;">&#8369;{{ number_format($total_qty_pri, 2) }}</h1> 
+                    <h1 style="line-height: 1;"><small> Quantity Price </small></h1> 
                 </div>
                 <div class="box-footer text-right">
                     <button type="button" class="btn btn-default btn-sm btn-flat"><i class="fa fa-print"></i> Print Preview </button>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits\Gate;
 
+use Auth;
 use Storage;
 use Session;
 use Illuminate\Http\Request;
@@ -32,28 +33,33 @@ trait MainGate
                             return $this->$method($window);
 
                         } else {
-                            Session::flash('failed','Error #006 - The page you are looking for does not belong to this module.');
-                            return back();
+                        	abort(403, 'Error #006 - The page you are looking for does not belong to this module.');
+                            // Session::flash('failed','Error #006 - The page you are looking for does not belong to this module.');
+                            // return back();
                         } 
 
                     } else {
-                    	Session::flash('failed','Error #005 - Cannot Identify your action or no action is defined.');
-                    	return back();
+                    	abort(403, 'Error #005 - Cannot Identify your action or no action is defined.');
+                    	// Session::flash('failed','Error #005 - Cannot Identify your action or no action is defined.');
+                    	// return back();
                     }
 
                 } else {
-                    Session::flash('failed','Error #004 - You do not have permission to access this window.');
-                    return back();
+                	abort(403, 'Error #004 - You do not have permission to access this window.');
+                    // Session::flash('failed','Error #004 - You do not have permission to access this window.');
+                    // return back();
                 }
 
             } else {
-                Session::flash('failed','Error #003 - The page you are looking for does not belong to this module.');
-                return back();
+            	abort(403, 'Error #003 - The page you are looking for does not belong to this module.');
+                // Session::flash('failed','Error #003 - The page you are looking for does not belong to this module.');
+                // return back();
             }
 
         } else {
-            Session::flash('failed','Error #002 - You do not have permission to access this module, Contact your system administrator for more info.');
-            return back();
+        	abort(403, 'Error #002 - You do not have permission to access this module, Contact your system administrator for more info.');
+            // Session::flash('failed','Error #002 - You do not have permission to access this module, Contact your system administrator for more info.');
+            // return back();
         }
 	}
 
@@ -63,6 +69,10 @@ trait MainGate
 								->where('method_name', active_action())
 								->where('status','1')
 								->first();
+
+		if(collect($usersWindowMethod)->isEmpty()) {
+			return abort(403, 'Window\'s Method does not Exist to this Window');
+		}
 
 		if($usersWindowMethod['method_type'] == 'common') {
 
@@ -74,7 +84,7 @@ trait MainGate
 
 	    } else {
 
-	    	return abort(404);
+	    	return abort(403, 'Role Access Failed: You do not have permission to proceed.');
 	    	// Session::flash('failed','Role Access Failed: You do not have permission to proceed.');
 	    	// return back();
 	    }
@@ -89,8 +99,9 @@ trait MainGate
 			return $this->$function($method, active_id(), request());
     	    
     	} else {
-    	    Session::flash('failed','Role Access Failed: The page you are looking for does not belong to this module.');
-    	    return back();
+    		return abort(403, 'Role Access Failed: The page you are looking for does not belong to this module.');
+    	    // Session::flash('failed','Role Access Failed: The page you are looking for does not belong to this module.');
+    	    // return back();
     	}
 	}
 

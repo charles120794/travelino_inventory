@@ -6,9 +6,11 @@
 <body>
 
 	<style type="text/css">
+
 		body {
 		  background: rgb(204,204,204); 
 		}
+
 		page[size="A4"] {
 		  background: white;
 		  width: 21cm;
@@ -18,12 +20,14 @@
 		  margin-bottom: 0.5cm;
 		  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
 		}
+
 		@media print {
 		  body, page[size="A4"] {
 		    margin: 0;
 		    box-shadow: 0;
 		  }
 		}
+		
 	</style>
 
 	<button></button>

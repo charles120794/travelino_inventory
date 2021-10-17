@@ -6,26 +6,27 @@
                 <table class="table table-bordered table-condensed" style="max-height: 70vh; overflow-y: scroll;">
                     <thead>
                         <tr class="bg-gray-light" style="height: 40px;">
-                            <th class="v-align-middle text-center">Code</th>
-                            <th class="v-align-middle text-center">Description</th>
-                            <th class="v-align-middle text-center">Stock</th>
-                            <th class="v-align-middle text-center">Cost</th>
-                            <th class="v-align-middle text-center">Quantity</th>
-                            <th class="v-align-middle text-center">Action</th>
+                            <th class="v-align-middle text-center"> Code </th>
+                            <th class="v-align-middle text-center"> Description </th>
+                            <th class="v-align-middle text-center"> Stock </th>
+                            <th class="v-align-middle text-center"> Price </th>
+                            <th class="v-align-middle text-center"> Quantity </th>
+                            <th class="v-align-middle text-center"> Action </th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($products as $key => $value)
+
                             <?php 
                                 $total_quantity = $value['item_quantity'] - $value['item_quantity_sold'] - $value['item_quantity_checkout'];
-
                                 $total_quantity_remaining = (is_null($value['item_quantity_sold'])) ? $value['item_quantity'] : $total_quantity ;
                             ?>
+
                             <tr>
                                 <td class="v-align-middle">{{ $value['item_code'] }}</td>
                                 <td class="v-align-middle">{{ $value['item_description'] }}</td>
                                 <td class="v-align-middle text-center">{{ number_format($total_quantity_remaining) }}</td>
-                                <td class="v-align-middle text-blue text-bold">&#8369;{{ number_format($value['item_selling_price'], 2) }}</td>
+                                <td class="v-align-middle text-right text-blue text-bold">&#8369;{{ number_format($value['item_selling_price'], 2) }}</td>
                                 <td class="v-align-middle text-center no-padding" style="width: 140px;">
                                     
                                     <div class="input-group">

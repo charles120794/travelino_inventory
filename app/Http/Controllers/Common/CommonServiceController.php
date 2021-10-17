@@ -10,8 +10,9 @@ use App\Http\Traits\Accounts\UsersInformationTrait;
 
 class CommonServiceController
 {
-
     use ModuleCommonAccessTrait, SystemCommonSideBarTrait, UsersInformationTrait;
+
+    const TAX_RATE = 0.12;
 
     public function dateTimeToday($format)
     {

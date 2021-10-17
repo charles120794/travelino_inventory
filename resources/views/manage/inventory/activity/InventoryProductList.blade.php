@@ -70,7 +70,7 @@
                         <div class="col-md-12">
                             <div class="bg-gray-light">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title"><i class="fa fa-table"></i> Product Table</h3>
+                                    <h3 class="box-title"><i class="fa fa-table"></i> Product Table </h3>
                                 </div>
                                 <div class="box-body">
                                     <div class="row">

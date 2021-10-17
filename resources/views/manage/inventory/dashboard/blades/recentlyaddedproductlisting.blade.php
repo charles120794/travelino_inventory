@@ -6,7 +6,7 @@
             <th class="text-center" style="width: 10%;">Unit</th>
             <th class="text-center" style="width: 10%;">Date Added</th>
             <th class="text-center" style="width: 10%;">Quantity</th>
-            <th class="text-center" style="width: 10%;">Cost</th>
+            <th class="text-center" style="width: 10%;">Price</th>
         </tr>
     </thead>
     <tbody>

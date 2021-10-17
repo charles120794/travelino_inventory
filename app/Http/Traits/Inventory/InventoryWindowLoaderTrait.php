@@ -14,49 +14,64 @@ trait InventoryWindowLoaderTrait
 {
 	public function inventory_dashboard($window)
 	{
-
 		$date_range = (request()->has('df') && request()->has('dt')) ? 
+							date('F d, Y', strtotime(request()->get('df'))) . ' - ' . date('F d, Y',strtotime(request()->get('dt'))) : 
+							date('F d, Y') ;
 
-						date('F d, Y', strtotime(request()->get('df'))) . ' - ' . date('F d, Y',strtotime(request()->get('dt'))) : date('F d, Y') ;
-
-		$total_expense  = $this->inventory_cashier_total_expenses_price();
-		$total_revenue  = $this->inventory_cashier_total_revenue_price();
-		$total_income   = $this->inventory_cashier_total_income_price();
-		$total_qty_sold = $this->inventory_cashier_total_quantity_sold();
+		$total_expense = $this->inventory_cashier_total_purchase();
+		$total_revenue = $this->inventory_cashier_total_selling();
+		$total_vat_amt = $this->inventory_cashier_total_vat_amount();
+		$total_profits = $this->inventory_cashier_total_vatable();
+		$total_gross_a = $this->inventory_cashier_total_gross();
+		$total_qty_sol = $this->inventory_cashier_total_quantity_sold();
+		$total_qty_cos = $this->inventory_cashier_total_qty_sold_cost();
+		$total_qty_pri = $this->inventory_cashier_total_qty_sold_price();
 
 		return $this->myViewLoader($window)
 					->with('total_expense', $total_expense)
 					->with('total_revenue', $total_revenue)
-					->with('total_income', $total_income)
-					->with('total_qty_sold', $total_qty_sold)
+					->with('total_vat_amt', $total_vat_amt)
+					->with('total_profits', $total_profits)
+					->with('total_gross_a', $total_gross_a)
+					->with('total_qty_sol', $total_qty_sol)
+					->with('total_qty_cos', $total_qty_cos)
+					->with('total_qty_pri', $total_qty_pri)
 					->with('date_range', $date_range);
 	}
 
 	public function inventory_cashier($window)
 	{
+		$products = $this->product_data();
 		$customer = $this->customer_data();
-
-		$product  = $this->product_data();
-
 		$currency = $this->currency_data();
 
 		return $this->myViewLoader($window)
+					->with('product',  $products)
 					->with('customer', $customer)
-					->with('currency', $currency)
-					->with('product', $product);
+					->with('currency', $currency);
+	}
+
+	public function inventory_order($window)
+	{
+		$products = $this->product_data();
+		$customer = $this->customer_data();
+		$currency = $this->currency_data();
+
+		return $this->myViewLoader($window)
+					->with('product',  $products)
+					->with('customer', $customer)
+					->with('currency', $currency);
 	}
 
 	public function inventory_issuance($window)
 	{
-		$contact = $this->contact_data();
-
-		$product = $this->product_data();
-
+		$contact    = $this->contact_data();
+		$product    = $this->product_data();
 		$department = $this->department_data();
 
 		return $this->myViewLoader($window)
-					->with('contact',$contact)
-					->with('product',$product)
+					->with('contact',   $contact)
+					->with('product',   $product)
 					->with('department',$department);
 	}
 

@@ -73,7 +73,7 @@
             </div>
         </div>
     </div>
-    <form method="post" action="{{ route('inventory.route',['path' => $path, 'action' => 'create-cashier-receipt', 'id' => encrypt(1) ]) }}" id="form_create_cashier"> @csrf
+    <form method="post" action="{{ route('inventory.route',['path' => $path, 'action' => 'cashier-create-receipt', 'id' => encrypt(1) ]) }}" id="form_create_cashier"> @csrf
         <div class="row">
             <div class="col-md-9">
                 <div class="box box-solid">
@@ -401,15 +401,17 @@
     }
 
     /* AJAX CALLBACK */
-
-    function retrieve_recent_cashier()
+    function retrieve_recent_cashier(page = 1)
     {
+        modal_loader_spiner(true);
         $.ajax({
             type : 'get',
-            url : '{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-recent-cashier','id' => 1]) }}',
+            url : '{{ route('inventory.route',['path' => $path, 'action' => 'cashier-retrieve-receipt-history', 'id' => str_random(30)]) }}',
+            data : {'cashier-history-page': page},
             dataType : 'html',
             success : function(data) {
                 $('#modal_load_recent_cashier').html(data);
+                modal_loader_spiner(false);
             }
         });
     }
@@ -435,7 +437,7 @@
             url : '{{ route('inventory.collect.customer') }}',
             data : {page: page, search: search},
             success : function(data) {
-                $('#modal_load_customers').html(data)
+                $('#modal_load_customers').html(data);
                 modal_loader_spiner(false);
             }
         });
@@ -447,7 +449,9 @@
             type : 'get',
             url : '{{ route('inventory.collect.customer.json') }}',
             data : {page: page, search: search},
-            success : function(data) { }
+            success : function(data) { 
+
+            }
         });
     }
 
@@ -521,7 +525,7 @@
             /*for each item in the array...*/
             $.ajax({
                 type : 'get',
-                url : '{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-product-json', 'id' => '1']) }}',
+                url : '{{ route('inventory.route',['path' => $path, 'action' => 'cashier-retrieve-product-json', 'id' => str_random(30)]) }}',
                 data : {page: 1, search : inp.val()},
                 dataType : 'json',
                 success : function(data){

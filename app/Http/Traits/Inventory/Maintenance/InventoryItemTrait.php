@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits\Inventory\Maintenance;
 
+use DB;
 use Session;
 use App\Model\Inventory\maintenance\InventoryTableItem;
 use App\Model\Inventory\maintenance\InventoryTableItemGroup;
@@ -10,6 +11,32 @@ use App\Http\Controllers\Common\CommonServiceController as CommenService;
 
 trait InventoryItemTrait
 {
+
+	public function inventory_retrieve_selling_product()
+	{
+		$items = (new InventoryTableItem)
+					->withCount(['itemQuantity AS item_quantity_sold' => function ($query) {
+				            $query->select(DB::raw("SUM(cashier_quantity) as cashier_quantity"));
+				            $query->whereHas('cashier', function($query){
+
+				            	$query->where('cashier_status_order','paid');
+				            	$query->whereIn('cashier_purchase_type', ['purchase','order']);
+							});
+				        }
+			    	])->withCount(['itemBasket AS item_quantity_checkout' => function ($query) {
+	    		            if(request()->has('customer')) {
+	    		            	$query->select(DB::raw("SUM(basket_item_quantity_new) as basket_item_quantity"));
+	    		            }
+	    		        }
+	    	    	]);
+
+    	if(request()->has('search') && !is_null(request()->get('search'))) {
+			$items = $items->where('item_code', 'like', '%' . request()->get('search') . '%');
+			$items = $items->orWhere('item_description', 'like', '%' . request()->get('search') . '%');
+		}
+
+		return $items->orderBy('item_description','asc')->get();
+	}
 
 	public function foreachdataflatten($array = [], $result = [])
 	{

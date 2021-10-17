@@ -1,13 +1,13 @@
 <table class="table table-bordered table-condensed">
     <thead>
         <tr class="bg-gray-light no-wrap">
-            <th class="text-center" style="width: 10%;">Code</th>
-            <th class="text-center" style="width: 40%;">Description</th>
-            <th class="text-center" style="width: 10%;">Unit</th>
-            <th class="text-center" style="width: 10%;">Qty. Sold</th>
-            <th class="text-center" style="width: 10%;">Amount</th>
-            <th class="text-center" style="width: 10%;">Cost</th>
-            <th class="text-center" style="width: 10%;">Action</th>
+            <th class="text-center" style="width: 10%;"> Code </th>
+            <th class="text-center" style="width: 40%;"> Description </th>
+            <th class="text-center" style="width: 10%;"> Unit </th>
+            <th class="text-center" style="width: 10%;"> Qty. Sold </th>
+            <th class="text-center" style="width: 10%;"> Cost </th>
+            <th class="text-center" style="width: 10%;"> Price </th>
+            <th class="text-center" style="width: 10%;"> Action </th>
         </tr>
     </thead>
     <tbody>
@@ -22,12 +22,12 @@
                 <td class="v-align-middle text-right text-green text-bold"> <small>&#8369;{{ number_format($item->item_quantity_sold * $item->item_purchase_price, 2) }}</small> </td>
                 <td class="v-align-middle text-right text-blue text-bold"> <small>&#8369;{{ number_format($item->item_quantity_sold * $item->item_selling_price, 2) }}</small> </td>
                 <td class="v-align-middle text-center"> 
-                    <button class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Add Item </button>
                 </td>
             </tr>
         @empty
             <tr>
-                <td class="text-center" colspan="7"> No Products in minimum Level </td>
+                <td class="text-center" colspan="7"> No Out of stcock Products </td>
             </tr>
         @endforelse
     </tbody>

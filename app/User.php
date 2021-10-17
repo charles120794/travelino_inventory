@@ -27,9 +27,9 @@ class User extends Authenticatable
      *
      * @var array
      */
-    // protected $fillable = [
-    //     'name', 'personal_email', 'password',
-    // ];
+    protected $fillable = [
+        'name', 'email', 'password',
+    ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -46,14 +46,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'is_admin' => 'boolean',
-        'created_date' => 'F d, Y',
+        // 'email_verified_at' => 'datetime',
+        // 'is_admin' => 'boolean',
+        // 'created_date' => 'F d, Y',
     ];
 
     public $primaryKey = 'users_id';
     
-    public $timestamps = false;
+    // public $timestamps = false;
 
     // public function setEmailAttribute($value)
     // {
@@ -62,7 +62,7 @@ class User extends Authenticatable
 
     public function getFullNameAttribute($value)
     {
-        return $value->status + $value->order_level + $value->number;
+        // return $value->status + $value->order_level + $value->number;
     }
 
     public function companyInfo()

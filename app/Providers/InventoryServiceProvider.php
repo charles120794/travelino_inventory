@@ -61,6 +61,14 @@ class InventoryServiceProvider extends ServiceProvider
             return \App\Http\Traits\Inventory\Activity\InventoryCashierTrait::class;
         });
 
+        $this->app->singleton('InventoryBasketTrait', function () {
+            return \App\Http\Traits\Inventory\Activity\InventoryBasketTrait::class;
+        });
+
+        $this->app->singleton('InventoryOrderTrait', function () {
+            return \App\Http\Traits\Inventory\Activity\InventoryOrderTrait::class;
+        });
+
         //////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////       MAINTENENACE        //////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////

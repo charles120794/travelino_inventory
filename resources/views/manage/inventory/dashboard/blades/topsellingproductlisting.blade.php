@@ -1,13 +1,13 @@
 <table class="table table-bordered table-condensed">
     <thead>
         <tr class="bg-gray-light no-wrap">
-            <th class="text-center" style="width: 10%;">Code</th>
-            <th class="text-center" style="width: 40%;">Description</th>
-            <th class="text-center" style="width: 10%;">Unit</th>
-            <th class="text-center" style="width: 10%;">Qty. Sold</th>
-            <th class="text-center" style="width: 10%;">Stock</th>
-            <th class="text-center" style="width: 10%;">Amount</th>
-            <th class="text-center" style="width: 10%;">Cost</th>
+            <th class="text-center" style="width: 10%;"> Code </th>
+            <th class="text-center" style="width: 40%;"> Description </th>
+            <th class="text-center" style="width: 10%;"> Unit </th>
+            <th class="text-center" style="width: 10%;"> Qty. Sold </th>
+            <th class="text-center" style="width: 10%;"> Stock </th>
+            <th class="text-center" style="width: 10%;"> Cost </th>
+            <th class="text-center" style="width: 10%;"> Price </th>
         </tr>
     </thead>
     <tbody>

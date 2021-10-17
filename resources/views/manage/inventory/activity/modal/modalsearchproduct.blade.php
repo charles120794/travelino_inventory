@@ -1,5 +1,5 @@
 <div class="modal fade" id="modalsearchproduct">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog" style="width: 1200px;">
         <div class="modal-content">
     		<div class="modal-header">
     		    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -137,14 +137,16 @@
         var item_quantity = $('#item_quantity' + key).val();
         var item_id       = $('#item_id' + key).val();
         $.ajax({
-            url : '{{ route('inventory.route',['path' => $path, 'action' => 'update-basket-quantity', 'id' => encrypt(1)]) }}',
+            url : '{{ route('inventory.route',['path' => $path, 'action' => 'update-customer-basket-quantity', 'id' => encrypt(1)]) }}',
             type : 'post',
             data : { 
                 cashier_item_id : item_id, 
                 cashier_item_quantity: item_quantity,
                 cashier_item_customer: item_customer,
             },
-            success : function(data) { console.log('successfully updated'); }
+            success : function(data) { 
+
+            }
         });
     }
 
@@ -177,7 +179,7 @@
     function append_selected_customer_item()
     {
         $.ajax({
-            url : '{{ route('inventory.route',['path' => active_path(), 'action' => 'retrieve-cashier-customer-basket', 'id' => encrypt(1)]) }}',
+            url : '{{ route('inventory.route', ['path' => active_path(), 'action' => 'retrieve-customer-basket', 'id' => encrypt(1)]) }}',
             type : 'get',
             dataType : 'html',
             data : { 
@@ -198,7 +200,7 @@
     function append_inputed_item(item_id = null) {
         var decryptor = '{{ encrypt('now_you_see_me') }}';
         $.ajax({
-            url : '{{ route('inventory.route',['path' => active_path(), 'action' => 'create-cashier-basket', 'id' => encrypt(1)]) }}',
+            url : '{{ route('inventory.route',['path' => active_path(), 'action' => 'create-customer-basket', 'id' => encrypt(1)]) }}',
             type : 'get',
             dataType : 'html',
             data : { 
@@ -225,7 +227,7 @@
         var item_quantity = $('.modal-item-qty' + event.data('key')).val() ;
         var item_customer = $('input[name="customer_id"]').val() ;
         $.ajax({
-            url : '{{ route('inventory.route',['path' => active_path(), 'action' => 'create-cashier-basket', 'id' => encrypt(1)]) }}',
+            url : '{{ route('inventory.route',['path' => active_path(), 'action' => 'create-customer-basket', 'id' => encrypt(1)]) }}',
             type : 'get',
             dataType : 'html',
             data : { 
@@ -277,14 +279,16 @@
         var customer = $('input[name="customer_id"]').val();
         $.ajax({
            type : 'post',
-           url  : '{{ route('inventory.route',['path' => $path, 'action' => 'retrieve-product', 'id' => encrypt('')]) }}',
+           url  : '{{ route('inventory.route',['path' => $path, 'action' => 'cashier-retrieve-product', 'id' => encrypt('')]) }}',
            data : {page: page, search: search, customer: customer},
            success : function (data) {
                 $('#modal_load_pagination').html(data);
                 modal_search_product_focus();
+           },
+           complete : function() {
                 modal_loader_spiner(false);
            }
-        }); 
+        });
     }
 
     function hide_no_item_selected()
