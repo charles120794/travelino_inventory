@@ -182,7 +182,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         // Custom Provider
         App\Providers\InventoryServiceProvider::class,
-
+        yajra\Datatables\DatatablesServiceProvider::class,
     ],
 
     /*
@@ -234,7 +234,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'PayPal' => Srmklive\PayPal\Facades\PayPal::class,
-        
+        'Datatables' => yajra\Datatables\Datatables::class,
     ],
 
 ];

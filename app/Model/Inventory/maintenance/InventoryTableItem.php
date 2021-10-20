@@ -14,7 +14,24 @@ class InventoryTableItem extends Model
 
 	protected $primaryKey = 'item_id';
 
+	protected $appends = [
+		'item_quantity_remaining',
+	];
+
 	public $timestamps = false;
+
+	public function getItemQuantityRemainingAttribute()
+    {
+    	$baskets = $this->itemBasket();
+    	$cashier = $this->itemQuantity();
+
+        $cashier->whereHas('cashier', function($query){
+        	$query->where('cashier_status_order','paid');
+        	$query->whereIn('cashier_purchase_type', ['purchase','order']);
+		});
+
+    	return $this->attributes['item_quantity'] - $cashier->sum('cashier_quantity') - $baskets->sum('basket_item_quantity_new');
+    }
 
 	public function itemGroup()
 	{
@@ -45,6 +62,11 @@ class InventoryTableItem extends Model
 	{
 		return $this->hasMany(new InventoryActivityBasket,'basket_item_id','item_id');
 	}
+
+	// public function itemBasketTotalQuantity()
+	// {
+	// 	return $this->itemBasket()->get()->sum('basket_item_quantity_new');
+	// }
 
 	public function itemCashier()
 	{

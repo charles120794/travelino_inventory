@@ -68,7 +68,7 @@ trait InventoryDashboardTrait
 
 		$products = collect($items)->filter(function($value, $key){
 			return $value['item_quantity'] - $value['item_quantity_sold'] > 0;
-		})->sortByDesc('item_quantity_sold')->take(10);
+		})->sortByDesc('item_quantity_sold');
 
 		return $this->myViewMethodLoader($method)->with('products', $products);
 	}

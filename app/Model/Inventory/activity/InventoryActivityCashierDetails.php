@@ -1,11 +1,11 @@
 <?php 
 
-namespace App\Model\Inventory\Activity;
+namespace App\Model\Inventory\activity;
 
-use App\User;
-use Illuminate\Database\Eloquent\Model;
 use App\Model\Inventory\maintenance\InventoryTableUnit;
 use App\Model\Inventory\maintenance\InventoryTableItem;
+
+use Illuminate\Database\Eloquent\Model;
 
 class InventoryActivityCashierDetails extends Model
 {

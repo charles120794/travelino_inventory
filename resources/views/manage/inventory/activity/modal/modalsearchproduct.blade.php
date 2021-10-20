@@ -6,8 +6,21 @@
     		    <span aria-hidden="true"> &times; </span></button>
     		    <h4 class="modal-title"><i class="fa fa-search"></i> Product / Item </h4>
     		</div>
-    		<div class="modal-body" id="modal_load_pagination">
-    		</div>
+    		<div class="modal-body" id="modal_load_paginationss">
+                <table class="table table-bordered table-condensed cashier-product_datatable" style="width: 100%;">
+                    <thead>
+                        <tr class="bg-gray-light">
+                            <th class="v-align-middle text-center" style="width: 10%;"> Code </th>
+                            <th class="v-align-middle text-center" style="width: 50%;"> Description </th>
+                            <th class="v-align-middle text-center" style="width: 10%;"> Stock </th>
+                            <th class="v-align-middle text-center" style="width: 10%;"> Price </th>
+                            <th class="v-align-middle text-center" style="width: 10%;"> Quantity </th>
+                            <th class="v-align-middle text-center" style="width: 10%;"> Action </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>      
+            </div>
     		<div class="modal-footer">
     			<button type="submit" class="btn btn-default btn-flat" data-dismiss="modal"><i class="fa fa-remove"></i> Close </button>
     		</div>
@@ -18,6 +31,38 @@
 @push('scripts')
 
 <script type="text/javascript">
+
+    $('#modalsearchproduct').ready(function(){ 
+        var productsTable = $('.cashier-product_datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('inventory.route',['path' => $path, 'action' => 'cashier-retrieve-products', 'id' => str_random(30)]) }}",
+            columns: [
+                {data: 'item_code', className : 'v-align-middle'},
+                {data: 'item_description', className : 'v-align-middle'},
+                {data: 'item_quantity_remaining', className : 'v-align-middle text-center'},
+                {data: 'item_selling_price', className : 'v-align-middle text-right text-blue text-bold'},
+                {data: 'quantity_button', className : 'v-align-middle text-center no-padding'},
+                {data: 'selected_product', className : 'v-align-middle text-center no-padding'},
+            ],
+            columnDefs : [
+                { width: '10%' , targets: 0 },
+                { width: '50%' , targets: 1 },
+                { width: '10%' , targets: 2 },
+                { width: '10%' , targets: 3 },
+                { width: '10%' , targets: 4 },
+                { width: '10%' , targets: 5 }
+            ],
+            autoWidth: false,
+            fixedColumns: true
+        }).column( 2 )
+        .data()
+        .filter( function ( value, index ) {
+            alert(value)
+            console.log(value)
+            return value > 20 ? true : false;
+        } );
+    });
 
     $(document).on('keypress', 'input[name="search_modal_item"]', function(event){
         if(event.which == 13){ retrieve_item_per_page(); }
@@ -274,21 +319,7 @@
 
     function retrieve_item_per_page(page = 1)
     {
-        modal_loader_spiner(true);
-        var search = $('input[name="search_modal_item"]').val();
-        var customer = $('input[name="customer_id"]').val();
-        $.ajax({
-           type : 'post',
-           url  : '{{ route('inventory.route',['path' => $path, 'action' => 'cashier-retrieve-product', 'id' => encrypt('')]) }}',
-           data : {page: page, search: search, customer: customer},
-           success : function (data) {
-                $('#modal_load_pagination').html(data);
-                modal_search_product_focus();
-           },
-           complete : function() {
-                modal_loader_spiner(false);
-           }
-        });
+        // $('.cashier-product_datatable').DataTable().ajax.reload();
     }
 
     function hide_no_item_selected()

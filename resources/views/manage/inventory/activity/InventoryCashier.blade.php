@@ -169,12 +169,23 @@
                     </div>
                     <div class="box-body">
                         <div class="row item-headers">
+                            <div class="col-md-12">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <th class="text-center" style="width: 41%;">Item Description</th>
+                                        <th class="text-center" style="width: 18%;">Unit</th>
+                                        <th class="text-center" style="width: 18%;">Quantity(<span class="text-total-quantity">0</span>)</th>
+                                        <th class="text-center" style="width: 18%;">Price</th>
+                                    </thead>
+                                </table>
+                            </div>
                             <div class="col-md-6">
-                                <div class="form-group text-center bg-gray-light pro-p-1">
+                                
+                                <div class="text-center bg-gray-light">
                                     <label> Item Description </label>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 bg-gray-light">
                                 <div class="form-group text-center bg-gray-light pro-p-1">
                                     <label> Unit </label>
                                 </div>
@@ -219,6 +230,8 @@
 @include('manage.inventory.maintenance.modal.modaladdcustomer')
 
 @push('scripts')
+
+<script type="text/javascript" src="{{ asset('inventory/dataTableServerSide.js') }}"></script>
 
 <script type="text/javascript">
     
@@ -309,15 +322,16 @@
             });
 
             modal_loader_spiner(true);
-
+            
             $(this).attr('disabled', true);
 
             setTimeout(function(){
 
-                var customer = JSON.parse(localStorage.getItem('customer_data'));
+                var customer_id   = localStorage.getItem('customer_id');
+                var customer_name = localStorage.getItem('customer_name');
 
-                $('input[name="customer_description"]').val(customer.customer_name).attr('readonly', true);
-                $('input[name="customer_id"]').val(customer.customer);
+                $('input[name="customer_id"]').val(customer_id);
+                $('input[name="customer_description"]').val(customer_name).attr('readonly', true);
 
                 $('#modalsearchcustomer').modal('hide');
 
@@ -419,11 +433,12 @@
     function ajax_call_customers_by_id(id)
     {
         $.ajax({
-            type : 'post',
-            url : '{{ route('inventory.collect.customer.id') }}',
+            type : 'get',
+            url : '{{ route('inventory.route',['path' => $path, 'action' => 'inventory-retrieve-customer-json-id', 'id' => str_random(30)]) }}',
             data : { customer: id },
             success : function(data) {
-                localStorage.setItem('customer_data',data);
+                localStorage.setItem('customer_id', data.customer_id);
+                localStorage.setItem('customer_name', data.customer_name);
             }
         });
     }
@@ -434,10 +449,11 @@
         var search = $('input[name="search_modal_customer"]').val();
         $.ajax({
             type : 'get',
-            url : '{{ route('inventory.collect.customer') }}',
+            url : '{{ route('inventory.route',['path' => $path, 'action' => 'inventory-retrieve-customer-cashier-modal', 'id' => str_random(30)]) }}',
             data : {page: page, search: search},
             success : function(data) {
                 $('#modal_load_customers').html(data);
+                $('.cashier-customer-datatable').DataTable();
                 modal_loader_spiner(false);
             }
         });

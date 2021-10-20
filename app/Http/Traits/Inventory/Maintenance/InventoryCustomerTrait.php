@@ -11,23 +11,27 @@ use App\Http\Controllers\Common\CommonServiceController as CommenService;
 
 trait InventoryCustomerTrait
 {
-	public function customer_data()
+
+	public function inventory_retrieve_customer()
 	{
-		$customer = new InventoryTableCustomer;
+		$customers = (new InventoryTableCustomer)
+								  ->with('customerContact');
 
-		$customer = $customer->when(!is_null(request()->get('search')), function($query) {
-			  return $query->where('customer_code','like','%'.request()->get('search').'%')
-						 ->orWhere('customer_description','like','%'.request()->get('search').'%')
-						 ->orWhere('customer_tin','like','%'.request()->get('search').'%')
-						 ->orWhere('customer_business_style','like','%'.request()->get('search').'%');
-		});
+		if(request()->has('search')) {
 
-		return $customer->orderBy('customer_description','asc')->paginate(10);
-	}
+			$customers = $customers->whereHas('customerContact', function($customers) {
 
-	public function inventory_retrieve_customer($method, $id, $request)
-	{
-		return (new InventoryTableCustomer)->where('customer_id', $request->id)->with('customerAddress')->with('customerContact')->first();
+			$customers = $customers->Where('contact_number','like', '%' . request()->get('search') . '%')
+				                 ->orWhere('contact_email','like', '%' . request()->get('search') . '%');
+			});
+
+			$customers = $customers->orWhere('customer_code', 'like', '%' . request()->get('search') . '%')
+								   ->orWhere('customer_tin', 'like', '%' . request()->get('search') . '%')
+								   ->orWhere('customer_description', 'like', '%' . request()->get('search') . '%')
+					   			   ->orWhere('customer_business_style', 'like', '%' . request()->get('search') . '%');
+		}
+
+		return $customers->orderBy('customer_description','asc')->get();
 	}
 
 	public function inventory_create_customer($method, $id, $request)
@@ -111,9 +115,12 @@ trait InventoryCustomerTrait
 							->count();
 
 		if($validateExist > 0) {
+
 			$request->session()->flash('failed','Cannot delete Customer in used');
 			return back();
+
 		} else {
+
 			InventoryTableCustomer::where('customer_id', decrypt($id))->delete();
 
 			$request->session()->flash('success','Customer successfully deleted');

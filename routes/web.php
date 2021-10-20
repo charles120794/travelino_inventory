@@ -10,10 +10,10 @@ Route::get('/welcome','Manage\Api\LoginController@logoutModuleRedirect');
 
 Route::middleware(['auth'])->prefix('inventory')->group(function(){
 
-    Route::get('/collect/customers', 'Manage\Admin\Inventory\InventoryController@html_collect_customers')->name('inventory.collect.customer');
-    Route::get('/collect/customers/json', 'Manage\Admin\Inventory\InventoryController@html_collect_customers_json')->name('inventory.collect.customer.json');
+    Route::get('/collect/customers', 'Manage\Admin\Inventory\InventoryController@inventory_retrieve_customer')->name('inventory.collect.customer');
+    Route::get('/collect/customers/json', 'Manage\Admin\Inventory\InventoryController@inventory_retrieve_customer_json')->name('inventory.collect.customer.json');
 
-    Route::post('/collect/customer/id/json', 'Manage\Admin\Inventory\InventoryController@json_collect_customer_by_id')->name('inventory.collect.customer.id');
+    Route::post('/collect/customers/json/id', 'Manage\Admin\Inventory\InventoryController@inventory_retrieve_customer_json_id')->name('inventory.collect.customer.json.id');
     Route::post('/{path}/{action?}/{id?}', 'Manage\Admin\Inventory\InventoryController@activeAdmin')->name('inventory.json.get');
 
 }); 

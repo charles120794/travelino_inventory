@@ -3,6 +3,7 @@
 namespace App\Http\Traits\Inventory;
 
 use DB;
+use Cache;
 use Carbon\Carbon;
 use Session;
 use Illuminate\Http\Request;
@@ -42,8 +43,8 @@ trait InventoryWindowLoaderTrait
 	public function inventory_cashier($window)
 	{
 		$products = $this->product_data();
-		$customer = $this->customer_data();
 		$currency = $this->currency_data();
+		$customer = $this->inventory_retrieve_customer();
 
 		return $this->myViewLoader($window)
 					->with('product',  $products)

@@ -9,11 +9,12 @@ use App\Http\Controllers\Controller;
 
 class InventoryController extends Controller 
 {
+	use \App\Http\Traits\Inventory\InventoryCollectionModifierTrait;
 	use \App\Http\Traits\Inventory\InventoryDashboardTrait; 
 	use \App\Http\Traits\Inventory\InventoryDashboardWidgetsTrait; 
-	use \App\Http\Traits\Inventory\InventoryWindowLoaderTrait; 
 	use \App\Http\Traits\Inventory\InventoryMethodLoaderTrait; 
-	use \App\Http\Traits\Inventory\InventoryCollectionModifierTrait;
+	use \App\Http\Traits\Inventory\InventoryModalTableTrait;
+	use \App\Http\Traits\Inventory\InventoryWindowLoaderTrait; 
 
 	/* Activity Trait */
 	use \App\Http\Traits\Inventory\Activity\InventoryIssuanceReturnTrait;

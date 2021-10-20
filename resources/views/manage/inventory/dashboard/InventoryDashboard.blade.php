@@ -194,7 +194,6 @@
 
 
 @push('scripts')
-
 <script type="text/javascript">
 
     $(window).scroll(function(){
@@ -349,6 +348,7 @@
             dataType : 'html',
             success : function (data) {
                 $('.top-selling-products').html(data);
+                $('.table-top-selling-product').DataTable();
             }
         });
     }

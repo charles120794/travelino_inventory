@@ -1,4 +1,4 @@
-<table class="table table-bordered table-condensed">
+<table class="table table-bordered table-condensed cashier-details-datatable">
     <thead>
         <tr class="bg-gray-light no-wrap">
             <th class="text-center" style="width: 10%;">Code</th>

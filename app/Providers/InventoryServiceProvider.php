@@ -26,16 +26,28 @@ class InventoryServiceProvider extends ServiceProvider
         //////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////       TRAITS        ////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////
+        $this->app->singleton('InventoryCollectionModifierTrait', function () {
+            return \App\Http\Traits\Inventory\InventoryCollectionModifierTrait::class;
+        });
+
         $this->app->singleton('InventoryDashboardTrait', function () {
             return \App\Http\Traits\Inventory\InventoryDashboardTrait::class;
         });
-        
-        $this->app->singleton('InventoryWindowLoaderTrait', function () {
-            return \App\Http\Traits\Inventory\InventoryWindowLoaderTrait::class;
+
+        $this->app->singleton('InventoryDashboardWidgetsTrait', function () {
+            return \App\Http\Traits\Inventory\InventoryDashboardWidgetsTrait::class;
         });
 
         $this->app->singleton('InventoryMethodLoaderTrait', function () {
             return \App\Http\Traits\Inventory\InventoryMethodLoaderTrait::class;
+        });
+
+        $this->app->singleton('InventoryModalTableTrait', function () {
+            return \App\Http\Traits\Inventory\InventoryModalTableTrait::class;
+        });
+
+        $this->app->singleton('InventoryWindowLoaderTrait', function () {
+            return \App\Http\Traits\Inventory\InventoryWindowLoaderTrait::class;
         });
 
         //////////////////////////////////////////////////////////////////////////////////////////////////

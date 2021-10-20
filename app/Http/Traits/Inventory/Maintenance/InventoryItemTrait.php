@@ -15,6 +15,8 @@ trait InventoryItemTrait
 	public function inventory_retrieve_selling_product()
 	{
 		$items = (new InventoryTableItem)
+					->with('itemBasket')
+					->with('itemQuantity')
 					->withCount(['itemQuantity AS item_quantity_sold' => function ($query) {
 				            $query->select(DB::raw("SUM(cashier_quantity) as cashier_quantity"));
 				            $query->whereHas('cashier', function($query){
@@ -23,7 +25,8 @@ trait InventoryItemTrait
 				            	$query->whereIn('cashier_purchase_type', ['purchase','order']);
 							});
 				        }
-			    	])->withCount(['itemBasket AS item_quantity_checkout' => function ($query) {
+			    	])
+			    	->withCount(['itemBasket AS item_quantity_checkout' => function ($query) {
 	    		            if(request()->has('customer')) {
 	    		            	$query->select(DB::raw("SUM(basket_item_quantity_new) as basket_item_quantity"));
 	    		            }

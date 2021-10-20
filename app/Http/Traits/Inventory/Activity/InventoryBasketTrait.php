@@ -16,6 +16,8 @@ trait InventoryBasketTrait
 
 	public function inventory_create_customer_basket($method, $id, $request)
 	{
+
+		// return decrypt($request->get('cashier_item_id'));
 		if($request->has('is_not_encrypted') && decrypt($request->get('is_not_encrypted')) == 'now_you_see_me') { 
 
 			$cashier_item_id = $request->get('cashier_item_id');
@@ -38,13 +40,8 @@ trait InventoryBasketTrait
 						->withCount(['itemQuantity AS item_quantity_sold' => function ($query) {
 					            $query->select(DB::raw("SUM(cashier_quantity) as cashier_quantity"));
 					            $query->whereHas('cashier', function($query){
-
-					            	$query->where('cashier_purchase_type','purchase');
-					            	$query->where('cashier_status_order','paid');
-
-					            	$query->orWhere('cashier_purchase_type','order');
-					            	$query->where('cashier_status_order','paid');
-
+					            	$query->where('cashier_status_order', 'paid');
+					            	$query->whereIn('cashier_purchase_type', ['purchase','order']);
 								});
 					        }
 				    	])->first();

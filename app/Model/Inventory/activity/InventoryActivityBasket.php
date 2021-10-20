@@ -1,8 +1,7 @@
 <?php 
 
-namespace App\Model\Inventory\Activity;
+namespace App\Model\Inventory\activity;
 
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class InventoryActivityBasket extends Model

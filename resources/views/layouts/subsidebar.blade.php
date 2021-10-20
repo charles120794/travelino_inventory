@@ -1,7 +1,8 @@
-<li class="header">SYSTEM MODULE</li>
+<li class="header"> SYSTEM MODULE </li>
 
 <li>
-    <a @if(config('owned')) href="{{ $activeModule->module_prefix }}/{{ $activeModule->module_route }}" @else href="{{ config('module.redirect_to.login') }}" @endif style="text-overflow: ellipsis; overflow: hidden;"> 
+    {{-- @if(config('owned')) href="{{ $activeModule->module_prefix }}/{{ $activeModule->module_route }}" @else href="{{ config('module.redirect_to.login') }}" @endif --}}
+    <a href="/inventory/home" style="text-overflow: ellipsis; overflow: hidden;"> 
         <i class="{{ $activeModule->module_icon }}"></i> <span> {{ strtoupper($activeModule->module_name) }} </span>
     </a>
 </li>
@@ -20,6 +21,6 @@
     <span>Account</span></a>
 </li>
 
-<li><a href="#"><i class="fa fa-circle-o text-aqua"></i> 
+{{-- <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> 
     <span>Information</span></a>
-</li>
+</li> --}}

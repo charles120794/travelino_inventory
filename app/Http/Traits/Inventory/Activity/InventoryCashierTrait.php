@@ -12,13 +12,6 @@ use App\Http\Controllers\Common\CommonServiceController as CommenService;
 
 trait InventoryCashierTrait
 {
-	public function json_collect_customer_by_id()
-	{
-		return $customers = (new InventoryTableCustomer)
-								->select('customer_id as customer','customer_code','customer_description as customer_name')
-								->where('customer_id', decrypt(request()->get('customer')))
-								->first()->toJson();
-	}
 
 	public function inventory_cashier_create_receipt($method, $id, $request)
 	{
@@ -157,29 +150,6 @@ trait InventoryCashierTrait
 		}
 
 		return $this->myViewMethodLoader($method)->with('cashiers', $cashiers);
-	}
-
-	public function inventory_cashier_customer($method = [], $id = '', $request = [])
-	{
-		$customers = (new InventoryTableCustomer)->orderBy('customer_description','asc');
-
-		if(request()->has('search')) {
-
-			$hasCustomer = function($query){
-				$query = $query->Where('contact_number','like', '%' . request()->get('search') . '%');
-				$query = $query->orWhere('contact_email','like', '%' . request()->get('search') . '%');
-			};
-
-			$customers = $customers->whereHas('customerContact', $hasCustomer);
-			$customers = $customers->orWhere('customer_code','like', '%' . request()->get('search') . '%');
-			$customers = $customers->orWhere('customer_description','like', '%' . request()->get('search') . '%');
-		}
-
-		if(request()->has('page')) {
-			$customers = $customers->paginate(10,['*'],'page', request()->get('page'));
-		}
-
-		return $customers;
 	}
 
 	public function inventory_cashier_retrieve_product($method, $id, $request)
