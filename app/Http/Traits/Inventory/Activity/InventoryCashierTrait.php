@@ -3,9 +3,9 @@
 namespace App\Http\Traits\Inventory\Activity;
 
 use DB;
-use App\Model\Inventory\Activity\InventoryActivityBasket;
-use App\Model\Inventory\Activity\InventoryActivityCashier;
-use App\Model\Inventory\Activity\InventoryActivityCashierDetails;
+use App\Model\Inventory\activity\InventoryActivityBasket;
+use App\Model\Inventory\activity\InventoryActivityCashier;
+use App\Model\Inventory\activity\InventoryActivityCashierDetails;
 
 use App\Model\Inventory\maintenance\InventoryTableItem;
 use App\Model\Inventory\maintenance\InventoryTableCustomer;
