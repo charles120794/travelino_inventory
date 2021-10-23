@@ -5,10 +5,12 @@ namespace App\Http\Traits\Inventory;
 use DB;
 use Session;
 use Illuminate\Http\Request;
+
+use App\Model\Inventory\activity\InventoryActivityCashier;
+use App\Model\Inventory\activity\InventoryActivityCashierDetails;
+
 use App\Model\Inventory\maintenance\InventoryTableItem;
 use App\Model\Inventory\maintenance\InventoryTableCustomer;
-use App\Model\Inventory\Activity\InventoryActivityCashier;
-use App\Model\Inventory\Activity\InventoryActivityCashierDetails;
 
 trait InventoryDashboardWidgetsTrait
 {

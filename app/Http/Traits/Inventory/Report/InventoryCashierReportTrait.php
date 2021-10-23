@@ -4,7 +4,7 @@ namespace App\Http\Traits\Inventory\Report;
 
 use Session;
 use Illuminate\Http\Request;
-use App\Model\Inventory\Activity\InventoryActivityCashier;
+use App\Model\Inventory\activity\InventoryActivityCashier;
 
 trait InventoryCashierReportTrait
 {

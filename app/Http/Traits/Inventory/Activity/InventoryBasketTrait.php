@@ -4,7 +4,7 @@ namespace App\Http\Traits\Inventory\Activity;
 
 use DB;
 use Session;
-use App\Model\Inventory\Activity\InventoryActivityBasket;
+use App\Model\Inventory\activity\InventoryActivityBasket;
 
 use App\Model\Inventory\maintenance\InventoryTableItem;
 use App\Model\Inventory\maintenance\InventoryTableCustomer;

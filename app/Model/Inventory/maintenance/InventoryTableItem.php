@@ -4,8 +4,8 @@ namespace App\Model\Inventory\maintenance;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Inventory\Activity\InventoryActivityCashierDetails;
-use App\Model\Inventory\Activity\InventoryActivityBasket;
+use App\Model\Inventory\activity\InventoryActivityCashierDetails;
+use App\Model\Inventory\activity\InventoryActivityBasket;
 
 class InventoryTableItem extends Model
 {
