@@ -25,6 +25,7 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
-        "@paypal/checkout-server-sdk": "^1.0.2"
+        "@paypal/checkout-server-sdk": "^1.0.2",
+        "sweetalert2": "^11.1.9"
     }
 }

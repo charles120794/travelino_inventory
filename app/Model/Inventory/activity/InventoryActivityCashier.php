@@ -25,5 +25,4 @@ class InventoryActivityCashier extends Model
 		return $this->hasOne(new InventoryTableCustomer,'customer_id','cashier_customer_id');
 	}
 
-
 }

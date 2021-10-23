@@ -17,25 +17,12 @@ trait InventoryBasketTrait
 	public function inventory_create_customer_basket($method, $id, $request)
 	{
 
-		// return decrypt($request->get('cashier_item_id'));
-		if($request->has('is_not_encrypted') && decrypt($request->get('is_not_encrypted')) == 'now_you_see_me') { 
-
-			$cashier_item_id = $request->get('cashier_item_id');
-			$cashier_item_customer = $request->get('cashier_item_customer');
-
-		} else {
-
-			$cashier_item_id = decrypt($request->get('cashier_item_id'));
-			$cashier_item_customer = $request->get('cashier_item_customer');
-
-		}
-
 		$basket = (new InventoryActivityBasket)
-						->where('basket_item_id', $cashier_item_id)
-						->where('basket_customer_id', $cashier_item_customer)
+						->where('basket_item_id', decrypt($request->get('cashier_item_id')))
+						->where('basket_customer_id', decrypt($request->get('cashier_item_customer')))
 						->first();
 
-		$items = (new InventoryTableItem)->where('item_id', $cashier_item_id)
+		$items = (new InventoryTableItem)->where('item_id', decrypt($request->get('cashier_item_id')))
 						->select('item_id','item_code','item_description','item_quantity','item_unit','item_selling_price','item_id')
 						->withCount(['itemQuantity AS item_quantity_sold' => function ($query) {
 					            $query->select(DB::raw("SUM(cashier_quantity) as cashier_quantity"));
@@ -56,10 +43,9 @@ trait InventoryBasketTrait
 				];
 
 				(new InventoryActivityBasket)
-					->where('basket_item_id', $cashier_item_id)
-					->where('basket_customer_id', $cashier_item_customer)
+					->where('basket_item_id', decrypt($request->get('cashier_item_id')))
+					->where('basket_customer_id', decrypt($request->get('cashier_item_customer')))
 					->update($collect);
-
 			}
 
 		} else {
@@ -68,7 +54,7 @@ trait InventoryBasketTrait
 				/* CHECK IF THIS ITEM QUANTITY IS NOT ZERO */
 				if(($items['item_quantity'] - $items['item_quantity_sold']) != 0) {
 					(new InventoryActivityBasket)->insert([
-						'basket_customer_id'           => $cashier_item_customer,
+						'basket_customer_id'           => decrypt($request->get('cashier_item_customer')),
 						'basket_item_id'               => $items['item_id'],
 						'basket_item_unit_id'          => $items['item_unit'],
 						'basket_item_code'             => $items['item_code'],
@@ -83,28 +69,24 @@ trait InventoryBasketTrait
 				}
 			}
 		}
-
-		return $this->myViewMethodLoader($method)->with('customer_basket', $this->customer_basket_data($cashier_item_customer));
 	}
 
 	public function inventory_retrieve_customer_basket($method, $id, $request)
 	{
-		$customer_basket = $this->customer_basket_data($request->get('cashier_item_customer'));
+		$customer_id = decrypt($request->get('cashier_item_customer'));
+
+		$customer_basket = $this->customer_basket_data($customer_id);
 
 		return $this->myViewMethodLoader($method)->with('customer_basket', $customer_basket);
 	}
 
-	public function inventory_delete_customer_basket()
+	public function inventory_delete_customer_basket($method, $id, $request)
 	{
-		(new InventoryActivityBasket)
-					->where('basket_customer_id', request()->get('cashier_item_customer'))
-					->where('basket_item_id', decrypt(request()->get('cashier_item_id')))
-					->delete();
+		(new InventoryActivityBasket)->where('basket_id', decrypt($request->get('basket_id')))->delete();
 	}
 
 	public function inventory_update_customer_basket_quantity($method, $id, $request)
 	{
-
 		$basket_item = (new InventoryActivityBasket)
 					->where('basket_customer_id', $request->get('cashier_item_customer'))
 					->where('basket_item_id', decrypt($request->get('cashier_item_id')))

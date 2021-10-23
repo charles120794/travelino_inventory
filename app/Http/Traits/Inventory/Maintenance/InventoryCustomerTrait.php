@@ -14,8 +14,7 @@ trait InventoryCustomerTrait
 
 	public function inventory_retrieve_customer()
 	{
-		$customers = (new InventoryTableCustomer)
-								  ->with('customerContact');
+		$customers = (new InventoryTableCustomer)->with('customerContact');
 
 		if(request()->has('search')) {
 

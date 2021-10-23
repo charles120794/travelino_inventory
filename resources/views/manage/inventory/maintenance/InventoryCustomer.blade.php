@@ -35,8 +35,8 @@
     </div>
 
     <div class="box box-primary">
-        <div class="box-body no-padding">
-            <table class="table table-bordered">
+        <div class="box-body">
+            <table class="table table-bordered customers-datatable">
                 <thead>
                     <tr class="bg-gray-light" style="height: 50px;">
                         <th class="v-align-middle text-center">Code</th>
@@ -47,8 +47,8 @@
                         <th class="v-align-middle text-center">Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse($customer as $key => $value)
+                <tbody></tbody>
+                    {{-- @forelse($customer as $key => $value)
                     <tr>
                         <td class="v-align-middle">{{ $value->customer_code }}</td>
                         <td class="v-align-middle">{{ $value->customer_description }}</td>
@@ -68,11 +68,8 @@
                     <tr>
                         <td class="text-center" colspan="6"> No result's found </td>
                     </tr>
-                    @endforelse
-                </tbody>
+                    @endforelse --}}
             </table>
-
-            {{ $customer->links('vendor.pagination.m_custom_pagination') }}
         </div>
     </div>
 
@@ -92,9 +89,30 @@
 
 <script type="text/javascript">
 
+    $(document).on('click', '.page-number', function(event){
+        event.preventDefault();
+    });
+
     $(function(){
 
-        $('.modal-edit-customer').on('click', function(){
+        $('.customers-datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('inventory.route',['path' => $path, 'action' => 'inventory-retrieve-customers-datatable', 'id' => str_random(30)]) }}",
+            columns: [
+                // {data: 'customer_code', className : 'v-align-middle'},
+                { data: 'customer_code', className : 'v-align-middle' },
+                { data: 'customer_description', className : 'v-align-middle' },
+                { data: 'customer_email', className : 'v-align-middle' },
+                { data: 'customer_contact', className : 'v-align-middle text-center' },
+                { data: 'customer_address', className : 'v-align-middle text-center' },
+                { data: 'action', className : 'v-align-middle text-center' },
+            ],
+            autoWidth: false,
+            fixedColumns: true
+        });
+
+        $(document).on('click', '.modal-edit-customer', function(){
             var id = $(this).data('id');
             $('#modaleditcustomer').modal('show');
             $.ajax({
@@ -127,23 +145,21 @@
             }
         });
 
-        $('.modal-show-address').on('click', function(){
-            var data_address = $(this).data('address');
-            $('#modalshowaddress').modal('show');
-            $('input[name="address_number"]').val(data_address.address_number);
-            $('input[name="address_street"]').val(data_address.address_street);
-            $('input[name="address_barangay"]').val(data_address.address_barangay);
-            $('input[name="address_city"]').val(data_address.address_city);
-            $('input[name="address_zip"]').val(data_address.address_zip);
+        $(document).on('click', '.modal-show-contact', function(){
+            $('#modalshowcontact').modal('show');
+            $('#show_contact_email').val($(this).data('email'));
+            $('#show_contact_number').val($(this).data('number'));
+            $('#show_contact_position').val($(this).data('position'));
+            $('#show_contact_description').val($(this).data('person'));
         });
 
-        $('.modal-show-contact').on('click', function(){
-            var data_contact = $(this).data('contact');
-            $('#modalshowcontact').modal('show');
-            $('#show_contact_description').val(data_contact.contact_description);
-            $('#show_contact_number').val(data_contact.contact_number);
-            $('#show_contact_email').val(data_contact.contact_email);
-            $('#show_contact_position').val(data_contact.contact_position);
+        $(document).on('click', '.modal-show-address', function(){
+            $('#modalshowaddress').modal('show');
+            $('#show_address_number').val($(this).data('number'));
+            $('#show_address_street').val($(this).data('street'));
+            $('#show_address_barangay').val($(this).data('barangay'));
+            $('#show_address_city').val($(this).data('city'));
+            $('#show_address_zip').val($(this).data('zip'));
         });
 
         $('#search-currency').on('input', function(){

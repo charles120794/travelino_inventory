@@ -55,8 +55,8 @@ trait InventoryWindowLoaderTrait
 	public function inventory_order($window)
 	{
 		$products = $this->product_data();
-		$customer = $this->customer_data();
 		$currency = $this->currency_data();
+		$customer = $this->inventory_retrieve_customer();
 
 		return $this->myViewLoader($window)
 					->with('product',  $products)
@@ -177,8 +177,8 @@ trait InventoryWindowLoaderTrait
 	{
 		$address  = $this->address_data();
 		$contact  = $this->contact_data();
-		$customer = $this->customer_data();
 		$currency = $this->currency_data();
+		$customer = $this->CustomPaginate($this->inventory_retrieve_customer());
 
 		return $this->myViewLoader($window)
 					->with('address',$address)

@@ -20,7 +20,7 @@
 								&#8369; {{ number_format($cashier['cashier_total_price'], 2) }}
 							</td>
 							<td class="v-align-middle text-center">
-								<button class="btn btn-primary"><i class="fa fa-print"></i></button>
+								<a href="{{ route('inventory.route',['path' => active_path(), 'action' => 'inventory-retrieve-customer-receipt', 'id' => encrypt($cashier['cashier_id'])]) }}" class="btn btn-primary"><i class="fa fa-print"></i></a>
 							</td>
 						</tr>
 						@endforeach 

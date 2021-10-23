@@ -13,14 +13,15 @@
     <div class="bg-white">
         <div class="panel panel-default">
             <div class="panel-heading clearfix bg-white">
-                <h3 class="panel-title pull-left">
+                <h3 class="panel-title pull-left" style="margin-top: 6px;">
                     <span class="fa fa-angle-double-right fa-fw"></span><b>{{ strtoupper($windowName) }}</b>  
                 </h3>
+                <a class="btn btn-sm btn-primary btn-flat pull-right" href="{{ route('inventory.route',['path' => $path, 'action' => 'create-product-page', 'id' => encrypt(1)]) }}" ><i class="fa fa-plus"></i> Add Product / Item </a>
             </div>
         </div>
     </div>
 
-    <div class="box box-primary">
+    <div class="box box-primary hide">
         <div class="box-header with-border">
             <h3 class="box-title"><i class="fa fa-search"></i> Search Product</h3>
         </div>
@@ -58,28 +59,28 @@
             </div>
         </div>
         <div class="box-footer text-right">
-            <a class="btn btn-warning btn-flat" href="{{ route('inventory.route',['path' => $path, 'action' => 'create-product-page', 'id' => encrypt(1)]) }}" ><i class="fa fa-plus"></i> Product </a>
             <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i> Search </button>
         </div>
     </div>
 
     <div class="box box-primary">
-        <div class="box-body no-padding">
+        <div class="box-body">
             <div class="row">
                 <div class="col-md-12">
-                    <table class="table table-bordered">
+
+                    <table class="table table-bordered products-datatable">
                         <thead>
                             <tr class="bg-gray-light" style="height: 50px;">
-                                <th class="v-align-middle text-center">Image</th>
-                                <th class="v-align-middle text-center">Description</th>
-                                <th class="v-align-middle text-center">Stock</th>
-                                <th class="v-align-middle text-right">Purchase Price</th>
-                                <th class="v-align-middle text-right">Selling Price</th>
-                                <th class="v-align-middle text-center">Action</th>
+                                <th class="v-align-middle text-center"> Image </th>
+                                <th class="v-align-middle text-center"> Description </th>
+                                <th class="v-align-middle text-center"> Stock </th>
+                                <th class="v-align-middle text-right"> Purchase Price </th>
+                                <th class="v-align-middle text-right"> Selling Price </th>
+                                <th class="v-align-middle text-center"> Action </th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach($product_data as $key => $product)
+                        <tbody></tbody>
+                            {{-- @foreach($product_data as $key => $product)
                             <tr>
                                 <td class="text-center"><img src="{{ Storage::url($product->item_image) }}" style="width: 100px;"></td>
                                 <td style="vertical-align: middle;">{{ $product->item_description }}</td>
@@ -92,30 +93,56 @@
                                     <button class="btn btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                                 </td>
                             </tr>
-                            @endforeach
-                        </tbody>
+                            @endforeach --}}
+                        
                     </table>
-                    <div class="box-body pull-right">
-                        {{ $product_data->links('vendor.pagination.bootstrap-4') }}
-                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </section>
 
-@include('manage.system.accounts.scripts.UsersDashboardScript')
+@include('manage.inventory.maintenance.modal.modaleditproductdetails')
 
 @include('manage.inventory.maintenance.modal.modalshowproductdetails')
 
 @push('scripts')
 
 <script type="text/javascript">
+
+    $('.products-datatable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('inventory.route',['path' => $path, 'action' => 'inventory-retrieve-products-datatable', 'id' => str_random(30)]) }}",
+        columns: [
+            // {data: 'customer_code', className : 'v-align-middle'},
+            { data: 'item_image_path', className : 'v-align-middle' },
+            { data: 'item_description', className : 'v-align-middle' },
+            { data: 'item_quantity_remaining_table', className : 'v-align-middle text-center' },
+            { data: 'item_purchase_price', className : 'v-align-middle text-right' },
+            { data: 'item_selling_price', className : 'v-align-middle text-right' },
+            { data: 'action', className : 'v-align-middle text-center' },
+        ],
+        autoWidth: false,
+        fixedColumns: true
+    });
     
     $(function(){
 
-        $('.btn-modal-view').on('click', function(){
+        $(document).on('click','.btn-modal-edit', function(){
+            $('#modaleditproductdetails').modal('show');
+            $.ajax({
+                url : '{{ route('inventory.route',['path' => $path, 'action' => 'edit-product-details', 'id' => encrypt(1)])}}',
+                type : 'post',
+                data : {id:$(this).data('id')},
+                dataType : 'html',
+                success : function(data){
+                    $('#modaleditproductdetails #editproductdetails').html(data);
+                }
+            });
+        });
+
+        $(document).on('click','.btn-modal-view', function(){
             $('#modalshowproductdetails').modal('show');
             $.ajax({
                 url : '{{ route('inventory.route',['path' => $path, 'action' => 'show-product-details', 'id' => encrypt(1)])}}',

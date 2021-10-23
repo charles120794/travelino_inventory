@@ -71,7 +71,7 @@ trait MainGate
 								->first();
 
 		if(collect($usersWindowMethod)->isEmpty()) {
-			return abort(403, 'Window\'s Method does not Exist to this Window');
+			return abort(403, 'Window\'s method does not exist. Contact your system administrator to fix this issue.');
 		}
 
 		if($usersWindowMethod['method_type'] == 'common') {

@@ -81,7 +81,9 @@ trait InventoryItemTrait
 
 	public function inventory_show_product_details($method, $id, $request)
 	{
-		$product = InventoryTableItem::where('item_id', $request->id)->first();
+		$product = InventoryTableItem::where('item_id', decrypt($request->id))->first();
+
+		abort_if(collect($product)->isEmpty(), 403, 'Product is not available');
 
 		return $this->myViewMethodLoader($method)->with('product', $product);
 	}

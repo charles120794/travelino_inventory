@@ -10,7 +10,7 @@
 
     @include('layouts.alerts.errors.alerts')
 
-    <div class="box box-solid bg-gray-light">
+    <div class="box box-solid bg-white">
         <div class="box-body">
             <h3 class="panel-title pull-left">
                 <span class="fa fa-angle-double-right fa-fw"></span><b>{{ strtoupper($windowName) }}</b>  

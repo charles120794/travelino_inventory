@@ -219,8 +219,6 @@
     </form>
 </section>
 
-@include('manage.system.accounts.scripts.UsersDashboardScript')
-
 @include('manage.inventory.activity.modal.modalshowrecentcashier')
 
 @include('manage.inventory.activity.modal.modalsearchcustomer')
@@ -376,10 +374,7 @@
         }); 
 
         $('.btn-modal-recent').on('click', function(){
-
-            $('#modalshowrecentcashier').modal('show');
-
-            retrieve_recent_cashier();
+            $('#modalcashierhistory').modal('show');
         });
 
     });
