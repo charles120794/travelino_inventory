@@ -52,7 +52,7 @@
         <!-- Google Font -->
         <link rel="stylesheet" href="{{ asset('admin/fonts/admin_google_fonts.css') }}">
 
-        <link rel="stylesheet" href="{{ asset('dataTables/datatables.min.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('datatables/datatables.min.css') }}"/>
  
     </head>
 
@@ -167,7 +167,7 @@
         
         <script src="{{ asset('custom/pro-group-loader.js') }}"></script>
 
-        <script src="{{ asset('dataTables/datatables.min.js') }}"></script>
+        <script src="{{ asset('datatables/datatables.min.js') }}"></script>
 
         <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
         <script src="{{-- asset('admin/dist/js/pages/dashboard.js') --}}"></script>
