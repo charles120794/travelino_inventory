@@ -1,9 +1,9 @@
 <table class="table table-bordered" id="users_table">
 	<thead>
 		<tr style="font-size: 12px; white-space: nowrap;">
-			<th class="text-center" style="vertical-align: top; width: 03%"> ID </th>
+			<th class="text-center" style="vertical-align: top; width: 10%"> ID </th>
 			@if($allSelected)
-			<th class="text-center" style="vertical-align: top; width: 15%"> COMPANY </th>
+			<th class="text-center" style="vertical-align: top; width: 10%"> COMPANY </th>
 			@endif
 			<th class="text-center" style="vertical-align: top; width: 20%"> FULL NAME </th>
 			<th class="text-center" style="vertical-align: top; width: 20%"> EMAIL ADDRESS </th>

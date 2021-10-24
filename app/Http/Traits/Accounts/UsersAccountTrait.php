@@ -33,7 +33,7 @@ trait UsersAccountTrait
 		return [
 	        'npassword' => 'min:6',
 	        'npassword' => 'min:6',
-	        'cpassword' => 'min:6|required_with:npassword|same:npassword',
+	        'cpassword' => 'min:6|required_with:npassword|same:cpassword',
 		];
 	}
 	
@@ -51,14 +51,13 @@ trait UsersAccountTrait
 	        'middlename'     => $request->middlename,
 	        'lastname'       => $request->lastname,
 	        'email'          => $request->email,
-	        'birthdate'      => $request->birth_date,
 	        'education'      => $request->education,
+	        'birth_date'     => $request->birth_date,
 	        'position_title' => $request->position_title,
-	        'contact'        => $request->contact_no,
-	        'address'        => $request->address,
+	        'personal_contact_phone' => $request->contact_no,
+	        'personal_address' => $request->address,
 	        'username'       => $request->username,
 	        'password'       => bcrypt($request->cpassword),
-	        'age'            => $compute_age,
 	        'order_level'    => (new CommonService)->orderLevel(app('Users')),
 	        'created_by'     => $this->thisUser()->users_id,
 	        'created_date'   => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),

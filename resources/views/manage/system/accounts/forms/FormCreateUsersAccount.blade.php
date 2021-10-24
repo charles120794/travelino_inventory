@@ -16,9 +16,9 @@
 				<tr>
 					<td rowspan="8" style="width: 200px;">
 						<div class="profile-photo" id="profile_photo_div" onclick="$('#profile_photo').click();" style="height: 250px; width: 230px; background-color: #999; cursor: pointer;">
-							<img src="" id="load_image" style="height: 100%;width: 100%;">
+							<img src="{{ Storage::url('/default/default_image_01.png') }}" id="load_image" style="height: 100%;width: 100%;">
 						</div>
-						<input type="file" name="profile_photo" id="profile_photo" style="position: absolute; opacity: 0;" required>
+						<input type="file" name="profile_photo" id="profile_photo" style="position: absolute; opacity: 0;">
 					</td>
 					<td style="font-weight: bold; font-size: 12px; vertical-align: middle; padding: 6px;">
 						COMPANY: 
