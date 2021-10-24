@@ -80,29 +80,26 @@ trait InventoryBasketTrait
 		return $this->myViewMethodLoader($method)->with('customer_basket', $customer_basket);
 	}
 
-	public function inventory_delete_customer_basket($method, $id, $request)
-	{
-		(new InventoryActivityBasket)->where('basket_id', decrypt($request->get('basket_id')))->delete();
-	}
-
 	public function inventory_update_customer_basket_quantity($method, $id, $request)
 	{
 		$basket_item = (new InventoryActivityBasket)
-					->where('basket_customer_id', $request->get('cashier_item_customer'))
 					->where('basket_item_id', decrypt($request->get('cashier_item_id')))
-					->first();
+					->where('basket_customer_id', decrypt($request->get('cashier_item_customer')));
 
-		if(collect($basket_item)->isNotEmpty()) {
+		if(collect($basket_item->first())->isNotEmpty()) {
 
-			(new InventoryActivityBasket)
-					->where('basket_customer_id', $request->get('cashier_item_customer'))
-					->where('basket_item_id', decrypt($request->get('cashier_item_id')))
-					->update([
-						'basket_item_price_new' => $basket_item['basket_item_price_old'] * $request->get('cashier_item_quantity'),
-						'basket_item_quantity_new' => $request->get('cashier_item_quantity')
-					]);
+			$product = InventoryTableItem::findOrFail(decrypt($request->cashier_item_id));
 
+			$basket_item->update([
+				'basket_item_price_new'    => $product['item_selling_price'] * $request->get('cashier_item_quantity'),
+				'basket_item_quantity_new' => $request->get('cashier_item_quantity')
+			]);
 		}
+	}
+
+	public function inventory_delete_customer_basket($method, $id, $request)
+	{
+		return (new InventoryActivityBasket)->where('basket_id', decrypt($request->get('basket_id')))->delete();
 	}
 
 	public function customer_basket_data($customer)

@@ -172,10 +172,10 @@
                                     <thead>
                                         <th class="text-center" style="width: 41%;">Item Description</th>
                                         <th class="text-center" style="width: 18%;">Unit</th>
-                                        <th class="text-center" style="width: 18%;">Quantity(<span class="text-total-quantity">0</span>)</th>
+                                        <th class="text-center" style="width: 18%;">Quantity(<span id="total_quantity">0</span>)</th>
                                         <th class="text-center" style="width: 18%;">Price</th>
                                     </thead>
-                                    <tbody id="table-cuctomer-basket"></tbody>
+                                    <tbody id="table_cuctomer_basket"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -214,11 +214,11 @@
         /**
          *  Step 1
          *  View the table of Customer List
+         *  Inititated via Datatables
          */
         $('.search-modal-customer').on('click', function(){
             if($('input[name="customer_description"]').attr('readonly')) {
                 $('#modalsearchcustomer').modal('show');
-                ajax_call_customers(1);
             }
         });
 
@@ -244,9 +244,9 @@
             /* Hide the modal */
             $('#modalsearchcustomer').modal('hide');
 
-            localStorage.setItem('customer_selected', $(this).data('customer'));
+            $('input[name="customer_id').val($(this).data('customer'));
 
-            $('input[name="customer_id').val($(this).data('customer'))
+            localStorage.setItem('customer_selected', $(this).data('customer'));
             /* Load the selected customer if any available item or product from the basket table  */
             retrieve_customer_basket($(this).data('customer'));
         });
@@ -259,6 +259,7 @@
                 alert('Please select a customer');
             } else {
                 $('#modalsearchproduct').modal('show');
+                $('.cashier-product_datatable').DataTable().ajax.reload();
             }
         }); 
 
@@ -328,12 +329,54 @@
         });
 
         $('.input-cash').on('input', function (event){
-            computeTotalChange();
-            validate_btn_submit();
+            compute_total_change(); validate_submit_button();
         });
 
         $('.btn-modal-recent').on('click', function() {
             $('#modalcashierhistory').modal('show');
+        });
+
+        $(document).on('click','.item-les-qty', function(){
+
+            var key = $(this).data('key'); 
+
+            if($('#item_quantity' + key).val() <= 1) {
+                $('#item-add-qty' + key).attr('disabled', false);
+                $(this).attr('disabled',true);
+            } else {
+                $('#item-add-qty' + key).attr('disabled', false);
+                $('#item_quantity' + key).val(function(i, old){
+                    return parseInt(old) - 1;
+                });
+
+                update_basket_quantity_button(key, true);
+
+                update_basket_quantity(key);
+            }
+        });
+
+        $(document).on('click','.item-add-qty',function(){
+
+            var key = $(this).data('key'); 
+
+            if(parseInt($('#item_quantity' + key).val()) >= parseInt($('#item_quantity_old' + key).val())) {
+                alert('Not enough stock is available');
+                $('#item-les-qty' + key).attr('disabled', false);
+                $(this).attr('disabled',true);
+            } else {
+                $('#item-les-qty' + key).attr('disabled', false);
+                $('#item_quantity' + key).val(function(i, old){
+                    return parseInt(old) + 1;
+                });
+
+                update_basket_quantity_button(key, true);
+
+                update_basket_quantity(key);
+            }
+        });
+
+        $(document).on('blur','.input-quantity', function(){
+            validate_form_input_qty($(this));
         });
 
     });
@@ -362,12 +405,12 @@
     //         alert('Inputing quantity greater than item quantity in not allowed.');
     //         $(this).val(0);
     //         $(this).closest('.col-md-2').next().find(':input').val('0.00');
-    //         computeTotalPrice();
+    //         displayTotalPrice();
     //     } else {
     //         var parseFloatTotal = parseFloat($(this).next().val() * $(this).val()).toFixed(2);
     //         $(this).closest('.col-md-2').next().find(':input').val(parseFloatTotal);
     //         $(this).closest('.col-md-2').next().find(':input')
-    //         computeTotalPrice();
+    //         displayTotalPrice();
     //         formatCurrency($(this).closest('.col-md-2').next().find(':input'));
     //     }
     // });
@@ -379,5 +422,9 @@
 @include('manage.inventory.activity.scripts.InventoryInputProductJS')
 
 @include('manage.inventory.activity.scripts.InventoryFunctionJS')
+
+@include('manage.inventory.activity.scripts.InventoryComputationJS')
+
+@include('manage.inventory.activity.scripts.InventoryValidatetorJS')
 
 @endsection

@@ -33,7 +33,7 @@
 <script type="text/javascript">
 
     $('#modalsearchproduct').ready(function(){ 
-        var productsTable = $('.cashier-product_datatable').DataTable({
+        $('.cashier-product_datatable').DataTable({
             processing: true,
             serverSide: true,
             ajax: "{{ route('inventory.route',['path' => $path, 'action' => 'cashier-retrieve-products', 'id' => str_random(30)]) }}",
@@ -97,65 +97,6 @@
                 return parseInt(old) + 1;
             });
         }
-    });
-
-    $(document).on('click','.item-les-qty', function(){
-
-        var key = $(this).data('key'); 
-
-        if($('#item_quantity' + key).val() <= 1) {
-
-            $('#item-add-qty' + key).attr('disabled', false);
-
-            $(this).attr('disabled',true);
-
-        } else {
-
-            $('#item-add-qty' + key).attr('disabled', false);
-
-            $('#item_quantity' + key).val(function(i, old){
-                return parseInt(old) - 1;
-            });
-
-            update_basket_quantity(key);
-            
-            computeTotalQtyPrice(key);
-            computeTotalPrice();
-            computeTotalChange();
-            computeTotalQuantity();
-
-            validate_btn_submit();
-        }
-    });
-
-    $(document).on('click','.item-add-qty',function(){
-        var key = $(this).data('key'); 
-        if(parseInt($('#item_quantity' + key).val()) >= parseInt($('#item_quantity_old' + key).val())) {
-            alert('Not enough stock is available');
-            $('#item-les-qty' + key).attr('disabled', false);
-            $(this).attr('disabled',true);
-        } else {
-            $('#item-les-qty' + key).attr('disabled', false);
-            $('#item_quantity' + key).val(function(i, old){
-                return parseInt(old) + 1;
-            });
-            update_basket_quantity(key);
-            computeTotalQtyPrice(key);
-            computeTotalPrice();
-            computeTotalChange();
-            computeTotalQuantity();
-            validate_btn_submit();
-        }
-    });
-
-    $(document).on('input','.input-quantity', function(){
-        var key = $(this).data('key');
-        validate_form_input_qty($(this));
-
-        computeTotalQtyPrice(key);
-        computeTotalPrice();
-        computeTotalChange();
-        validate_btn_submit();
     });
 
     // $(document).on('keypress', 'input[name="search_modal_item"]', function(event){
