@@ -8,7 +8,7 @@ use Session;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Common\CommonServiceController as CommonService;
 
-trait UsersInformationTrait 
+trait UsersAccessInformationTrait 
 {
 	
 	public function thisUser($user = null)

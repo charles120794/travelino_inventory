@@ -13,7 +13,7 @@ class InventoryController extends Controller
 	use \App\Http\Traits\Inventory\InventoryDashboardTrait; 
 	use \App\Http\Traits\Inventory\InventoryDashboardWidgetsTrait; 
 	use \App\Http\Traits\Inventory\InventoryMethodLoaderTrait; 
-	use \App\Http\Traits\Inventory\InventoryDatatableTrait;
+	use \App\Http\Traits\Inventory\InventoryDataTableTrait;
 	use \App\Http\Traits\Inventory\InventoryWindowLoaderTrait; 
 
 	/* Activity Trait */

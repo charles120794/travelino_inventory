@@ -3,14 +3,27 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+
+		$('.users-window-access-datatables').DataTable({
+			autoWidth: false,
+			columnDefs : [
+		    	{ 
+		    		"targets": 0,
+		    	 	"orderable": false,  
+		    	} // Applies the option to all columns
+		  	]
+		});
+
 		$('form[data-request="json"]').on('submit',function(e){
 			e.preventDefault();
 		});
+
 		$('input, select, textarea').on('change',function(e){
 			if($.trim($(this).val()) != "") {
 	    		$(this).css('border-color','');
 	    	}
 	    });
+
 	});
 
 	function submitModalImageUpload()
@@ -45,7 +58,7 @@
             dataType : 'json',
             cache : false,
             success : function(data) {
-            	var option = '<option value=""> SELECT MODULE </option>';
+            	var option = '<option value=""> --Select Module-- </option>';
                 if(data.length > 0){
                 	$.each( data, function(key,value) {
 	                    option += '<option value="' + value.module_id + '">' + value.module_description + '</option>';
@@ -70,6 +83,14 @@
 		    processData : false,
 		    success : function(data) {
 		    	$('#form_users_window_access').html(data);
+		    	$('.users-window-access-datatables').DataTable({
+	    			columnDefs : [
+	    		    	{ 
+	    		    		"targets": 0,
+	    		    	 	"orderable": false,  
+	    		    	} // Applies the option to all columns
+	    		  	]
+		    	});
 		    }
 		});
     }

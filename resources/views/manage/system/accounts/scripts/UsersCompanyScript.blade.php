@@ -3,14 +3,21 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+
+		$('.users-company-access-datatables').DataTable({
+			autoWidth: false,
+		});
+
 	    $('form[data-request="json"]').on('submit',function(e){
 	        e.preventDefault();
 	    });
+
 	    $('input, select, textarea').on('change',function(e){
 	        if($.trim($(this).val()) != "") {
 	            $(this).css('border-color','');
 	        }
 	    });
+
 	});
 
 	function submitModalImageUpload()

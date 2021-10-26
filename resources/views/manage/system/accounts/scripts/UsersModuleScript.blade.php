@@ -3,14 +3,21 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+
+		$('.users-module-access-datatables').DataTable({
+			autoWidth: false,
+		});
+
 		$('form[data-request="json"]').on('submit',function(e){
 			e.preventDefault();
 		});
+
 		$('input,select,textarea').on('change',function(e){
 			if($.trim($(this).val()) != "") {
 	    		$(this).css('border-color','');
 	    	}
 	    });	
+
 	});
 
 	function submitModalImageUpload()
@@ -44,7 +51,12 @@
 		    cache : false,
 		    processData : false,
 		    success : function(data) {
+
 		    	$('#form_users_module').html(data);
+
+		    	$('.users-module-access-datatables').DataTable({
+		    		autoWidth: false,
+		    	});
 		    }
 		});
 	}
@@ -64,6 +76,7 @@
     }
 
 	function updateStatus(id,url){
+		
 		if($('#'+id).hasClass('fa-toggle-on')){
 			$('#'+id).removeClass('fa-toggle-on')
 			.removeClass('text-orange')
@@ -79,6 +92,8 @@
 				
 			});
 		}
+
+		submitFormSearch();
 	}
 
 </script>

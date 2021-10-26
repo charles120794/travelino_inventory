@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use App\Http\Traits\Gate\MainGate as MainGateTrait;
 
-use App\Http\Traits\Accounts\UsersInformationTrait;
+use App\Http\Traits\Accounts\UsersAccessInformationTrait;
 
 use App\Http\Traits\Common\UsersCommonTrait;
 use App\Http\Traits\Common\ModuleCommonAccessTrait as ModuleTrait;
@@ -21,7 +21,7 @@ class Controller extends BaseController
 {
     use DispatchesJobs, ValidatesRequests, AuthorizesRequests;
 
-    use MainGateTrait, UsersInformationTrait, UsersCommonTrait, ModuleTrait, SystemTrait, SideBarTrait;
+    use MainGateTrait, UsersAccessInformationTrait, UsersCommonTrait, ModuleTrait, SystemTrait, SideBarTrait;
 
     public function myViewLoader($window, $array = [])
     {

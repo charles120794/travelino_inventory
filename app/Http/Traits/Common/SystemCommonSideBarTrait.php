@@ -2,12 +2,16 @@
 
 namespace App\Http\Traits\Common;
 
+use App\Model\Accounts\UsersWindowAccess;
+
 trait SystemCommonSideBarTrait
 {
 
 	public function getActiveSideBar()
 	{	
 		return $this->systemWindowSub($this->usersWindowAccess(0));
+
+		// return UsersWindowAccess::where('menu_parent','=', 0)->with('childrenCategories')->get();
 	}
 
 	protected function usersWindowAccess($parent)
@@ -16,14 +20,14 @@ trait SystemCommonSideBarTrait
 
 		$modu = $this->getModulePrefix();
 
-		return app('UsersWindowAccess')
-							->where('users_id', $user->users_id)
-							->where('module_id', $modu->module_id)
-							->where('company_id', $user->company_id)
-							->where('menu_parent', $parent)
-							->where('status','1')
-							->orderBy('order_level','asc')
-							->get();
+		return (new UsersWindowAccess)->where('company_id', $user->company_id)
+					
+					->where('menu_parent', $parent)
+					
+					->where('users_id', $user->users_id)
+					->where('module_id', $modu->module_id)
+
+					->where('status', '1')->orderBy('order_level', 'asc')->get();
 	}
 
 	protected function systemWindowSub($array, $windows = []) 
@@ -31,30 +35,29 @@ trait SystemCommonSideBarTrait
 
 		foreach ($array as $key => $value) {
 
-			$systemWindow = $value->systemWindow()->first();
+			$activeTag = ($value->systemWindow['menu_path'] == active_path()) ? 'active' : null ;
 
-			$activeTag = ($systemWindow['menu_path'] == active_path()) ? 'active' : null ;
+			$value = collect($value)->merge([
+				'menu_icon'   => $value->systemWindow['menu_icon'] ,
+				'menu_path'   => $value->systemWindow['menu_path'] , 
+				'menu_active' => $activeTag ,
+				'menu_module' => active_module() ,
+			]);
 
-			array_add($systemWindow,'menu_active', $activeTag);
+			$value = collect($value)->merge([
+				'menu_sub_class' => $this->systemWindowSub($this->usersWindowAccess($value['menu_id']))
+			]);
 
-			array_add($systemWindow,'menu_module', active_module());
-
-			array_add($systemWindow,'module_code', active_path());
-
-			$windowSubClass = $this->systemWindowSub($this->usersWindowAccess($value->menu_id));
-
-			array_add($systemWindow,'menu_sub',$windowSubClass); 
-
-			foreach($systemWindow['menu_sub'] as $checkactive) {
-				( !is_null($checkactive['menu_active']) ) ? array_add($systemWindow, 'menu_active', 'active') : false ;
+			foreach($value['menu_sub_class'] as $checkactive) {
+				( !is_null($checkactive['menu_active']) ) ? array_add($value, 'menu_active', 'active') : null ;
 			}
 
-			$windows[] = $systemWindow;
-
+			$windows[] = collect($value)->only([
+				'menu_type', 'menu_path', 'menu_icon', 'menu_name', 'menu_active', 'menu_module', 'menu_sub_class',
+			]);
 		}
 
 		return $windows;
 
 	}
-
 }

@@ -22,7 +22,7 @@
 
 				@include('manage.system.accounts.includes.UsersAccessTab')
 
-				<div class="tab-content">
+				<div class="tab-content" style="min-height: 75vh;">
 
 					@include('manage.system.accounts.forms.FormSearchUsersWindow')
 

@@ -1,12 +1,11 @@
 <?php
 
-Route::get('/', function(){
-    return view('auth.login3');
-});
 
-Auth::routes();
+Route::get('/categories', 'CategoryController@index');
 
-Route::get('/welcome','Manage\Api\LoginController@logoutModuleRedirect');
+// Auth::routes();
+
+
 
 Route::middleware(['auth'])->prefix('inventory')->group(function(){
 
@@ -36,4 +35,10 @@ Route::middleware('auth')->prefix('common')->group(function(){
 
 Auth::routes();
 
+Route::get('/', function(){ 
+    return view('auth.login3'); 
+})->middleware('guest');
+
 Route::get('/home', 'HomeController@index')->name('home');
+
+// Route::get('/welcome','Manage\Api\LoginController@logoutModuleRedirect');

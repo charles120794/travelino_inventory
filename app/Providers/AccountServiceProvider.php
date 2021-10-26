@@ -26,29 +26,38 @@ class AccountServiceProvider extends ServiceProvider
         //////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////       TRAITS        ////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////
-        $this->app->singleton('UsersAccountTrait', function () {
-            return \App\Http\Traits\Accounts\UsersAccountTrait::class;
+        $this->app->singleton('UsersAccessAccountTrait', function () {
+            return \App\Http\Traits\Accounts\UsersAccessAccountTrait::class;
         });
 
-        $this->app->singleton('UsersInformationTrait', function () {
-            return \App\Http\Traits\Accounts\UsersInformationTrait::class;
+        $this->app->singleton('UsersAccessCompanyTrait', function () {
+            return \App\Http\Traits\Accounts\UsersAccessCompanyTrait::class;
+        });
+
+        $this->app->singleton('UsersAccessInformationTrait', function () {
+            return \App\Http\Traits\Accounts\UsersAccessInformationTrait::class;
+        });
+        
+        $this->app->singleton('UsersAccessModuleTrait', function () {
+            return \App\Http\Traits\Accounts\UsersAccessModuleTrait::class;
+        });
+
+        $this->app->singleton('UsersAccessWindowTrait', function () {
+            return \App\Http\Traits\Accounts\UsersAccessWindowTrait::class;
+        });
+
+        $this->app->singleton('UsersCollectionModifierTrait', function () {
+            return \App\Http\Traits\Accounts\UsersCollectionModifierTrait::class;
+        });
+
+        $this->app->singleton('UsersWindowLoaderTrait', function () {
+            return \App\Http\Traits\Accounts\UsersWindowLoaderTrait::class;
         });
 
         $this->app->singleton('UsersMethodLoaderTrait', function () {
             return \App\Http\Traits\Accounts\UsersMethodLoaderTrait::class;
         });
         
-        $this->app->singleton('UsersModuleAccessTrait', function () {
-            return \App\Http\Traits\Accounts\UsersModuleAccessTrait::class;
-        });
-
-        $this->app->singleton('UsersSettingTrait', function () {
-            return \App\Http\Traits\Accounts\UsersSettingTrait::class;
-        });
-
-        $this->app->singleton('UsersWindowLoaderTrait', function () {
-            return \App\Http\Traits\Accounts\UsersWindowLoaderTrait::class;
-        });
         //////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////       MODELS        ////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////

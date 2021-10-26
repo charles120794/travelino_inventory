@@ -7,7 +7,7 @@ use Session;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Common\CommonServiceController as CommonService;
 
-trait UsersModuleAccessTrait
+trait UsersAccessModuleTrait
 {
 	public function accounts_update_users_module_access($method, $id = null, $request)
 	{

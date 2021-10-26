@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Model\Settings\SystemMedia;
 use App\Http\Controllers\Common\CommonServiceController as CommonService;
 
-trait UsersAccountTrait
+trait UsersAccessAccountTrait
 {
 
 	public function accounts_validate_users_information()
@@ -48,9 +48,11 @@ trait UsersAccountTrait
 		$array = [
 			'company_id'     => $request->company,
 	        'firstname'      => $request->firstname,
+	        'name'           => $request->firstname,
 	        'middlename'     => $request->middlename,
 	        'lastname'       => $request->lastname,
 	        'email'          => $request->email,
+	        'personal_email' => $request->email,
 	        'education'      => $request->education,
 	        'birth_date'     => $request->birth_date,
 	        'position_title' => $request->position_title,
@@ -81,14 +83,16 @@ trait UsersAccountTrait
 
 		    $message ='Cannot add new user. This company (' . $company->company_descriptiion . ') reached the maximum number of users.';
 
-		    Session::flash('failed', $message);
+		    request()->session()->flash('failed', $message);
+
 		    return back()->withInput();
 
 		} 
 
 		if(count($user) > 0) {
 
-		    Session::flash('failed','This User or Email is already exists.');
+		    request()->session()->flash('failed','This User or Email is already exists.');
+
 		    return back()->withInput();
 
 		} else {
@@ -105,7 +109,8 @@ trait UsersAccountTrait
 
 		    app('UsersCompanyAccess')->insert($compayAccess);
 
-		    Session::flash('success','New User successfully created.');
+		    request()->session()->flash('success','New User successfully created.');
+		    
 		    return back();
 
 		}
@@ -247,52 +252,6 @@ trait UsersAccountTrait
 		}
 	}
 
-	public function accounts_update_users_window_access($method, $id = null, $request) 
-	{
-		if( !is_null($request->window ) ) {
-		    foreach( $request->window as $key => $value ) {
-		    	$windowAccess = app('UsersWindowAccess')
-						->where('users_id',    decrypt($value['users_id']))
-						->where('company_id',  decrypt($value['company_id']))
-						->where('module_id',   decrypt($value['module_id']))
-						->where('menu_id',     decrypt($value['menu_id']));
-		    	if( array_key_exists( 'checkbox' , $value ) ) {
-		        	if( $windowAccess->count() == 0 ) {
-		        		$array = [ 
-	                		'users_id'     => decrypt($value['users_id']),
-	                		'company_id'   => decrypt($value['company_id']),
-	                		'module_id'    => decrypt($value['module_id']),
-	                		'menu_id'      => decrypt($value['menu_id']), 
-	                		'menu_type'    => decrypt($value['menu_type']),
-	                		'menu_parent'  => decrypt($value['menu_parent']),
-	                		'created_by'   => $this->thisUser()->users_id,
-							'created_date' => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
-                		];
-                		app('UsersWindowAccess')->insert($array);
-		            }
-		        } else {
-	                $windowAccess->delete(); 
-		        }
-		    }
-		}
-	}
-
-	public function accounts_update_users_window_access_reorder($method, $id = null, $request) 
-	{
-		if( !is_null($request->group ) ) {
-		    foreach( $request->group as $key => $value ) {
-		    	app('UsersWindowAccess')->where('access_id', $key)->update([
-		    		'menu_parent' => $value['parent'],
-		    		'menu_level'  => $value['level'],
-		    		'menu_type'   => $value['type'],
-		    		'order_level' => $value['order'],
-		    	]);
-		    }
-		}
-		$request->session()->flash('success','User Window Access successfully updated');
-		return back();
-	}
-
 	public function accounts_update_users_window_method_access($method, $id = null, $request)
 	{
 		if( !is_null($request->method) ) {
@@ -342,11 +301,6 @@ trait UsersAccountTrait
 	    } else {
 	    	return response()->json(['message' => 'Cannot update your own account to Inactive.']);
 	    }
-	}
-
-	public function accounts_delete_users($method, $id = null, $request)
-	{
-		
 	}
 
 }

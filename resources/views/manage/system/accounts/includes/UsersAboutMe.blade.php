@@ -33,14 +33,31 @@
 	</div>
 
 	<div class="box-body">
-		<strong><i class="fa fa-book margin-r-5"></i> Education </strong>
+
+		<strong>
+			<i class="margin-r-5 fa fa-book"></i> Education 
+		</strong>
+
 		<p class="text-muted"> {{ $thisUserAccount->education }} </p> <hr>
-		<strong><i class="fa fa-map-marker margin-r-5"></i> Location </strong>
-		<p class="text-muted"> {{ $thisUserAccount->address }} </p> <hr>
-		<strong><i class="fa fa-envelope margin-r-5"></i> Email </strong>
-		<p> {{ $thisUserAccount->email }} </p> <hr>
-		<strong><i class="fa fa-phone margin-r-5"></i> Contact </strong>
-		<p> {{ $thisUserAccount->contact }} </p>
+
+		<strong>
+			<i class="margin-r-5 fa fa-envelope"></i> Email 
+		</strong>
+		
+		<p class="text-muted"> {{ $thisUserAccount->personal_email }} </p> <hr>
+
+		<strong>
+			<i class="margin-r-5 fa fa-phone"></i> Contact 
+		</strong>
+
+		<p class="text-muted"> {{ $thisUserAccount->personal_contact_phone }} </p> <hr>
+
+		<strong>
+			<i class="margin-r-5 fa fa-map-marker"></i> Address 
+		</strong>
+
+		<p class="text-muted"> {{ $thisUserAccount->usersAddress['address_complete'] }} </p> <hr>
+
 	</div>
 
 </div>

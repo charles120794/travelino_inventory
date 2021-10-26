@@ -19,32 +19,31 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    <form method="get" id="form-filter">
-                        <div class="row">
-                            <div class="col-md-12">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="form-horizontal" method="GET" id="form-filter">
                                 <div class="form-group">
-                                    <label>Select Module</label>
-                                    <select class="form-control" name="module">
-                                        <option value="">--Select All--</option>
-                                        @foreach($users_module as $module)
-                                        <option value="{{ $module->module_id }}" @if(request()->get('module') == $module->module_id) selected @endif>{{ Str::title($module->module_description) }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label class="control-label col-sm-2" for="email"> Select Module: </label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" name="module">
+                                            <option value="">--Select All--</option>
+                                            @foreach($users_module as $module)
+                                            <option value="{{ $module->module_id }}" @if(request()->get('module') == $module->module_id) selected @endif>{{ Str::title($module->module_description) }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
+
                     <form method="post" action="{{ route('accounts.route',['path' => $path, 'action' => 'update-users-window-access', 'id' => encrypt($thisUser->users_id) ]) }}"> @csrf
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="">
-                                    <div class="box-header with-border">
-                                        <h3 class="box-title">&nbsp;</h3>
-                                        <div class="box-tools clearfix">
-                                            <button type="button" class="btn btn-warning" onclick="$('#form-filter').submit()"><i class="fa fa-filter fa-fw"></i> Filter </button>
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-check fa-fw"></i> Update </button>
-                                        </div>
-                                    </div>
+                                <div class="box-tools pull-right clearfix">
+                                    <button type="button" class="btn btn-sm btn-warning" onclick="$('#form-filter').submit()"><i class="fa fa-search"></i> Search </button>
+                                    <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Update </button>
                                 </div>
                             </div>
                         </div>
@@ -59,29 +58,42 @@
                                     </thead>
                                     <tbody>
                                         @forelse($users_window as $key => $value)
+
                                         <tr class="tr-order-level" data-group="{{ $value->menu_id }}">
+
                                             <td id="td-level-padding{{ $value->menu_id }}" style="padding-left: {{ 50 * ($value->menu_level - 1) }}px;">
 
-                                                <input type="text" class="form-control" name="group[{{ $value->access_id }}][description]" value="{{ $value->systemWindow['menu_name'] }}">
-
+                                                <div class="input-group" id="draggable_id{{ $key }}" draggable="true" ondragstart="drag(this)" ondrop="return alert()">
+                                                    <span class="input-group-addon" style="cursor: move;"><i class="fa fa-arrows"></i></span>
+                                                    <input type="text" class="form-control" name="group[{{ $value->access_id }}][description]" value="{{ $value->menu_name }}">
+                                                </div>
+                                                
                                                 <input type="hidden" name="group[{{ $value->access_id }}][type]" id="type_id{{ $value->menu_id }}" value="{{ $value->menu_type }}">
                                                 <input type="hidden" name="group[{{ $value->access_id }}][level]" id="level_id{{ $value->menu_id }}" value="{{ $value->menu_level }}">
                                                 <input type="hidden" name="group[{{ $value->access_id }}][parent]" id="parent_id{{ $value->menu_id }}" value="{{ $value->menu_parent }}">
                                                 <input type="hidden" name="group[{{ $value->access_id }}][order]" id="order_level{{ $value->menu_id }}" value="{{ $value->order_level }}">
+
                                             </td>
+
                                             <td class="text-center">
+
                                                 <div class="btn-group">
-                                                    <a href="#" data-uniqid="{{ $value->menu_id }}" data-parent="{{ $value->menu_parent }}" data-level="{{ $value->menu_level }}" data-type="{{ $value->menu_type }}" class="btn btn-default btn-flat btn-move-up"><i class="fa fa-angle-up"></i></a>
-                                                    <a href="#" data-uniqid="{{ $value->menu_id }}" data-parent="{{ $value->menu_parent }}" data-level="{{ $value->menu_level }}" data-type="{{ $value->menu_type }}" class="btn btn-default btn-flat btn-move-down"><i class="fa fa-angle-down"></i></a>
+
+                                                    {{-- <a href="#" data-uniqid="{{ $value->menu_id }}" data-parent="{{ $value->menu_parent }}" data-level="{{ $value->menu_level }}" data-type="{{ $value->menu_type }}" class="btn btn-default btn-flat btn-move-up"><i class="fa fa-angle-up"></i></a> --}}
+                                                    {{-- <a href="#" data-uniqid="{{ $value->menu_id }}" data-parent="{{ $value->menu_parent }}" data-level="{{ $value->menu_level }}" data-type="{{ $value->menu_type }}" class="btn btn-default btn-flat btn-move-down"><i class="fa fa-angle-down"></i></a> --}}
                                                     <a href="#" data-uniqid="{{ $value->menu_id }}" data-parent="{{ $value->menu_parent }}" data-level="{{ $value->menu_level }}" data-type="{{ $value->menu_type }}" class="btn btn-default btn-flat btn-move-left"><i class="fa fa-angle-left"></i></a>
                                                     <a href="#" data-uniqid="{{ $value->menu_id }}" data-parent="{{ $value->menu_parent }}" data-level="{{ $value->menu_level }}" data-type="{{ $value->menu_type }}" class="btn btn-default btn-flat btn-move-right"><i class="fa fa-angle-right"></i></a>
+
                                                 </div>
-                                                <button type="button" class="btn btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+
+                                                <a href="{{ route('accounts.route',['path' => active_path(), 'action' => 'delete-users-window-access', 'id' => encrypt($value->access_id) ]) }}" class="btn btn-danger" onclick="return confirm('Confirm to remove your access to this window')"><i class="fa fa-remove"></i></a>
+
                                             </td>
+
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="2" class="text-center"> No result's found </td>
+                                            <td colspan="2" class="text-center"> Please select module then click search button. </td>
                                         </tr>
                                         @endforelse
                                     </tbody>
@@ -102,6 +114,47 @@
 @push('scripts')
 
 <script type="text/javascript">
+
+    function dropHere(event, target) {
+        // event.preventDefault();
+        // console.log(target.id, event.target.id)
+        var htmlID =  localStorage.getItem('tableRow');
+
+        console.log(event);
+        // console.log($('#' + htmlID).closest('tr').html());
+
+        $(event).html($('#' + htmlID)[0].outerHTML)
+
+        $('#' + htmlID).closest('tr').remove();
+    }
+
+    function allowDropHere(event) {
+        $(event).css('background-color', '#f7f7f7');
+        $('tr[data-group="' + localStorage.getItem('tableData') + '"]').addClass('hide');
+    }
+
+    function drag(event) {
+
+        $('.tr-order-level').each(function(){
+            $(this).attr('ondragover','allowDrop(this)');
+        });
+
+        $(event).closest('tr').attr('ondragover', '');
+
+        localStorage.setItem('tableRow', $(event).closest('tr')[0].outerHTML)
+        localStorage.setItem('tableData', $(event).closest('tr').data('group'))
+    }
+
+    function allowDrop(event) {
+
+        $('.added-tr').remove();;
+
+        if(document.getElementsByClassName('added-tr').length == 0) {
+            // $('tr[data-group="' + localStorage.getItem('tableData') + '"]');
+            $('tr[data-group="' + localStorage.getItem('tableData') + '"]').insertAfter($(event));
+            arangeOrder()
+        }
+    }
 
     $(function(){
 
@@ -129,6 +182,14 @@
         });
 
     });
+
+    function arangeOrder()
+    {
+        var orderLevel = 1;
+        $('.tr-order-level').each(function(key, value){
+            $('#order_level' + $(this).data('group')).val(orderLevel++);
+        });
+    }
 
     function findParent(uniqid)
     {

@@ -6,11 +6,11 @@ use Carbon\Carbon;
 use App\Http\Traits\Common\ModuleCommonAccessTrait;
 use App\Http\Traits\Common\SystemCommonSideBarTrait;
 
-use App\Http\Traits\Accounts\UsersInformationTrait;
+use App\Http\Traits\Accounts\UsersAccessInformationTrait;
 
 class CommonServiceController
 {
-    use ModuleCommonAccessTrait, SystemCommonSideBarTrait, UsersInformationTrait;
+    use ModuleCommonAccessTrait, SystemCommonSideBarTrait, UsersAccessInformationTrait;
 
     const TAX_RATE = 0.12;
 

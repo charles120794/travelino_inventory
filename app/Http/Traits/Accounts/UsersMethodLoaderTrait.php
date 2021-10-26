@@ -13,8 +13,7 @@ trait UsersMethodLoaderTrait
     {
         $usersCompany = $this->usersAllCompany(decrypt($id));
 
-        return $this->myViewMethodLoader($method)
-                            ->with('usersCompany', $usersCompany);
+        return $this->myViewMethodLoader($method)->with('usersCompany', $usersCompany);
     }
 
     public function accounts_search_users_module_table($method, $id = null, $request)
@@ -36,8 +35,8 @@ trait UsersMethodLoaderTrait
         $windowAccess = $this->getUserWindowAccess(decrypt($id), $request->company_id, $request->module_id);
 
         return $this->myViewMethodLoader($method)
-                    ->with('companyId', $request->company_id)
                     ->with('moduleId', $request->module_id)
+                    ->with('companyId', $request->company_id)
                     ->with('allWindow', $moduleWindow)
                     ->with('windowAccess', $windowAccess)
                     ->with('thisUserAccount', $thisUserAcct);

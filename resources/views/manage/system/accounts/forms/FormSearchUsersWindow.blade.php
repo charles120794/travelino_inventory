@@ -1,4 +1,4 @@
-<form method="post" action="{{ route('accounts.route',['path' => $path, 'action' => 'search-users-window-table', 'id' => encrypt($thisUserAccount->users_id)]) }}" id="form_search_users_window" data-request="json"> 
+<form method="get" action="{{ route('accounts.route',['path' => $path, 'action' => 'search-users-window-table', 'id' => encrypt($thisUserAccount->users_id)]) }}" id="form_search_users_window" data-request="json"> 
 	{{ csrf_field() }}
 	<table class="table table-bordered">
 		<tr>
@@ -16,9 +16,9 @@
 			</td>
 			<td style="padding: 0px;" colspan="3">
 				<select class="form-control input-sm" id="company_id" name="company_id" onchange="return selectedCompany(this)" required>
-					<option value=""> -- Select Company --</option>
+					<option value=""> --Select Company-- </option>
 		            @foreach($usersCompany as $key => $value)
-		            <option value="{{ $value->company_id }}"> {{ strtoupper($value->company_code) }} - {{ strtoupper($value->company_name) }} {{ ($value->company_id == $thisUserAccount->company_id) ? ' (DEFAULT COMPANY)' : ''}}</option>
+		            <option value="{{ $value->company_id }}">{{ strtoupper($value->company_name) }} {{ ($value->company_id == $thisUserAccount->company_id) ? ' (DEFAULT COMPANY)' : ''}}</option>
 		            @endforeach
 		        </select>
 			</td>
@@ -29,7 +29,7 @@
 			</td>
 			<td style="padding: 0px;" colspan="3">
 				<select class="form-control input-sm" id="module_id" name="module_id" onchange="return submitFormSearch()" required disabled>
-					<option value=""> -- Select Module --</option>
+					<option value=""> --Select Module-- </option>
 		        </select>
 			</td>
 		</tr>

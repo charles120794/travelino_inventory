@@ -11,11 +11,9 @@ use Illuminate\Database\Eloquent\Model;
 class UsersWindowAccess extends Model
 {
 
-    // protected $connection = 'setings';
-
     protected $table = 'users_window';
 
-    protected $primaryKey = 'users_id';
+    protected $primaryKey = 'access_id';
 
     public $timestamps = false;
 
@@ -26,12 +24,22 @@ class UsersWindowAccess extends Model
 
     public function systemSubClass()
     {
-        return $this->hasMany(UsersWindowAccess::class,'menu_parent','menu_id');
+        return $this->hasMany(UsersWindowAccess::class, 'menu_parent', 'menu_id');
     }
 
     public function systemWindow()
     {
         return $this->hasOne(SystemWindow::class, 'menu_id', 'menu_id');
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(UsersWindowAccess::class, 'menu_id', 'menu_id');
+    }
+
+    public function childrenCategories()
+    {
+        return $this->hasMany(UsersWindowAccess::class, 'menu_id', 'menu_id')->with('categories');
     }
 
 }

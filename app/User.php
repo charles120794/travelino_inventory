@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use App\Model\Settings\SystemCompany;
 
+use App\Model\Accounts\UsersAddress;
 use App\Model\Accounts\UsersModuleAccess;
 use App\Model\Accounts\UsersWindowAccess;
 use App\Model\Accounts\UsersCompanyAccess;
@@ -95,14 +96,13 @@ class User extends Authenticatable
         return $this->hasOne(TableConsumer::class,'users_id','users_id');
     }
 
-    public function addressInfo()
+    public function usersAddress()
     {
-        return $this->hasMany(UsersBillingAddress::class,'users_id','users_id');
+        return $this->hasOne(UsersAddress::class,'address_id','users_address');
     }
 
-    public function addressPersonalInfo()
+    public function usersBillingAddress()
     {
-        return $this->hasOne(UsersBillingAddress::class,'address_id','personal_address_id');
+        return $this->hasOne(UsersBillingAddress::class,'address_id','users_address');
     }
-
 }

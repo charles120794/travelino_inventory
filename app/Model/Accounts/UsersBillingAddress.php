@@ -18,9 +18,8 @@ class UsersBillingAddress extends Model
 
     public $timestamps = false;
 
-    public function usersBillingInfo()
+    public function usersInfo()
     {
-        return $this->belongsTo(UsersBilling::class, 'consumer_address','address_id');
+        return $this->hasOne(User::class,'users_address','address_id');
     }
-
 }

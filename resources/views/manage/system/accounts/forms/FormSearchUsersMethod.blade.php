@@ -15,10 +15,10 @@
                 SELECT COMPANY: 
             </td>
             <td style="padding: 0px;" colspan="3">
-                <select class="form-control input-sm" id="company_id" name="company_id" onchange="return selectedCompany(this)" required>
+                <select class="form-control" id="company_id" name="company_id" onchange="return selectedCompany(this)" required>
                     <option value="" selected>-- Select Company --</option>
                     @foreach($usersCompany as $key => $value)
-                    <option value="{{ $value->company_id }}"> {{ strtoupper($value->company_code) }} - {{ strtoupper($value->company_name) }} {{ ($value->company_id == $thisUserAccount->company_id) ? ' (DEFAULT COMPANY)' : ''}}</option>
+                    <option value="{{ $value->company_id }}"> {{ strtoupper($value->company_name) }} {{ ($value->company_id == $thisUserAccount->company_id) ? ' (DEFAULT COMPANY)' : ''}}</option>
                     @endforeach
                 </select>
             </td>
@@ -28,7 +28,7 @@
                 SELECT MODULE:
             </td>
             <td style="padding: 0px;" colspan="3">
-                <select class="form-control input-sm" id="module_id" name="module_id" onchange="return selectedModule(this)" disabled required>
+                <select class="form-control" id="module_id" name="module_id" onchange="return selectedModule(this)" disabled required>
                     <option value="" selected>-- Select Module --</option>
                 </select>
             </td>
@@ -38,7 +38,7 @@
                 SELECT WINDOW: 
             </td>
             <td style="padding: 0px;" colspan="3">
-                <select class="form-control input-sm" id="window_id" name="window_id" onchange="return submitFormSearch()" disabled required>
+                <select class="form-control" id="window_id" name="window_id" onchange="return submitFormSearch()" disabled required>
                     <option value="" selected>-- Select Window --</option>
                 </select>
             </td>

@@ -1,29 +1,29 @@
 @foreach($class as $key => $value)
 
-<li class="{{ $value->menu_active }} @if($value->usersAccess['menu_type'] == '1') treeview @endif">
+	<li class="{{ $value['menu_active'] }} @if($value['menu_type'] == '1') treeview @endif">
 
-	<a href="/{{ $value->menu_module }}/{{ $value->menu_path }}">
-	
-		<i class="{{ $value->menu_icon }}"></i> <span>{{ $value->menu_name }}</span>
+		<a href="/{{ $value['menu_module'] }}/{{ $value['menu_path'] }}">
+		
+			<i class="{{ $value['menu_icon'] }}"></i> <span>{{ $value['menu_name'] }}</span>
 
-		@if($value->usersAccess['menu_type'] == '1')
+			@if($value['menu_type'] == '1')
 
-		<span class="pull-right-container">
-			<i class="fa fa-angle-left pull-right"></i>
-		</span>
+			<span class="pull-right-container">
+				<i class="fa fa-angle-left pull-right"></i>
+			</span>
+
+			@endif
+
+		</a>
+
+		@if($value['menu_type'] == '1')
+
+			<ul class="treeview-menu">
+				@include('layouts.sidebaraccess', [ 'class' => $value['menu_sub_class'] ])
+			</ul>
 
 		@endif
 
-	</a>
-
-	@if($value->usersAccess['menu_type'] == '1')
-
-		<ul class="treeview-menu">
-			@include('layouts.sidebaraccess', ['class' => $value->menu_sub])
-		</ul>
-
-	@endif
-
-</li>
+	</li>
 
 @endforeach

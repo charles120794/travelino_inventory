@@ -3,14 +3,29 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+
+		$('.users-account-datatables').DataTable({
+			autWidth: false
+		});
+
 		$('form[data-request="json"]').on('submit',function(e){
 			e.preventDefault();
 		});
+
 		$('input,select,textarea').on('change',function(e){
 			if($.trim($(this).val()) != "") {
 	    		$(this).css('border-color','');
 	    	}
 	    });	
+
+	    $('.btn-users-tab').on('click', function(){
+	    	if($(this.innerHTML).attr('href') == '#list') {
+	    		history.pushState({}, null, '?tab=all-account');
+	    	} else {
+	    		history.pushState({}, null, '?tab=add-account');
+	    	}
+	    });
+
 	});
 
 	function submitModalImageUpload()
@@ -25,6 +40,7 @@
 	}
 
 	function updateStatus(id,url){
+
 		if($('#'+id).hasClass('fa-toggle-on')){
 			$('#'+id).removeClass('fa-toggle-on')
 			.removeClass('text-orange')
@@ -40,6 +56,8 @@
 				alert(data.message);
 			});
 		}
+
+		submitFormSearch();
 	}
 
 	function submitFormSearch()
@@ -50,7 +68,12 @@
 			method : 'post',
 			dataType : 'html',
 			success : function(data) {
+
 				$('#form_company_users').html(data);
+
+				$('.users-account-datatables').DataTable({
+					autWidth: false
+				});
 			} 
 		});
 	}

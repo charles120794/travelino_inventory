@@ -10,13 +10,13 @@
 				</div>
 			</td>
 		</tr>
-		<tr style="white-space: nowrap;">
+		{{-- <tr style="white-space: nowrap;">
             <td style="font-weight: bold; font-size: 12px; vertical-align: middle; padding: 6px; width: 15%;">
                 SEARCH COMPANY: 
             </td>
             <td style="padding: 0px;">
                 <input class="form-control input-sm" id="company_id" name="company_id" onchange="return submitFormSearch()" placeholder="Search Company">
             </td>
-        </tr>
+        </tr> --}}
 	</table>
 </form>

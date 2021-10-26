@@ -42,8 +42,8 @@ class InventoryServiceProvider extends ServiceProvider
             return \App\Http\Traits\Inventory\InventoryMethodLoaderTrait::class;
         });
 
-        $this->app->singleton('InventoryDatatableTrait', function () {
-            return \App\Http\Traits\Inventory\InventoryDatatableTrait::class;
+        $this->app->singleton('InventoryDataTableTrait', function () {
+            return \App\Http\Traits\Inventory\InventoryDataTableTrait::class;
         });
 
         $this->app->singleton('InventoryWindowLoaderTrait', function () {

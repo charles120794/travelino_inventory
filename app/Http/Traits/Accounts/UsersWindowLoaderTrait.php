@@ -26,21 +26,21 @@ trait UsersWindowLoaderTrait
 
 	public function accounts_users_window_access($window)
 	{
+		$userModuleAccess = $this->usersAllModule($this->thisUser()->users_id, $this->thisUser()->company_id);
+
 		$userWindowAccess = $this->thisUser();
 
 		$userWindowAccess = $userWindowAccess->windowAccess();
 
 		$userWindowAccess = $userWindowAccess->when(request()->has('module'), function($query){
-			return $query->where('module_id',request()->get('module'));
+			return $query->where('module_id', request()->get('module'));
 		});
 
 		$userWindowAccess = $userWindowAccess->when(request()->has('company'), function($query){
-			return $query->where('company_id',request()->get('company'));
+			return $query->where('company_id', request()->get('company'));
 		});
 
-		$userWindowAccess = $userWindowAccess->orderBy('order_level','asc')->get();
-
-		$userModuleAccess = $this->usersAllModule($this->thisUser()->users_id,$this->thisUser()->company_id);
+		$userWindowAccess = (request()->has('module')) ? $userWindowAccess->orderBy('order_level','asc')->get() : [] ;
 
 		return $this->myViewLoader($window)
 				->with('users_module', $userModuleAccess)

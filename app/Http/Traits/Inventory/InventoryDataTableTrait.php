@@ -14,7 +14,7 @@ use App\Model\Inventory\activity\InventoryActivityCashier;
 use App\Model\Inventory\maintenance\InventoryTableItem;
 use App\Model\Inventory\maintenance\InventoryTableCustomer;
 
-trait InventoryDatatableTrait
+trait InventoryDataTableTrait
 {
 
 	/* Retrieve all Seeling product to Cashier */

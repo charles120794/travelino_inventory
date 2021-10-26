@@ -2,11 +2,9 @@
 
 namespace App\Http\Traits\Accounts;
 
-use Crypt;
-use Session;
 use Illuminate\Http\Request;
 
-trait UsersSettingTrait
+trait UsersCollectionModifierTrait
 {
     public function accounts_search_users_module_json($method, $id = null, $request)
     {

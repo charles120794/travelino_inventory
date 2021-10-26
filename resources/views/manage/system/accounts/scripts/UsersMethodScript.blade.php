@@ -3,14 +3,21 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
+
+        $('.users-method-access-datatables').DataTable({
+            autoWidth: false,
+        });
+
         $('form[data-request="json"]').on('submit',function(e){
             e.preventDefault();
         });
+
         $('input, select, textarea').on('change',function(e){
             if($.trim($(this).val()) != "") {
                 $(this).css('border-color','');
             }
         });
+        
     });
 
     function submitModalImageUpload()
@@ -68,7 +75,7 @@
                 var option = '<option value=""> -- Select Window -- </option>';
                 if(data.length > 0 ){
                     $.each( data, function(key,value) {
-                        option += '<option value="' + value.menu_id + '">' + value.menu_name + '</option>';
+                        option += '<option value="' + value.menu_id + '">' + (value.menu_name).toUpperCase() + '</option>';
                     });
                     $('#window_id').attr('disabled',false);
                     $('#window_id').html(option);
@@ -90,6 +97,9 @@
             cache: false,
             success : function(data) {
                 $('#form_users_window_method').html(data);
+                $('.users-method-access-datatables').DataTable({
+                    autoWidth: false,
+                });
             }
         });
     }

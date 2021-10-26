@@ -1,17 +1,17 @@
 <form method="post" action="{{ route('accounts.route',['path' => $path, 'action' => 'update-users-window-method', 'id' => encrypt($thisUserAccount->users_id)]) }}" id="form_update_users_method">
 	{{ csrf_field() }}
-	<table class="table table-bordered table-condensed table-hover" id="users_table">
+	<table class="table table-bordered table-condensed table-hover users-method-access-datatables" id="users_table">
 		<thead>
-			<tr style="font-size: 12px; white-space: nowrap;">
-				<th class="text-center" style="vertical-align: top; width: 3%">  ID </th>
-				<th class="text-center" style="vertical-align: top; width: 10%"> FUNCTION </th>
-				<th class="text-center" style="vertical-align: top; width: 20%"> ACTION ROUTE </th>
-				<th class="text-center" style="vertical-align: top; width: 20%"> WINDOW TYPE </th>
+			<tr class="bg-gray-light" style="font-size: 12px; white-space: nowrap;">
+				<th class="text-center" style="vertical-align: top; width: 05%"> </th>
+				<th class="text-center" style="vertical-align: top; width: 80%"> ACTION REQUIRED </th>
+				{{-- <th class="text-center" style="vertical-align: top; width: 20%"> ACTION ROUTE </th> --}}
+				<th class="text-center" style="vertical-align: top; width: 15%"> WINDOW TYPE </th>
 			</tr>
 		</thead>
 		<tbody id="users_table_body">
 
-			@forelse($allMethods as $key => $value)
+			@foreach($allMethods as $key => $value)
 
 				<tr style="font-size: 12px; white-space: nowrap;">
 					<td class="text-center">
@@ -21,18 +21,12 @@
 						<input type="hidden" name="method[{{ $key }}][company_id]" value="{{ encrypt($companyId) }}">
 						<input type="hidden" name="method[{{ $key }}][module_id]" value="{{ encrypt($moduleId) }}">
 					</td>
-					<td style="vertical-align: middle;">{{ Str::title(str_replace('_', ' ', $value->method_function)) }}</td>
 					<td style="vertical-align: middle;">{{ Str::title(str_replace('-', ' ', $value->method_name)) }}</td>
+					{{-- <td style="vertical-align: middle;">{{ Str::title(str_replace('_', ' ', $value->method_function)) }}</td> --}}
 					<td style="vertical-align: middle;">{{ (is_null($value->method_blade)) ? 'CRUD' : 'DISPLAY' }}</td>
 				</tr>
 
-			@empty
-
-				<tr style="font-size: 12px; white-space: nowrap;">
-					<td colspan="4" class="text-center">No result's found.</td>
-				</tr>
-
-			@endforelse
+			@endforeach
 
 		</tbody>
 
