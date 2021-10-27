@@ -3,13 +3,15 @@
 namespace App\Http\Traits\Inventory\Activity;
 
 use DB;
+
+use App\Http\Controllers\Common\CommonServiceController as CommenService;
+
 use App\Model\Inventory\activity\InventoryActivityBasket;
 use App\Model\Inventory\activity\InventoryActivityCashier;
 use App\Model\Inventory\activity\InventoryActivityCashierDetails;
 
 use App\Model\Inventory\maintenance\InventoryTableItem;
 use App\Model\Inventory\maintenance\InventoryTableCustomer;
-use App\Http\Controllers\Common\CommonServiceController as CommenService;
 
 trait InventoryCashierTrait
 {
@@ -76,8 +78,6 @@ trait InventoryCashierTrait
 			'order_level'           => (new CommenService)->orderLevel(new InventoryActivityCashier),
 		]);
 
-
-
 		if($cashier_id > 0) {
 
 			foreach ($request->item as $key => $value) {
@@ -130,7 +130,7 @@ trait InventoryCashierTrait
 
 			request()->session()->flash('success','Transaction successfully saved.');
 			
-			return redirect()->route('inventory.route',['path' => active_path(), 'action' => 'inventory-retrieve-customer-receipt', 'id' => encrypt($cashier_id)]);
+			return redirect()->route('inventory.route',['path' => active_path(), 'action' => 'inventory-retrieve-customer-cashier-receipt', 'id' => encrypt($cashier_id)]);
 
 		} else {
 			return abort(403, 'Invalid Transaction');
@@ -141,7 +141,7 @@ trait InventoryCashierTrait
 	{
 		$cashiers = (new InventoryActivityCashier);
 
-		$cashiers = $cashiers->whereIn('cashier_purchase_type',['purchase','order'])->where('cashier_status_order','paid');
+		$cashiers = $cashiers->whereIn('cashier_purchase_type', ['purchase','order'])->where('cashier_status_order','paid');
 
 		if(request()->has('cashier-history-page')) {
 			$cashiers = $cashiers->paginate(10, ['*'], 'cashier-history-page', request()->get('cashier-history-page'));

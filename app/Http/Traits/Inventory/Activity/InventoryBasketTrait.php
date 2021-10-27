@@ -73,9 +73,7 @@ trait InventoryBasketTrait
 
 	public function inventory_retrieve_customer_basket($method, $id, $request)
 	{
-		$customer_id = decrypt($request->get('cashier_item_customer'));
-
-		$customer_basket = $this->customer_basket_data($customer_id);
+		$customer_basket = (new InventoryActivityBasket)->where('basket_customer_id', decrypt($request->get('cashier_item_customer')))->get();
 
 		return $this->myViewMethodLoader($method)->with('customer_basket', $customer_basket);
 	}
@@ -100,11 +98,6 @@ trait InventoryBasketTrait
 	public function inventory_delete_customer_basket($method, $id, $request)
 	{
 		return (new InventoryActivityBasket)->where('basket_id', decrypt($request->get('basket_id')))->delete();
-	}
-
-	public function customer_basket_data($customer)
-	{
-		return (new InventoryActivityBasket)->where('basket_customer_id', $customer)->get();
 	}
 
 	public function customer_basket_data_delete($customer)

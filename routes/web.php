@@ -20,7 +20,6 @@ Route::get('/storage-link', function() {
     Artisan::call('storage:link');
 });
 
-
 Route::get('/system-down', function() {
     Artisan::call('down');
 });

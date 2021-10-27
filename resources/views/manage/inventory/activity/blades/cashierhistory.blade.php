@@ -20,23 +20,23 @@
 								&#8369; {{ number_format($cashier['cashier_total_price'], 2) }}
 							</td>
 							<td class="v-align-middle text-center">
-								<a href="{{ route('inventory.route',['path' => active_path(), 'action' => 'inventory-retrieve-customer-receipt', 'id' => encrypt($cashier['cashier_id'])]) }}" class="btn btn-primary"><i class="fa fa-print"></i></a>
+								<a href="{{ route('inventory.route',['path' => active_path(), 'action' => 'inventory-retrieve-cashier-customer-receipt', 'id' => encrypt($cashier['cashier_id'])]) }}" class="btn btn-primary"><i class="fa fa-print"></i></a>
 							</td>
 						</tr>
 						@endforeach 
 					</tbody>
 				</table>
 			</div>
-			<div class="col-md-12">
+			{{-- <div class="col-md-12">
 		        <div class="pull-right">
 		            {{ $cashiers->links('vendor.pagination.cashierHistoryPagination') }}
 		        </div>
-		    </div>
+		    </div> --}}
 		</div>
 	</div>
-	<div class="overlay modal-loader-overlay">
+	{{-- <div class="overlay modal-loader-overlay">
         <i class="fa fa-refresh fa-spin modal-loader-spin"></i>
-    </div>
+    </div> --}}
 </div>
 
 

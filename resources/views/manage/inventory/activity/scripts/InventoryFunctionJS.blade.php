@@ -9,7 +9,7 @@
 	    var item_customer = localStorage.getItem('customer_selected') ; /* Encrypted */
 
 	    $.ajax({
-	        url : '{{ route('inventory.route',['path' => active_path(), 'action' => 'create-customer-basket', 'id' => encrypt(1)]) }}',
+	        url : '{{ route('inventory.route',['path' => active_path(), 'action' => 'inventory-create-customer-basket', 'id' => encrypt(1)]) }}',
 	        type : 'get',
 	        dataType : 'html',
 	        data : { 
@@ -31,7 +31,7 @@
 	    var item_customer = localStorage.getItem('customer_selected');
 
 	    $.ajax({
-	        url : '{{ route('inventory.route',['path' => $path, 'action' => 'update-customer-basket-quantity', 'id' => encrypt(1)]) }}',
+	        url : '{{ route('inventory.route',['path' => $path, 'action' => 'inventory-update-customer-basket-quantity', 'id' => encrypt(1)]) }}',
 	        type : 'post',
 	        data : { 
 	            cashier_item_id : item_id, 
@@ -57,7 +57,7 @@
 	function retrieve_customer_basket(customer) 
 	{
 	    $.ajax({
-	        url : '{{ route('inventory.route', ['path' => active_path(), 'action' => 'retrieve-customer-basket', 'id' => str_random(30)]) }}',
+	        url : '{{ route('inventory.route', ['path' => active_path(), 'action' => 'inventory-retrieve-customer-basket', 'id' => str_random(30)]) }}',
 	        type : 'get',
 	        dataType : 'html',
 	        data : { 
@@ -70,6 +70,7 @@
 	        complete : function () {
 
 	        	display_total_price(); 
+	        	display_total_quantity(); 
 
 	            compute_total_per_details_quantity();
 	            compute_total_change();
@@ -83,7 +84,7 @@
 	function remove_customer_basket_item(basket)
 	{
 	    $.ajax({
-	        url : '{{ route('inventory.route',['path' => active_path(), 'action' => 'delete-cashier-customer-basket', 'id' => encrypt(1)]) }}',
+	        url : '{{ route('inventory.route',['path' => active_path(), 'action' => 'inventory-delete-customer-basket', 'id' => encrypt(1)]) }}',
 	        type : 'get',
 	        dataType : 'html',
 	        data : { basket_id: basket, },

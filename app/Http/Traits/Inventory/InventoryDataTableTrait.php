@@ -147,11 +147,13 @@ trait InventoryDataTableTrait
 		return $contents;
 	}
 
-	public function inventory_retrieve_receipt_history_modal_table($method, $id, $request)
+	public function inventory_retrieve_cashier_receipt_history_modal_table($method, $id, $request)
 	{
 		$cashier = InventoryActivityCashier::query();
 
 		$cashier->select('cashier_id','cashier_customer_name','cashier_date','cashier_total_price');
+
+		$cashier->where('cashier_purchase_type','purchase')->where('cashier_status_order','paid');
 
 		$contents = (new Datatables)->eloquent($cashier)
 
@@ -203,6 +205,91 @@ trait InventoryDataTableTrait
 	                })
 
 	                ->rawColumns(['customer_total_purchase','action'])
+
+					->toJson();
+
+		return $contents;
+	}
+
+	public function inventory_retrieve_order_receipt_history_modal_table($method, $id, $request)
+	{
+
+		$contents = (new Datatables)->eloquent(InventoryActivityCashier::query())
+
+					->addColumn('customer_name', function($query){
+						return $query->cashier_customer_name;
+					})
+
+					->addColumn('customer_status', function($query){
+						return ucfirst($query->cashier_status);
+					})
+
+					->addColumn('customer_date_purchased', function($query){
+						return date('F d, Y', strtotime($query->cashier_date));
+					})
+
+					->addColumn('customer_date_payment', function($query){
+						return date('F d, Y', strtotime($query->cashier_payment_date));
+					})
+
+					->addColumn('customer_total_purchase', function($query){
+						return '&#8369; ' . number_format($query->cashier_total_price, 2);
+					})
+
+					->addColumn('customer_pending_action', function($query){
+
+						$edit_location = route('inventory.route', ['path' => active_path(), 'action' => 'inventory-edit-order', 'id' => encrypt($query['cashier_id'])]);
+						$cancel_location = route('inventory.route', ['path' => active_path(), 'action' => 'inventory-cancel-order', 'id' => encrypt($query['cashier_id'])]);
+
+						return '<a href="' . $edit_location . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit </a>
+								<a href="' . $cancel_location . '" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i> Cancel </a>';
+					})
+
+					->addColumn('customer_history_action', function($query){
+
+						$location = route('inventory.route', ['path' => active_path(), 'action' => 'inventory-retrieve-order-receipt', 'id' => encrypt($query['cashier_id'])]);
+
+						return '<a href="' . $location . '" class="btn btn-sm btn-primary"><i class="fa fa-print"></i> Print Receipt </a>';
+					})
+
+					->filter(function ($query) {
+						
+						if(request()->order_type == 'history') {
+							$query->where('cashier_purchase_type','order')->whereIn('cashier_status', ['posted','cancelled']);;
+						}
+
+						if(request()->order_type == 'pending') {
+							$query->where('cashier_purchase_type','order')->where('cashier_status','new');
+						}
+						
+	                    if (!is_null( request()->search['value'] )) {
+	                        $query->orWhere('cashier_customer_name', 'like', "%" . request()->search['value'] . "%");
+	                    }
+
+	                    if (!is_null( request()->search['value'] )) {
+	                        $query->orWhere('cashier_date', 'like', "%" . request()->search['value'] . "%");
+	                    }
+
+	                    if (!is_null( request()->search['value'] )) {
+	                        $query->orWhere('cashier_total_price', 'like', "%" . request()->search['value'] . "%");
+	                    }
+	                })
+
+	                ->order(function ($query) {
+						if (request()->order[0]['column'] == 0) {
+						    $query->orderBy('cashier_customer_name', request()->order[0]['dir']);
+						}
+
+	                    if (request()->order[0]['column'] == 1) {
+	                        $query->orderBy('cashier_date', request()->order[0]['dir']);
+	                    }
+
+	                    if (request()->order[0]['column'] == 2) {
+	                        $query->orderBy('cashier_total_price', request()->order[0]['dir']);
+	                    }
+	                })
+
+	                ->rawColumns(['customer_total_purchase','customer_pending_action','customer_history_action'])
 
 					->toJson();
 

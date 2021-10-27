@@ -8,6 +8,7 @@
             <td style="padding: 0px;">
                 <select class="form-control input-sm" id="company_id" name="company_id" onchange="return submitFormSearch()" required>
                     <option value="">--SELECT ALL--</option>
+                    {{ active_path() }}
                     @foreach($usersCompany as $key => $value)
                     <option value="{{ $value->company_id }}" {{ ($value->company_id == $thisUser->company_id) ? 'selected' : ''}}> {{ strtoupper($value->company_code) }} - {{ strtoupper($value->company_name) }} {{ ($value->company_id == $thisUser->company_id) ? ' (DEFAULT COMPANY)' : ''}}</option>
                     @endforeach

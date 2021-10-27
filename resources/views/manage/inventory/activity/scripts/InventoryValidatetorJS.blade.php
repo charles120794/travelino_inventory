@@ -47,6 +47,7 @@
 	    if(compute_total_all_details_price() == 0.00) {
 	        errors++;
 	    }
+	    
 	    /* If no Errors found Enable Submit Button */
 	    if(errors == 0) {
 	        $('.btn-submit').attr('type','submit').attr('disabled',false);

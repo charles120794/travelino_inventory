@@ -10,7 +10,7 @@
 	    /*execute a function when someone writes in the text field:*/
 	    inp.on('input', function(e) {
 
-	        if(validate_customer_data()) {
+	        if($('input[name="customer_id"]').val().trim() == "") {
 
 	            alert('Please select a customer');
 
