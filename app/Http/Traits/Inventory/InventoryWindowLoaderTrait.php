@@ -4,8 +4,8 @@ namespace App\Http\Traits\Inventory;
 
 use DB;
 use Cache;
-use Carbon\Carbon;
 use Session;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Model\Inventory\maintenance\InventoryTableItemGroup;
 use Illuminate\Support\Arr;
