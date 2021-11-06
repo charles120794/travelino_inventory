@@ -4,14 +4,13 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePasswordResetsTable extends Migration
+class SystemAlterTable extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-
     protected function schemaConnection()
     {
         return Schema::connection('mysql_test');
@@ -19,12 +18,13 @@ class CreatePasswordResetsTable extends Migration
 
     public function up()
     {
-        $this->schemaConnection()
-             ->create('password_resets', function (Blueprint $table) {
-                $table->string('email')->index();
-                $table->string('token');
-                $table->timestamp('created_at')->nullable();
-            });
+        $this->schemaConnection()->table('system_window_method', function (Blueprint $table) {
+            $table->foreign('menu_id')->references('menu_id')->on('system_window');
+        });
+
+        $this->schemaConnection()->table('system_window_method', function (Blueprint $table) {
+            $table->foreign('module_id')->references('module_id')->on('system_module');
+        });
     }
 
     /**
@@ -34,6 +34,6 @@ class CreatePasswordResetsTable extends Migration
      */
     public function down()
     {
-        $this->schemaConnection()->dropIfExists('password_resets');
+        //
     }
 }

@@ -53,9 +53,9 @@ Route::middleware('auth')->prefix('settings')->group(function(){
     Route::match(['get', 'post'],'/{path}/{action?}/{id?}', 'Manage\System\Settings\SettingsController@activeAdmin')->name('settings.route');
 });
 
-Route::middleware('auth')->prefix('common')->group(function(){
-    Route::match(['get', 'post'],'/{path}/{action?}/{id?}', 'Common\CommonController@activeAdmin')->name('common.route');
-}); 
+Route::middleware('auth')->prefix('filesystem')->group(function(){
+    Route::match(['get', 'post'],'/{path}/{action?}/{id?}', 'Manage\System\Settings\SettingsController@activeAdmin')->name('filesystem.route');
+});
 
 Auth::routes();
 

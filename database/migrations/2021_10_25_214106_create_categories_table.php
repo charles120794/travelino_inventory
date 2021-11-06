@@ -11,15 +11,21 @@ class CreateCategoriesTable extends Migration
      *
      * @return void
      */
+    protected function schemaConnection()
+    {
+        return Schema::connection('mysql_test');
+    }
+
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-            $table->unsignedBigInteger('category_id')->nullable();
-            $table->foreign('category_id')->references('id')->on('categories');
-            $table->timestamps();
-        });
+        $this->schemaConnection()
+             ->create('categories', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('name');
+                $table->unsignedBigInteger('category_id')->nullable();
+                $table->foreign('category_id')->references('id')->on('categories');
+                $table->timestamps();
+            });
     }
 
     /**
@@ -29,6 +35,6 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        $this->schemaConnection()->dropIfExists('categories');
     }
 }

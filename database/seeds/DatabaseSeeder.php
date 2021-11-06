@@ -11,6 +11,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $this->call([
+            /* Trncate First the database */
+            SystemDatabaseTruncate::class,
+
+            SystemCompanySeeder::class,
+            SystemCompanyControlDateSeeder::class,
+            SystemModuleGroupSeeder::class,
+            SystemModuleSeeder::class,
+            SystemCompanyModuleSeeder::class,
+            SystemWindowSeeder::class,
+            SystemCompanyWindowMethodSeeder::class,
+            SystemAuditTrailSeeder::class,
+        ]);
     }
 }
