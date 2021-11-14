@@ -13,17 +13,35 @@ class SystemAlterTable extends Migration
      */
     protected function schemaConnection()
     {
-        return Schema::connection('mysql_test');
+        return Schema::connection('mysql');
     }
 
     public function up()
     {
-        $this->schemaConnection()->table('system_window_method', function (Blueprint $table) {
-            $table->foreign('menu_id')->references('menu_id')->on('system_window');
+        $this->schemaConnection()->table('system_module', function (Blueprint $table) {
+            $table->foreign('module_group')->references('group_id')->on('system_module_group');
+        });
+
+        $this->schemaConnection()->table('system_company_module', function (Blueprint $table) {
+            $table->foreign('access_company_company_id')->references('company_id')->on('system_company');
+            $table->foreign('access_company_module_id')->references('module_id')->on('system_module');
+        });
+
+        $this->schemaConnection()->table('system_window', function (Blueprint $table) {
+            $table->foreign('window_module_id')->references('module_id')->on('system_module');
         });
 
         $this->schemaConnection()->table('system_window_method', function (Blueprint $table) {
-            $table->foreign('module_id')->references('module_id')->on('system_module');
+            $table->foreign('window_method_module_id')->references('module_id')->on('system_module');
+            $table->foreign('window_method_window_code')->references('window_code')->on('system_window');
+        });
+
+        $this->schemaConnection()->table('users_tbl_address', function (Blueprint $table) {
+            $table->foreign('address_company_id')->references('company_id')->on('system_company');
+        });
+
+        $this->schemaConnection()->table('system_audit_trail', function (Blueprint $table) {
+            $table->foreign('company_id')->references('company_id')->on('system_company');
         });
     }
 

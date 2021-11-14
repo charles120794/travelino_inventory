@@ -1,12 +1,12 @@
 @foreach($class as $key => $value)
 
-	<li class="{{ $value['menu_active'] }} @if($value['menu_type'] == '1') treeview @endif">
+	<li class="{{ $value['window_active'] }} @if($value['window_type'] == '1') treeview @endif">
 
-		<a href="/{{ $value['menu_module'] }}/{{ $value['menu_path'] }}">
+		<a href="/{{ $value['window_module'] }}/{{ $value['window_path'] }}">
 		
-			<i class="{{ $value['menu_icon'] }}"></i> <span>{{ $value['menu_name'] }}</span>
+			<i class="{{ $value['window_icon'] }}"></i> <span>{{ $value['window_name'] }}</span>
 
-			@if($value['menu_type'] == '1')
+			@if($value['window_type'] == '1')
 
 			<span class="pull-right-container">
 				<i class="fa fa-angle-left pull-right"></i>
@@ -16,10 +16,10 @@
 
 		</a>
 
-		@if($value['menu_type'] == '1')
+		@if($value['window_type'] == '1')
 
 			<ul class="treeview-menu">
-				@include('layouts.sidebaraccess', [ 'class' => $value['menu_sub_class'] ])
+				@include('layouts.sidebaraccess', [ 'class' => $value['window_sub_class'] ])
 			</ul>
 
 		@endif

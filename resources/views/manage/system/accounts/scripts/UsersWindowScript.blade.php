@@ -51,7 +51,7 @@
 
 	function selectedCompany(event, option = '') {
         $.ajax({
-            url : '{{ route('accounts.route',['path' => $path, 'action' => 'search-users-company-module-json', 'id' => encrypt($thisUserAccount->users_id)]) }}',
+            url : '{{ route('actions.route',['path' => $path, 'action' => 'search-users-company-module-json', 'id' => encrypt($thisUserAccount->users_id)]) }}',
             method : "post",
             data : { 'company_id' : event.value },
             processData : true,

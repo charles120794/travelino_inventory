@@ -1,4 +1,4 @@
-<form id="form_addwindow" action="{{ route('accounts.route',['path' => $path, 'action' => 'accounts-create-users-window' , 'id' => Crypt::encrypt('') ]) }}" method="post"> {{ csrf_field() }} {{ csrf_field() }}
+<form id="form_addwindow" action="{{ route('actions.route',['path' => $path, 'action' => 'accounts-create-users-window' , 'id' => Crypt::encrypt('') ]) }}" method="post"> {{ csrf_field() }} {{ csrf_field() }}
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2" style="overflow-x: auto;">
 			<table class="table table-bordered">

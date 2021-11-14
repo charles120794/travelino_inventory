@@ -11,7 +11,7 @@ class SystemModuleSeeder extends Seeder
      */
     protected function databaseConnection()
     {
-        return DB::connection('mysql_test');
+        return DB::connection('mysql');
     }
 
     public function run()
@@ -70,7 +70,7 @@ class SystemModuleSeeder extends Seeder
                 "module_type" => "free",
                 "module_status" => "active",
                 "status" => 1,
-                "order_level" => 2,
+                "order_level" => 3,
                 "created_by" => 1,
                 "created_date" => "2019-12-17 09:30:48",
             ),
@@ -89,7 +89,26 @@ class SystemModuleSeeder extends Seeder
                 "module_type" => "free",
                 "module_status" => "active",
                 "status" => 1,
-                "order_level" => 2,
+                "order_level" => 4,
+                "created_by" => 1,
+                "created_date" => "2021-11-06 08:33:48",
+            ),
+            array(
+                "module_id" => 5,
+                "module_group" => 1,
+                "module_code" => "MOD0005",
+                "module_home" => "home",
+                "module_name" => "LANDING PAGE",
+                "module_description" => "LANDING PAGE",
+                "module_prefix" => "landing",
+                "module_sub_domain" => "landing",
+                "module_class_icon" => "fa fa-dropbox",
+                "module_class_design" => "bg-aqua",
+                "module_redirect_route" => "landing.route",
+                "module_type" => "free",
+                "module_status" => "active",
+                "status" => 1,
+                "order_level" => 5,
                 "created_by" => 1,
                 "created_date" => "2021-11-06 08:33:48",
             ),

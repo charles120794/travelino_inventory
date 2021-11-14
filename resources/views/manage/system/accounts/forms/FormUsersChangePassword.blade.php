@@ -4,7 +4,7 @@
 			<div class="box-header with-border" style="padding-top: 20px; padding-bottom: 20px;">
 				<h3 class="box-title"><i class="fa fa-lock fa-fw"></i> Change Password </h3>
 			</div>
-			<form method="post" action="{{ route('accounts.route',['path' => $path, 'action' => 'update-users-password','id' => encrypt($thisUserAccount->users_id)]) }}"> {{ csrf_field() }}
+			<form method="post" action="{{ route('actions.route',['path' => $path, 'action' => 'update-users-password','id' => encrypt($thisUserAccount->users_id)]) }}"> {{ csrf_field() }}
 				<div class="box-body">
 					<div class="form-group">
 						<label for="opassword" class="control-label"> Password </label>

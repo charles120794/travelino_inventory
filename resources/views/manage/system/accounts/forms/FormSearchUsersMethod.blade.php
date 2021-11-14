@@ -1,4 +1,4 @@
-<form method="post" action="{{ route('accounts.route',['path' => $path, 'action' => 'search-users-window-method-table', 'id' => encrypt($thisUserAccount->users_id)]) }}" id="form_search_users_method" data-request="json"> 
+<form method="post" action="{{ route('actions.route',['path' => $path, 'action' => 'search-users-window-method-table', 'id' => encrypt($thisUserAccount->users_id)]) }}" id="form_search_users_method" data-request="json"> 
     {{ csrf_field() }}
     <table class="table table-bordered">
         <tr>

@@ -31,7 +31,7 @@
 
 				<div class="pull-right" style="margin-right: 20px; margin-top: -60px;">
 					<p>Account Status &nbsp;&nbsp;
-						<i class="{{ ($thisUserAccount->status == 1) ? 'fa fa-toggle-on text-orange' : 'fa fa-toggle-off text-red' }}" id="togglestatus{{ $thisUserAccount->users_id }}" onclick="return updateStatus(this.id,'{{ route('accounts.route',['path' => 'accounts', 'action' => 'toggle-users-profile', 'id' => encrypt($thisUserAccount->users_id)]) }}')" style="font-size: 23px; cursor: pointer;"></i> 
+						<i class="{{ ($thisUserAccount->status == 1) ? 'fa fa-toggle-on text-orange' : 'fa fa-toggle-off text-red' }}" id="togglestatus{{ $thisUserAccount->users_id }}" onclick="return updateStatus(this.id,'{{ route('actions.route',['path' => 'accounts', 'action' => 'toggle-users-profile', 'id' => encrypt($thisUserAccount->users_id)]) }}')" style="font-size: 23px; cursor: pointer;"></i> 
 					</p>
 				</div>
 
@@ -52,7 +52,7 @@
 
 </div>
 
-@include('manage.common.modal.ModalImageUpload')
+@include('manage.common.modal.ModalImageUpload',['source' => 'PROFILE', 'type' => 'IMAGE'])
 
 @include('manage.system.accounts.scripts.UsersProfileScript')
 

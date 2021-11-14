@@ -22,6 +22,17 @@ class DatabaseSeeder extends Seeder
             SystemCompanyModuleSeeder::class,
             SystemWindowSeeder::class,
             SystemCompanyWindowMethodSeeder::class,
+
+            UsersSeeder::class,
+            UsersTableAddressSeeder::class,
+            
+            UsersAccessAddressSeeder::class,
+            UsersAccessCompanySeeder::class,
+            UsersAccessModuleSeeder::class,
+            
+            UsersAccessWindowSeeder::class,
+            UsersAccessWindowMethodSeeder::class,
+            
             SystemAuditTrailSeeder::class,
         ]);
     }

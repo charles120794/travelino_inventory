@@ -9,23 +9,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class UsersCompanyAccess extends Model
 {
+    protected $table = 'users_access_company';
 
-    // protected $connection = 'settings';
-
-    protected $table = 'users_company';
-
-    protected $primaryKey = 'users_id';
+    protected $primaryKey = 'access_id';
 
     public $timestamps = false;
 
     public function userInfo()
     {
-        return $this->belongsTo(User::class, 'users_id', 'users_id');
+        return $this->hasOne(User::class,'users_id','access_users_id');
     }
 
     public function companyInfo()
     {
-        return $this->hasOne(SystemCompany::class, 'company_id', 'company_id');
+        return $this->hasOne(SystemCompany::class,'company_id','access_company_id');
     }
-    
 }

@@ -64,8 +64,9 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'proAuth' => \App\Http\Middleware\ProAuthenticate::class,
         'client' => CheckClientCredentials::class,
+        
+        'check.module' => \App\Http\Middleware\CheckForModule::class,
     ];
-
     /**
      * The priority-sorted list of middleware.
      *

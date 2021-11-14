@@ -11,27 +11,36 @@ trait UsersMethodLoaderTrait
     /* Search Tables */
     public function accounts_search_users_company_table($method, $id = null, $request)
     {
-        $usersCompany = $this->usersAllCompany(decrypt($id));
+        $usersCompany    = $this->usersCompany(decrypt($id))->pluck('company_id')->toArray();
+        $usersDefaultCompany  = $this->usersDefaultCompany(decrypt($id))->company_id;
+        $systemCompany   = $this->allActiveCompany();
+        $thisUserAccount = $this->activeUser(decrypt($id));
+        $thisUserCompany = $this->activeCompany();
 
-        return $this->myViewMethodLoader($method)->with('usersCompany', $usersCompany);
+        return $this->myViewMethodLoader($method)
+                            ->with('usersCompany', $usersCompany)
+                            ->with('systemCompany', $systemCompany)
+                            ->with('thisUserAccount', $thisUserAccount)
+                            ->with('thisUserCompany', $thisUserCompany)
+                            ->with('usersDefaultCompany', $usersDefaultCompany);
     }
 
     public function accounts_search_users_module_table($method, $id = null, $request)
     {
-        return $this->myViewMethodLoader($method,[
-            'companyId'       => $request->company_id,
-            'thisUserAccount' => $this->getUser($id),
-            'companyModule'   => $this->companyModule($request->company_id),
-            'moduleAccess'    => $this->getUserModuleAccess(decrypt($id), $request->company_id),
-        ]);
+        $activeUser  = $this->activeUser(decrypt($id));
+        $companyId   = $this->usersDefaultCompany(decrypt($id))->company_id;
+        $usersModule = $this->usersModule(decrypt($id), $this->usersDefaultCompany(decrypt($id))->company_id);
+
+        return $this->myViewMethodLoader($method)
+                    ->with('companyId', $companyId)
+                    ->with('activeUser', $activeUser)
+                    ->with('usersModule', $usersModule);
     }
 
     public function accounts_search_users_window_table($method, $id = null, $request)
     {
-        $thisUserAcct = $this->getUser($id);
-
-        $moduleWindow = $this->moduleWindow($request->module_id);
-
+        $thisUserAcct = $this->activeUser($id);
+        $moduleWindow = $this->systemWindow($request->module_id);
         $windowAccess = $this->getUserWindowAccess(decrypt($id), $request->company_id, $request->module_id);
 
         return $this->myViewMethodLoader($method)
@@ -44,10 +53,8 @@ trait UsersMethodLoaderTrait
 
     public function accounts_search_users_window_method_table($method, $id = null, $request)
     {
-        $thisUserAccou = $this->getUser($id);
-
+        $thisUserAccou = $this->activeUser(decrypt($id));
         $moduleMethods = $this->moduleWindowMethod($request->module_id, $request->window_id);
-
         $usersMethodAc = $this->getUserWindowMethodAccess(decrypt($id), $request->company_id, $request->module_id, $request->window_id);
 
         return $this->myViewMethodLoader($method)
@@ -61,33 +68,36 @@ trait UsersMethodLoaderTrait
     /* Display Views */
     public function accounts_users_user_profile($method, $id = null, $request)
     {
+        $activeUser = $this->activeUser(decrypt($id));
+        $activeUserCompany = $this->usersDefaultCompany(decrypt($id));
+
         return $this->myViewMethodLoader($method)
-                            ->with('thisUserAccount', $this->getUser($id));
+                ->with('thisUserAccount', $activeUser)
+                ->with('thisUserCompany', $activeUserCompany);
     }
 
     public function accounts_users_user_company($method, $id = null, $request)
     {
-        $thisUserAccou = $this->getUser($id);
-
-        $systemCompany = $this->activeCompany();
-
-        $userCompanies = $this->getUserCompanyAccess(decrypt($id));
+        $usersCompany    = $this->usersCompany(decrypt($id))->pluck('company_id')->toArray();
+        $usersDefaultCompany  = $this->usersDefaultCompany(decrypt($id))->company_id;
+        $systemCompany   = $this->allActiveCompany();
+        $thisUserAccount = $this->activeUser(decrypt($id));
+        $thisUserCompany = $this->activeCompany();
 
         return $this->myViewMethodLoader($method)
-                            ->with('usersCompany', $userCompanies)
+                            ->with('usersCompany', $usersCompany)
                             ->with('systemCompany', $systemCompany)
-                            ->with('thisUserAccount', $thisUserAccou);
+                            ->with('thisUserAccount', $thisUserAccount)
+                            ->with('thisUserCompany', $thisUserCompany)
+                            ->with('usersDefaultCompany', $usersDefaultCompany);
     }
 
     public function accounts_users_user_module($method, $id = null, $request)
     {
-        $thisUserAcct = $this->getUser($id);
-
+        $thisUserAcct = $this->activeUser(decrypt($id));
         $usersCompany = $this->usersAllCompany(decrypt($id));
-
-        $companyModul = $this->companyModule($thisUserAcct->company_id);
-
-        $moduleAccess = $this->getUserModuleAccess(decrypt($id), $thisUserAcct->company_id);
+        $companyModul = $this->companyModule($this->usersDefaultCompany(decrypt($id))->company_id);
+        $moduleAccess = $this->usersModule(decrypt($id), $this->usersDefaultCompany(decrypt($id))->company_id);
 
         return $this->myViewMethodLoader($method)
                             ->with('companyId', $thisUserAcct->company_id)
@@ -99,16 +109,11 @@ trait UsersMethodLoaderTrait
 
     public function accounts_users_user_window($method, $id = null, $request)
     {
-        $thisUserAcct = $this->getUser($id);
-
-        $activeModule = $this->getModulePrefix();
-
-        $usersModules = $this->usersAllModule(decrypt($id));
-
-        $usersCompany = $this->usersAllCompany(decrypt($id));
-
-        $windowAccess = $this->getUserWindowAccess(decrypt($id), $request->company_id, $request->module_id);
-
+        $activeModule = $this->activeModule();
+        $thisUserAcct = $this->activeUser(decrypt($id));
+        $usersCompany = $this->usersCompany(decrypt($id));
+        $usersModules = $this->usersModule(decrypt($id), $this->usersDefaultCompany(decrypt($id))->company_id);;
+        $windowAccess = $this->usersWindow(decrypt($id), $request->company_id, $request->module_id);
         $moduleWindow = $this->moduleWindow($activeModule->module_id);
 
         return $this->myViewMethodLoader($method)
@@ -122,7 +127,7 @@ trait UsersMethodLoaderTrait
 
     public function accounts_users_user_method($method, $id = null, $request)
     {
-        $thisUserAcct = $this->getUser($id);
+        $thisUserAcct = $this->activeUser(decrypt($id));
 
         $usersCompany = $this->usersAllCompany(decrypt($id));
 
@@ -140,7 +145,7 @@ trait UsersMethodLoaderTrait
 
     public function accounts_search_users_method($method, $id = null, $request)
     {
-        $thisUser = $this->getUser($id);
+        $thisUser = $this->activeUser(decrypt($id));
 
         $usersWindowMethod = $this->getUserWindowAccess(decrypt($request->users_id));
 
@@ -154,13 +159,9 @@ trait UsersMethodLoaderTrait
 
     public function accounts_search_company_users_table($method, $id = null, $request)
     {
-        $allSelected = (is_null($request->company_id)) ? true : false ;
+        $companyUsers = $this->companyUsers($request->company_id);
 
-        $companyUser = (!is_null($request->company_id)) ? $this->companyUsers($request->company_id) : $this->allUsers() ;
-
-        return $this->myViewMethodLoader($method)
-                    ->with('allUsers', $companyUser)
-                    ->with('allSelected', $allSelected);
+        return $this->myViewMethodLoader($method)->with('companyUsers', $companyUsers);
     }
 
 }

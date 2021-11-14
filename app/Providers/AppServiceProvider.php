@@ -23,23 +23,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //////////////////////////////////////////////////////////////////////////////////////////////////
-        /////////////////       TRAITS        ////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////
-        $this->app->singleton('SystemCommonTrait', function () {
-            return \App\Http\Traits\Settings\SystemCommonTrait::class;
-        }); 
-
-        $this->app->singleton('SystemCompanyTrait', function () {
-            return \App\Http\Traits\Settings\SystemCompanyTrait::class;
-        }); 
-        
         $this->app->singleton('SystemCompanyModuleAccessTrait', function () {
             return \App\Http\Traits\Settings\SystemCompanyModuleAccessTrait::class;
         });
 
-        $this->app->singleton('SystemMediaUploaderTrait', function () {
-            return \App\Http\Traits\Settings\SystemMediaUploaderTrait::class;
+        $this->app->singleton('SystemCompanyTrait', function () {
+            return \App\Http\Traits\Settings\SystemCompanyTrait::class;
+        });
+        
+        $this->app->singleton('SystemDatabaseBackupTrait', function () {
+            return \App\Http\Traits\Settings\SystemDatabaseBackupTrait::class;
+        }); 
+
+        $this->app->singleton('SystemFileSystemTrait', function () {
+            return \App\Http\Traits\Settings\SystemFileSystemTrait::class;
         });
 
         $this->app->singleton('SystemMethodLoaderTrait', function () {
@@ -60,36 +57,6 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton('SystemWindowTrait', function () {
             return \App\Http\Traits\Settings\SystemWindowTrait::class;
-        });
-        //////////////////////////////////////////////////////////////////////////////////////////////////
-        /////////////////       MODELS        ////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////
-        $this->app->singleton('SystemCompany', function () {
-            return new \App\Model\Settings\SystemCompany;
-        });
-
-        $this->app->singleton('SystemCompanyModule', function () {
-            return new \App\Model\Settings\SystemCompanyModule;
-        });
-
-        $this->app->singleton('SystemModule', function () {
-            return new \App\Model\Settings\SystemModule;
-        });
-
-        $this->app->singleton('SystemWindow', function () {
-            return new \App\Model\Settings\SystemWindow;
-        });
-
-        $this->app->singleton('SystemWindowMethod', function () {
-            return new \App\Model\Settings\SystemWindowMethod;
-        });
-
-        $this->app->singleton('SystemMediaExtension', function () {
-            return new \App\Model\Settings\SystemMediaExtension;
-        });
-
-        $this->app->singleton('SystemCompanyPlan', function () {
-            return new \App\Model\Settings\SystemCompanyPlan;
         });
     }
 }

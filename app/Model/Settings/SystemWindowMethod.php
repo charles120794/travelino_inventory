@@ -6,9 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class SystemWindowMethod extends Model
 {
-
-    // protected $connection = 'settings';
-
     protected $table = 'system_window_method';
 
     protected $primaryKey = 'method_id';
@@ -17,7 +14,6 @@ class SystemWindowMethod extends Model
 
     public function systemWindow()
     {
-        return $this->belongsTo(SystemWindow::class,'menu_id','menu_id');
+        return $this->belongsTo(SystemWindow::class,'window_code','window_code_parent');
     }
-    
 }

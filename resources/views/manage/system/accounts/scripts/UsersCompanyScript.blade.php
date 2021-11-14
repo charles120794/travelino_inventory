@@ -53,6 +53,10 @@
 		    processData: false,
 		    success : function(data) {
 		    	$('#form_users_company').html(data);
+
+		    	$('.users-company-access-datatables').DataTable({
+		    		autoWidth: false,
+		    	});
 		    }
 		});
 	}
@@ -66,6 +70,8 @@
 	        processData: false,
 	        success : function(data) {
 	        	alert('Successfully Updated.');
+
+	        	submitFormSearch();
 	        }
 	    });
 	}

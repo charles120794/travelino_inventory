@@ -9,23 +9,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class UsersModuleAccess extends Model
 {
+    protected $table = 'users_access_module';
 
-    // protected $connection = 'settings';
-
-    protected $table = 'users_module';
-
-    protected $primaryKey = 'users_id';
+    protected $primaryKey = 'access_id';
 
     public $timestamps = false;
 
     public function userInfo()
     {
-        return $this->belongsTo(User::class, 'users_id', 'users_id');
+        return $this->belongsTo(User::class,'users_id','users_id');
     }
 
     public function moduleInfo()
     {
-        return $this->hasOne(SystemModule::class, 'module_id', 'module_id');
+        return $this->hasOne(SystemModule::class,'module_id','access_module_id');
     }
-
 }

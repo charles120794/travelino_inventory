@@ -2,8 +2,8 @@
 
 <li>
     {{-- @if(config('owned')) href="{{ $activeModule->module_prefix }}/{{ $activeModule->module_route }}" @else href="{{ config('module.redirect_to.login') }}" @endif --}}
-    <a href="/inventory/home" style="text-overflow: ellipsis; overflow: hidden;"> 
-        <i class="{{ $activeModule->module_icon }}"></i> <span> {{ strtoupper($activeModule->module_name) }} </span>
+    <a href="/landing/home" style="text-overflow: ellipsis; overflow: hidden;"> 
+        <i class="fa fa-sitemap"></i> <span> Modules </span>
     </a>
 </li>
 
@@ -11,7 +11,7 @@
 
 @include('layouts.sidebaraccess')
 
-<li class="header"> LABELS </li>
+{{-- <li class="header"> LABELS </li>
 
 <li><a href="/settings/home"><i class="fa fa-cog text-yellow"></i> 
     <span>Settings</span></a>
@@ -19,7 +19,7 @@
 
 <li><a href="/accounts/home"><i class="fa fa-user text-red"></i> 
     <span>Account</span></a>
-</li>
+</li> --}}
 
 {{-- <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> 
     <span>Information</span></a>

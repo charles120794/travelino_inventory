@@ -1,4 +1,4 @@
-<form method="post" action="{{ route('accounts.route',['path' => $path, 'action' => 'create-users-account', 'id' => encrypt('') ]) }}" enctype="multipart/form-data"> {{ csrf_field() }}
+<form method="post" action="{{ route('actions.route',['path' => $path, 'action' => 'create-users-account', 'id' => encrypt('') ]) }}" enctype="multipart/form-data"> {{ csrf_field() }}
 	<div class="row">
 		<div class="col-md-12" style="overflow-x: auto;">
 			<table class="table table-bordered">

@@ -2,33 +2,26 @@
 
 namespace App\Model\Settings;
 
-use App\User;
+use App\Model\Accounts\UsersCompanyAccess;
+
 use Illuminate\Database\Eloquent\Model;
 
 class SystemCompany extends Model
 {
-		
-	// protected $connection = 'settings';
-
 	protected $table = 'system_company';
 
 	protected $primaryKey = 'company_id';
 
 	public $timestamps = false;
 
-	public function usersInfo()
+	public function usersAccess()
 	{
-		return $this->hasMany(User::class,'company_id','company_id');
+		return $this->hasMany(UsersCompanyAccess::class,'access_company_id','company_id')->with('userInfo');
 	}
 
-	public function companyModuleInfo()
+	public function moduleAccess()
 	{
-		return $this->hasMany(SystemCompanyModule::class,'company_id','company_id');
-	}
-
-	public function companyDetailsInfo()
-	{
-		return $this->hasMany(SystemCompanyDetails::class,'company_id','company_id');
+		return $this->hasMany(SystemCompanyModule::class,'access_company_company_id','company_id');
 	}
 
 	public function updatedBy()
@@ -47,5 +40,4 @@ class SystemCompany extends Model
 
 		return (count($exists) > 0) ? $exists->firstname : '' ;
 	}
-
 }

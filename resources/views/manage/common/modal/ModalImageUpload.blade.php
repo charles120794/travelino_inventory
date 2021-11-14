@@ -9,13 +9,13 @@
             <div class="modal-body">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li><a href="#upload" id="to-upload-image" data-toggle="tab"><b> <i class="fa fa-upload fa-fw"></i> Upload Image </b></a></li>
-                        <li class="active"><a href="#select" id="to-select-image" data-toggle="tab"><b> <i class="fa fa-list fa-fw"></i> Select Image </b></a></li>
+                        <li><a href="#upload" id="tab_upload_image" data-toggle="tab"><b> <i class="fa fa-upload fa-fw"></i> Upload Images </b></a></li>
+                        <li class="active"><a href="#select" id="tab_select_image" data-toggle="tab"><b> <i class="fa fa-list fa-fw"></i> Select Image </b></a></li>
                     </ul>
                 </div>
                 <div class="tab-content">
                     <div class="tab-pane fade" id="upload">
-                        <form method="post" action="{{ route('settings.route',['path' => 'settings', 'action' => 'upload-image-content', 'id' => encrypt('') ]) }}" id="form-upload-image" enctype="multipart/form-data">
+                        <form method="post" action="{{ route('actions.route',['path' => 'settings', 'action' => 'upload-image-content' ]) }}" id="form_upload_file" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="box box-solid">
                                 <div class="box-header with-border">
@@ -23,7 +23,9 @@
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="col-md-6 col-md-offset-3" style="margin-top: 80px; margin-bottom: 80px;">
-                                            <input type="file" name="images[]" class="form-control" multiple="multiple">
+                                            <input type="hidden" name="file[][source]" id="file_source" value="{{ $source ?? 'PUBLIC' }}">
+                                            <input type="hidden" name="file[][type]" id="file_type" value="{{ $type ?? 'IMAGE' }}">
+                                            <input type="file" name="file[][file]" id="file_upload" class="form-control" multiple="multiple">
                                             <div class="box-header with-border text-center" style="margin-top: 10px;">
                                                 <h3 class="box-title" style="font-size: 14px;">Choose Image to Upload</h3>
                                             </div>
@@ -34,13 +36,15 @@
                         </form>
                     </div>
                     <div class="tab-pane active fade in" id="select">
-                        <div id="uploaded-image-content"></div>
+                        <div id="uploaded_image_content"></div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-flat btn-primary btn-sm btn-submit" id="btn-upload" style="display: none;"><i class="fa fa-upload"></i> Upload </button>
-                <button type="button" class="btn btn-flat btn-primary btn-sm btn-submit" id="btn-submit" onclick="return submitModalImageUpload()"><i class="fa fa-check"></i> Submit </button>
+                <button type="button" class="btn btn-flat btn-primary btn-sm btn-upload" id="btn_upload" style="display: none;">
+                    <i class="fa fa-upload"></i> Upload 
+                </button>
+                <button type="button" class="btn btn-flat btn-primary btn-sm btn-submit" id="btn_submit"><i class="fa fa-check"></i> Submit </button>
                 <button type="button" class="btn btn-flat btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-remove"></i> Close </button>
             </div>
         </div>
@@ -52,35 +56,44 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
- 
-        // $.ajax({
-        //     url : '{{-- route('settings.route', ['path' => 'settings', 'action' => 'retrieve-images', 'id' => encrypt('') ]) --}}',
-        //     type : 'post',
-        //     dataType : 'html',
-        //     success : function(data){
-        //         $('#uploaded-image-content').html(data);
-        //         callBackUpdateMedia();
-        //     } 
-        // });
 
-        $('#btn-upload').on('click', function(){
-            $('#upload #form-upload-image').submit();
-        });
+        $('#btn_upload').on('click', function(){
+            $('#form_upload_file').submit();
+        })
 
-        $('#to-upload-image').on('click', function(){
-            $('#btn-upload').show();
-            $('#btn-submit').hide();
-        });
+        $('#form_upload_file').on('submit', function(event){
 
-        $('#to-select-image').on('click', function(){
-            $('#btn-submit').show();
-            $('#btn-upload').hide();
+            var file_source = $('#file_source').val();
+            var file_data = $('#file_upload')[0];
+
+            $.ajax({
+               url : '{{ route('actions.route', ['path' => 'file-system', 'action' => 'file-upload-images' ]) }}',
+               type : 'post',
+               data : { source : file_source, form_data : file_data },
+               dataType : 'html',
+               success : function(data){
+                    $('#tab_select_image').click();
+                    $('#uploaded_image_content').html(data);
+               } 
+            });
+
+            event.preventDefault();
         });
 
     });
 
+    $(document).on('click', '#tab_upload_image', function(){
+        $('#btn_upload').show();
+        $('#btn_submit').hide();
+    });
+
+    $(document).on('click', '#tab_select_image', function(){
+        $('#btn_upload').hide();
+        $('#btn_submit').show();
+    });
+
     function callBackUpdateMedia() {
-        $('#addimageupload #uploaded-image-content #form-media-details').on('submit', function(event){
+        $('#addimageupload #uploaded_image_content #form-media-details').on('submit', function(event){
             event.preventDefault();
             if($.trim($('#media_id').val()) == "") {
                 alert('Please select image to update');

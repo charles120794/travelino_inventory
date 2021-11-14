@@ -11,7 +11,7 @@ class SystemAuditTrailSeeder extends Seeder
      */
     protected function databaseConnection()
     {
-        return DB::connection('mysql_test');
+        return DB::connection('mysql');
     }
 
     public function run()

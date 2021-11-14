@@ -42,6 +42,10 @@ class AccountServiceProvider extends ServiceProvider
             return \App\Http\Traits\Accounts\UsersAccessModuleTrait::class;
         });
 
+        $this->app->singleton('UsersAccessWindowMethodTrait', function () {
+            return \App\Http\Traits\Accounts\UsersAccessWindowMethodTrait::class;
+        });
+
         $this->app->singleton('UsersAccessWindowTrait', function () {
             return \App\Http\Traits\Accounts\UsersAccessWindowTrait::class;
         });
@@ -56,41 +60,6 @@ class AccountServiceProvider extends ServiceProvider
 
         $this->app->singleton('UsersMethodLoaderTrait', function () {
             return \App\Http\Traits\Accounts\UsersMethodLoaderTrait::class;
-        });
-        
-        //////////////////////////////////////////////////////////////////////////////////////////////////
-        /////////////////       MODELS        ////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////
-        $this->app->singleton('Users', function () {
-            return new \App\User;
-        });
-
-        $this->app->singleton('UsersBilling', function () {
-            return new \App\Model\Accounts\UsersBilling;
-        });
-
-        $this->app->singleton('UsersBillingAddress', function () {
-            return new \App\Model\Accounts\UsersBillingAddress;
-        });
-
-        $this->app->singleton('UsersAccount', function () {
-            return new \App\Model\Accounts\UsersAccount;
-        });
-       
-        $this->app->singleton('UsersCompanyAccess', function () {
-            return new \App\Model\Accounts\UsersCompanyAccess;
-        });
-
-        $this->app->singleton('UsersModuleAccess', function () {
-            return new \App\Model\Accounts\UsersModuleAccess;
-        });
-
-        $this->app->singleton('UsersWindowAccess', function () {
-            return new \App\Model\Accounts\UsersWindowAccess;
-        });
-
-        $this->app->singleton('UsersWindowMethodAccess', function () {
-            return new \App\Model\Accounts\UsersWindowMethodAccess;
         });
 
     }

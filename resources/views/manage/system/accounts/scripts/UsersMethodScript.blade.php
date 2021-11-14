@@ -45,7 +45,7 @@
 
     function selectedCompany(event) {
         $.ajax({
-            url : '{{ route('accounts.route',['path' => $path, 'action' => 'search-users-module-json', 'id' => encrypt($thisUserAccount->users_id)]) }}',
+            url : '{{ route('actions.route',['path' => $path, 'action' => 'search-users-module-json', 'id' => encrypt($thisUserAccount->users_id)]) }}',
             data : { company_id : event.value },
             method : 'post',
             dataType : 'json',
@@ -67,7 +67,7 @@
 
     function selectedModule(event) {
         $.ajax({
-            url : '{{ route('accounts.route',['path' => $path, 'action' => 'search-users-window-json', 'id' => encrypt($thisUserAccount->users_id)]) }}',
+            url : '{{ route('actions.route',['path' => $path, 'action' => 'search-users-window-json', 'id' => encrypt($thisUserAccount->users_id)]) }}',
             data : $('#form_search_users_method').serialize(),
             method : 'post',
             dataType : 'json',

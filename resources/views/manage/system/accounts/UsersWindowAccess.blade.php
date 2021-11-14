@@ -38,7 +38,7 @@
                         </div>
                     </div>
 
-                    <form method="post" action="{{ route('accounts.route',['path' => $path, 'action' => 'update-users-window-access', 'id' => encrypt($thisUser->users_id) ]) }}"> @csrf
+                    <form method="post" action="{{ route('actions.route',['path' => $path, 'action' => 'update-users-window-access', 'id' => encrypt($thisUser->users_id) ]) }}"> @csrf
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="box-tools pull-right clearfix">
@@ -86,7 +86,7 @@
 
                                                 </div>
 
-                                                <a href="{{ route('accounts.route',['path' => active_path(), 'action' => 'delete-users-window-access', 'id' => encrypt($value->access_id) ]) }}" class="btn btn-danger" onclick="return confirm('Confirm to remove your access to this window')"><i class="fa fa-remove"></i></a>
+                                                <a href="{{ route('actions.route',['path' => active_path(), 'action' => 'delete-users-window-access', 'id' => encrypt($value->access_id) ]) }}" class="btn btn-danger" onclick="return confirm('Confirm to remove your access to this window')"><i class="fa fa-remove"></i></a>
 
                                             </td>
 

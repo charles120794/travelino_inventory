@@ -1,4 +1,4 @@
-<form method="post" action="{{ route('accounts.route',['path' => $path,'action' => 'update-users-window','id' => encrypt($thisUserAccount->users_id)]) }}" id="form_update_users_window">
+<form method="post" action="{{ route('actions.route',['path' => $path,'action' => 'update-users-window','id' => encrypt($thisUserAccount->users_id)]) }}" id="form_update_users_window">
 
 	{{ csrf_field() }}
 

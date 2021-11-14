@@ -2,20 +2,19 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
 use App\Model\Settings\SystemCompany;
 
-use App\Model\Accounts\UsersAddress;
 use App\Model\Accounts\UsersModuleAccess;
 use App\Model\Accounts\UsersWindowAccess;
 use App\Model\Accounts\UsersCompanyAccess;
+use App\Model\Accounts\UsersAddressAccess;
 use App\Model\Accounts\UsersWindowMethodAccess;
 
-use App\Model\Tables\TableConsumer;
-use App\Model\Accounts\UsersBillingAddress;
+use App\Model\Maintenance\UsersTableAddress;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Laravel\Passport\HasApiTokens;
 
@@ -54,7 +53,7 @@ class User extends Authenticatable
 
     public $primaryKey = 'users_id';
     
-    // public $timestamps = false;
+    public $timestamps = false;
 
     // public function setEmailAttribute($value)
     // {
@@ -66,43 +65,70 @@ class User extends Authenticatable
         // return $value->status + $value->order_level + $value->number;
     }
 
-    public function companyInfo()
-    {
-        return $this->hasOne(SystemCompany::class,'company_id','company_id');
-    }
+    
 
+    /**
+     * For Users Access Information
+     */
     public function companyAccess()
     {
-        return $this->hasMany(UsersCompanyAccess::class,'users_id','users_id');
+        return $this->hasMany(UsersCompanyAccess::class,'access_users_id','users_id')->with('companyInfo');
     }
 
-    public function moduleAccess()
+    public function companyDefaultAccess()
     {
-        return $this->hasMany(UsersModuleAccess::class,'users_id','users_id');
+        return $this->hasOne(UsersCompanyAccess::class,'access_users_id','users_id')->where('access_company_default', 1);
     }
 
+    public function moduleAccess($companyID = null)
+    {
+        $module = $this->hasMany(UsersModuleAccess::class,'access_users_id','users_id')->with('moduleInfo');
+
+        if( !is_null($companyID) ) {
+            $module = $module->where('access_company_id', $companyID);
+        }
+
+        return $module;
+    }
+
+    public function moduleDefaultAccess()
+    {
+        return $this->hasOne(UsersModuleAccess::class,'access_users_id','users_id')->where('access_module_default', 1);;
+    }
+
+    /**
+     * Access with no default value
+     */
     public function windowAccess()
     {
-        return $this->hasMany(UsersWindowAccess::class,'users_id','users_id');
+        return $this->hasMany(UsersWindowAccess::class,'access_users_id','users_id')->with('windowInfo');
     }
 
     public function windowMethodAccess()
     {
-        return $this->hasMany(UsersWindowMethodAccess::class,'users_id','users_id');
+        return $this->hasMany(UsersWindowMethodAccess::class,'access_users_id','users_id')->with('windowMethodInfo');
     }
 
-    public function billingInfo()
-    {
-        return $this->hasOne(TableConsumer::class,'users_id','users_id');
-    }
-
+    /**
+     * For Users Address Information
+     */
     public function usersAddress()
     {
-        return $this->hasOne(UsersAddress::class,'address_id','users_address');
+        return $this->hasMany(UsersAddressAccess::class,'access_users_id','users_id');
     }
 
-    public function usersBillingAddress()
+    public function usersDefaltAddress()
     {
-        return $this->hasOne(UsersBillingAddress::class,'address_id','users_address');
+        return $this->hasMany(UsersAddressAccess::class,'access_users_id','users_id')->where('address_default', 1);
     }
+
+    // public function billingInfo()
+    // {
+    //     return $this->hasOne(TableConsumer::class,'access_users_id','users_id');
+    // }
+
+    // public function usersBillingAddress()
+    // {
+    //     return $this->hasOne(UsersBillingAddress::class,'address_id','users_address');
+    // }
 }

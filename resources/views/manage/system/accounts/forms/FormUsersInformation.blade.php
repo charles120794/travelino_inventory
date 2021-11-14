@@ -1,8 +1,14 @@
-<form method="post" action="{{ route('accounts.route',['path' => $path, 'action' => 'update-users-information','id' => encrypt($thisUserAccount->users_id)]) }}"> {{ csrf_field() }}
+<form method="post" action="{{ route('actions.route',['path' => $path, 'action' => 'update-users-information','id' => encrypt($thisUserAccount->users_id)]) }}"> {{ csrf_field() }}
 	<div class="box box-default">
 		<div class="box-header with-border" style="padding-top: 20px; padding-bottom: 20px;">
-			<h3 class="box-title"> <i class="fa fa-user fa-fw"></i> Personal Information </h3>
-			<label><input type="checkbox" id="btn_edit" style="height: 16px; width: 16px; margin: 0px 5px 0px 10px;"> <span style="margin-top: -2px; float: right"> Edit </span> </label>
+			<h3 class="box-title pull-left"> <i class="fa fa-user fa-fw"></i> Personal Information </h3>
+			<label class="pull-left" style="margin-top: 1px;">
+				<input type="checkbox" id="btn_edit" style="height: 16px; width: 16px; margin: 0px 5px 0px 10px;"> 
+				<span style="margin-top: -1px; float: right"> Edit </span> 
+			</label>
+			{{-- <div class="box-footer"> --}}
+				<button type="submit" class="btn btn-primary pull-right hide" id="btn_save"><i class="fa fa-edit"></i> Update </button>
+			{{-- </div> --}}
 		</div>
 		<div class="box-body">
 			<div class="form-group">
@@ -38,22 +44,19 @@
 			</div>
 			<div class="form-group">
 				<label for="birthdate" class="control-label"> Date of Birth: </label>
-				<span class="form-control info-text">{{ date('F d, Y',strtotime($thisUserAccount->birth_date)) }}</span>
-				<input type="date" class="form-control info-input" name="birthdate" id="birthdate" value="{{ $thisUserAccount->birth_date }}" required>
+				<span class="form-control info-text">{{ date('F d, Y',strtotime($thisUserAccount->personal_birth_date)) }}</span>
+				<input type="date" class="form-control info-input" name="birthdate" id="birthdate" value="{{ $thisUserAccount->personal_birth_date }}" required>
 			</div>
 			<div class="form-group">
 				<label for="address" class="control-label"> Complete Address: </label>
-				<span class="form-control info-text">{{ $thisUserAccount->address }}</span>
-				<textarea class="form-control info-input" name="address" id="address" style="resize: vertical; min-height: 100px;" required>{{ $thisUserAccount->address }}</textarea>
+				<span class="form-control info-text" style="height: 100px;">{{ $thisUserAccount->personal_address }}</span>
+				<textarea class="form-control info-input" name="address" id="address" style="resize: vertical; min-height: 100px;" required>{{ $thisUserAccount->personal_address }}</textarea>
 			</div>
 {{-- 			<div class="form-group">
 				<label for="education" class="control-label"> Education: </label>
 				<span class="form-control info-text">{{ $thisUserAccount->education }}</span>
 				<textarea class="form-control info-input" name="education" id="education" style="resize: vertical; min-height: 100px;" required>{{ $thisUserAccount->education }}</textarea>
 			</div> --}}
-		</div>
-		<div class="box-footer">
-			<button type="submit" class="btn btn-info pull-right"><i class="fa fa-check"></i> Submit </button>
 		</div>
 	</div>
 </form>

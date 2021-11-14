@@ -14,14 +14,14 @@ trait UsersWindowLoaderTrait
 
 	public function accounts_users($window)
 	{
-		$allUsers = $this->companyUsers($this->thisUser()->company_id);
-		
-		$usersCompany = $this->usersCompany($this->thisUser()->users_id);
+		$companyUsers = $this->companyUsers();
+		$usersCompany = $this->usersCompany();
+		$usersDefaultCompany = $this->usersDefaultCompany();
 
 		return $this->myViewLoader($window)
-				->with('allSelected', false)
-				->with('allUsers', $allUsers)
-				->with('usersCompany', $usersCompany);
+				->with('companyUsers', $companyUsers)
+				->with('usersCompany', $usersCompany)
+				->with('usersDefaultCompany', $usersDefaultCompany);
 	}
 
 	public function accounts_users_window_access($window)

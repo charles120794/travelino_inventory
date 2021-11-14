@@ -1,4 +1,4 @@
-<form method="post" action="{{ route('accounts.route',['path' => $path, 'action' => 'update-users-module', 'id' => encrypt($thisUserAccount->users_id)]) }}" id="form_update_users_module">
+<form method="post" action="{{ route('actions.route',['path' => $path, 'action' => 'update-users-module', 'id' => encrypt($thisUserAccount->users_id)]) }}" id="form_update_users_module">
 	{{ csrf_field() }}
 	<table class="table table-bordered table-condensed table-hover users-module-access-datatables" id="users_table">
 		<thead>

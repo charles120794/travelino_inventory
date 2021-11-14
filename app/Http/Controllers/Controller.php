@@ -7,41 +7,51 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-use App\Http\Traits\Gate\MainGate as MainGateTrait;
+use App\Http\Traits\AccessGate;
 
 use App\Http\Traits\Accounts\UsersAccessInformationTrait;
 
-use App\Http\Traits\Common\UsersCommonTrait;
-use App\Http\Traits\Common\ModuleCommonAccessTrait as ModuleTrait;
-use App\Http\Traits\Common\SystemCommonAccessTrait as SystemTrait;
-
-use App\Http\Traits\Common\SystemCommonSideBarTrait as SideBarTrait;
+use App\Http\Traits\Retrieves\SystemCompanyTrait;
+use App\Http\Traits\Retrieves\SystemModuleTrait;
+use App\Http\Traits\Retrieves\SystemSideBarTrait;
+use App\Http\Traits\Retrieves\SystemWindowTrait;
+use App\Http\Traits\Retrieves\SystemWindowMethodTrait;
+use App\Http\Traits\Retrieves\UsersCommonTrait;
 
 class Controller extends BaseController
 {
     use DispatchesJobs, ValidatesRequests, AuthorizesRequests;
 
-    use MainGateTrait, UsersAccessInformationTrait, UsersCommonTrait, ModuleTrait, SystemTrait, SideBarTrait;
+    use AccessGate, 
+        UsersAccessInformationTrait, 
+        SystemCompanyTrait, 
+        SystemModuleTrait, 
+        SystemSideBarTrait, 
+        SystemWindowTrait, 
+        SystemWindowMethodTrait, 
+        UsersCommonTrait;
 
     public function myViewLoader($window, $array = [])
     {
-        return view($window->menu_blade, $array)
-                    ->with('path', $window->menu_path)
-                    ->with('windowName', $window->menu_name)
-                    ->with('windowIcon', $window->menu_icon)
-                    ->with('thisUser', $this->thisUser())
-                    ->with('activeModule', $this->getModulePrefix())
-                    ->with('usersActiveModule', $this->usersActiveModule($this->thisUser()->users_id));
+        return view($window->window_blade, $array)
+                    ->with('usersMenus', $this->usersMenus())
+                    ->with('thisUser', $this->usersInfo())
+                    ->with('path', $this->activeWindow()->window_path)
+                    ->with('windowPath', $this->activeWindow()->window_path)
+                    ->with('windowName', $this->activeWindow()->window_name)
+                    ->with('windowIcon', $this->activeWindow()->window_icon)
+                    ->with('activeModule', $this->activeModule());
     }
 
     public function myViewMethodLoader($method, $array = [])
     {
-        return view($method->method_blade, $array)
-                    ->with('path', $method->systemWindow->menu_path)
-                    ->with('windowName', $method->systemWindow->menu_name)
-                    ->with('windowIcon', $method->systemWindow->menu_icon)
-                    ->with('thisUser', $this->thisUser())
-                    ->with('activeModule', $this->getModulePrefix())
-                    ->with('usersActiveModule', $this->usersActiveModule($this->thisUser()->users_id));
+        return view($method->window_method_blade, $array)
+                    ->with('usersMenus', $this->usersMenus())
+                    ->with('thisUser', $this->usersInfo())
+                    ->with('path', $this->activeWindow()->window_path)
+                    ->with('windowPath', $this->activeWindow()->window_path)
+                    ->with('windowName', $this->activeWindow()->window_name)
+                    ->with('windowIcon', $this->activeWindow()->window_icon)
+                    ->with('activeModule', $this->activeModule());
     }
 }

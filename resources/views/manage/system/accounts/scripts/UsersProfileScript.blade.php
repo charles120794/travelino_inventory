@@ -4,12 +4,12 @@
 	
 	$('#btn_edit').on('click',function(){
 		if($(this).is(':checked')){
-			$('#btn_save').attr('disabled',false);
+			$('#btn_save').removeClass('hide');
 			$('.info-text').hide();
 			$('.info-input').show().css('border-color','darkgreen');
 			$('.info-input')[0].focus();
 		}else{
-			$('#btn_save').attr('disabled',true);
+			$('#btn_save').addClass('hide');
 			$('.info-text').show();
 			$('.info-input').hide();
 		}

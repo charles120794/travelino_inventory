@@ -1,4 +1,4 @@
-<form method="post" action="{{ route('accounts.route',['path' => $path, 'action' => 'search-company-users-table', 'id' => encrypt('1') ]) }}" id="form_search_company_users" data-request="json">
+<form method="post" action="{{ route('accounts.route',['path' => $path, 'action' => 'search-company-users-table' ]) }}" id="form_search_company_users" data-request="json">
     {{ csrf_field() }}
     <table class="table table-bordered">
         <tr style="white-space: nowrap;">
@@ -10,7 +10,10 @@
                     <option value="">--SELECT ALL--</option>
                     {{ active_path() }}
                     @foreach($usersCompany as $key => $value)
-                    <option value="{{ $value->company_id }}" {{ ($value->company_id == $thisUser->company_id) ? 'selected' : ''}}> {{ strtoupper($value->company_code) }} - {{ strtoupper($value->company_name) }} {{ ($value->company_id == $thisUser->company_id) ? ' (DEFAULT COMPANY)' : ''}}</option>
+                    <option value="{{ $value->company_id }}" {{ ($value->company_id == Auth()->User()->company_id) ? 'selected' : ''}}> 
+                        {{ strtoupper($value->company_code) }} - {{ strtoupper($value->company_name) }} 
+                        {{ ($value->company_id == $usersDefaultCompany->company_id) ? ' (DEFAULT COMPANY)' : ''}}
+                    </option>
                     @endforeach
                 </select>
             </td>

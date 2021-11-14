@@ -5,8 +5,11 @@ namespace App\Http\Traits\Accounts;
 use Hash;
 use Crypt;
 use Session;
+use App\User;
 use Illuminate\Http\Request;
-use App\Model\Settings\SystemMedia;
+use App\Model\Accounts\UsersCompanyAccess;
+use App\Model\Accounts\UsersWindowMethodAccess;
+use App\Model\Settings\SystemFileSystem;
 use App\Http\Controllers\Common\CommonServiceController as CommonService;
 
 trait UsersAccessAccountTrait
@@ -60,14 +63,14 @@ trait UsersAccessAccountTrait
 	        'personal_address' => $request->address,
 	        'username'       => $request->username,
 	        'password'       => bcrypt($request->cpassword),
-	        'order_level'    => (new CommonService)->orderLevel(app('Users')),
+	        'order_level'    => (new CommonService)->orderLevel((new User)),
 	        'created_by'     => $this->thisUser()->users_id,
 	        'created_date'   => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
 	        'profile_path'   => null,
 		];
 
 		/* VALIDATE USERS IF EXISTS */
-		$user = app('Users')->where('firstname', $request->firstname)
+		$user = (new User)->where('firstname', $request->firstname)
 							->where('middlename', $request->lastname)
 							->where('lastname', $request->lastname)
 							->where('email', $request->email)
@@ -97,7 +100,7 @@ trait UsersAccessAccountTrait
 
 		} else {
 
-		    $usersId = app('Users')->insertGetId($array);
+		    $usersId = (new User)->insertGetId($array);
 
 		    /* Creating Default Company Access*/
 		    $compayAccess = [
@@ -107,7 +110,7 @@ trait UsersAccessAccountTrait
 		    	'created_date' => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
 		    ];
 
-		    app('UsersCompanyAccess')->insert($compayAccess);
+		    (new UsersCompanyAccess)->insert($compayAccess);
 
 		    request()->session()->flash('success','New User successfully created.');
 		    
@@ -118,85 +121,86 @@ trait UsersAccessAccountTrait
 
 	public function accounts_update_users_information($method, $id = null, $request)
 	{	
-	
-		$personalAddressID = (is_null($request->input('personal_address_id'))) ?
-						$this->accounts_create_address($request->input('personal_address'), decrypt($id)) : 
-						$request->input('personal_address_id') ;
+		
+		// $personalAddressID = (is_null($request->input('personal_address_id'))) ?
+		// 				$this->accounts_create_address($request->input('personal_address'), decrypt($id)) : 
+		// 				$request->input('personal_address_id') ;
 
-	    app('Users')->where('users_id', decrypt($id))->update([
+	    (new User)->where('users_id', decrypt($id))->update([
 	    	'firstname'               => $request->input('firstname'),
 	    	'middlename'              => $request->input('middlename'),
 	    	'lastname'                => $request->input('lastname'),
-	    	'business_email'          => $request->input('contact_business_email'),
-	    	'business_contact_phone'  => $request->input('contact_business_phone'),
-	    	'personal_email'          => $request->input('contact_personal_email'),
-	    	'personal_contact_phone'  => $request->input('contact_personal_phone'),
-	    	'personal_address_id'     => $personalAddressID,
-	    	'birth_date'              => $request->input('personal_birth_date'),
-	    	'updated_by'              => $this->thisUser()->users_id,
+	    	'business_email'          => $request->input('email'),
+	    	'business_contact_phone'  => $request->input('contact'),
+	    	'personal_email'          => $request->input('email'),
+	    	'personal_contact_phone'  => $request->input('contact'),
+	    	'personal_birth_date'     => $request->input('birthdate'),
+	    	'personal_address'     	  => $request->input('address'),
+	    	'updated_by'              => $this->activeUser()->users_id,
 	    	'updated_date'            => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
 	    ]);
 
-	    $billingAddressID = (is_null($request->input('billing_address_id'))) ?
-	    				$this->accounts_create_address($request->input('billing_address'), decrypt($id)) : 
-	    				$request->input('billing_address_id') ;
+	    // $billingAddressID = (is_null($request->input('billing_address_id'))) ?
+	    // 				$this->accounts_create_address($request->input('billing_address'), decrypt($id)) : 
+	    // 				$request->input('billing_address_id') ;
 
-	    app('UsersBilling')->where('users_id', decrypt($id))->update([
-	    	'consumer_address'          => $billingAddressID,
-	    	'consumer_description'      => $request->input('billing_description'),
-	    	'consumer_tin'              => $request->input('billing_tin'),
-	    	'consumer_tax_rate'         => $request->input('billing_tax_rate'),
-	    	'consumer_currency'         => $request->input('billing_currency'),
-	    	'consumer_website'          => $request->input('billing_website'),
-	    	'consumer_email'            => $request->input('billing_email'),
-	    	'consumer_contact_person'   => $request->input('billing_contact_person'),
-	    	'consumer_contact_phone'    => $request->input('billing_contact_phone'),
-	    	'consumer_contact_position' => $request->input('billing_contact_position'),
-	    	'updated_by'                => $this->thisUser()->users_id,
-	    	'updated_date'              => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
-	    ]);
+	    // app('UsersBilling')->where('users_id', decrypt($id))->update([
+	    // 	'consumer_address'          => $billingAddressID,
+	    // 	'consumer_description'      => $request->input('billing_description'),
+	    // 	'consumer_tin'              => $request->input('billing_tin'),
+	    // 	'consumer_tax_rate'         => $request->input('billing_tax_rate'),
+	    // 	'consumer_currency'         => $request->input('billing_currency'),
+	    // 	'consumer_website'          => $request->input('billing_website'),
+	    // 	'consumer_email'            => $request->input('billing_email'),
+	    // 	'consumer_contact_person'   => $request->input('billing_contact_person'),
+	    // 	'consumer_contact_phone'    => $request->input('billing_contact_phone'),
+	    // 	'consumer_contact_position' => $request->input('billing_contact_position'),
+	    // 	'updated_by'                => $this->thisUser()->users_id,
+	    // 	'updated_date'              => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
+	    // ]);
 
-	    Session::flash('success', 'Users Account Information successfully updated.');
+	    $request->session()->flash('success', 'Users Account Information successfully updated.');
+
 	    return back();
 	}
 
-	protected function accounts_create_address($address, $userID)
+	public function accounts_create_address($address, $userID)
 	{
-		$usersAddressCount = app('UsersBillingAddress')->where('users_id', $userID)->where('address_complete', $address)->first();
+		// $usersAddressCount = app('UsersBillingAddress')->where('users_id', $userID)->where('address_complete', $address)->first();
 
-		if(count($usersAddressCount) > 0) {
-			return $usersAddressCount->address_id;
-		} else {
-			$createAddress = app('UsersBillingAddress');
+		// if(count($usersAddressCount) > 0) {
+		// 	return $usersAddressCount->address_id;
+		// } else {
+		// 	$createAddress = app('UsersBillingAddress');
 
-			$createAddress->users_id = $userID;
-			$createAddress->address_complete = $address;
+		// 	$createAddress->users_id = $userID;
+		// 	$createAddress->address_complete = $address;
 
-			$createAddress->save();
+		// 	$createAddress->save();
 
-			return $createAddress->address_id;
-		}
+		// 	return $createAddress->address_id;
+		// }
 	}
 
 	public function accounts_update_users_profile_photo($method, $id = null, $request)
 	{
-    	if(count($this->getUser($id)) > 0) {
+    	if(collect($this->activeUser(decrypt($id)))->isNotEmpty()) {
     		/* Update Users Profile Photo */
-        	app('Users')->where('users_id', decrypt($id))->update([
+        	(new User)->where('users_id', decrypt($id))->update([
 				'profile_path' => $request->input('change_profile_image'),
-				'updated_by' => $this->thisUser()->users_id,
+				'updated_by'   => $this->activeUser()->users_id,
 	            'updated_date' => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
 			]);
         	/* Update Media Status */
-			SystemMedia::where('media_path', $request->input('change_profile_image'))->update([
+			SystemFileSystem::where('file_path', $request->input('change_profile_image'))->update([
 				'media_status' => 'used',
 			]);
 
-        	Session::flash('success', 'Profile picture updated successfully.');
+        	$request->session()->flash('success', 'Profile picture updated successfully.');
         	return back();
 
     	} else {
-    		Session::flash('failed', 'Invalid Users Account');
+    		$request->session()->flash('failed', 'Invalid Users Account');
     		return back();
     	}
 	}
@@ -205,48 +209,58 @@ trait UsersAccessAccountTrait
 	{
 		$this->validate($request, $this->accounts_validate_users_password());
 
-	    if (Hash::check($request->opassword, $this->thisUser(decrypt($id))->password)) {
+	    if (Hash::check($request->opassword, $this->activeUser(decrypt($id))->password)) {
 
 	        if ($request->npassword == $request->cpassword) {
 
-	            app('Users')->where('users_id', decrypt($id))->update([
+	            (new User)->where('users_id', decrypt($id))->update([
 	            	'password' => bcrypt($request->cpassword), 
-	            	'updated_by' => $this->thisUser()->users_id,
+	            	'updated_by' => $this->activeUser()->users_id,
 		            'updated_date' => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
 	            ]);
 
-	            Session::flash('success', 'Password successfully updated.');
+	            $request->session()->flash('success', 'Password successfully updated.');
+
 	            return back();
 
 	        } else {
-	            Session::flash('failed', 'Password do not match with the confirmed password, Please try again.');
+
+	            $request->session()->flash('failed', 'Password do not match with the confirmed password, Please try again.');
+
 	            return back();
 	        }
 
 	    } else {
-	        Session::flash('failed', 'You have enterred invalid old password. Please try again.');
+
+	        $request->session()->flash('failed', 'You have enterred invalid old password. Please try again.');
+
 	        return back();
 	    }
 	}
 
 	public function accounts_update_users_company_access($method, $id = null, $request)
 	{
+
 		if( !is_null($request->company ) ) {
+
 			foreach ($request->company as $key => $value) {
-				$companyAccess = app('UsersCompanyAccess')
-					->where('users_id', decrypt($value['users_id']))
-					->where('company_id', decrypt($value['company_id']));
+
+				$companyAccess = (new UsersCompanyAccess)
+										->where('access_users_id', decrypt($value['users_id']))
+										->where('access_company_id', decrypt($value['company_id']))
+										->delete();
+
 			    if( array_key_exists('checkbox', $value) ) {
-			    	if( count($companyAccess->first()) == 0 ) {
-				        app('UsersCompanyAccess')->insert([
-				        	'users_id' => decrypt($value['users_id']), 
-				        	'company_id' => decrypt($value['company_id']),
-				        	'created_by' => $this->thisUser()->users_id,
-				        	'created_date' => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),  
-				        ]);
-				    } 
-				} else {
-					$companyAccess->delete();
+
+		    		$default = array_key_exists('default_id', $value) ? 1 : 0 ;
+
+			        (new UsersCompanyAccess)->insert([
+			        	'access_company_default' => $default,
+			        	'access_users_id' => decrypt($value['users_id']), 
+			        	'access_company_id' => decrypt($value['company_id']),
+			        	'created_by' => $this->activeUser()->users_id,
+			        	'created_date' => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),  
+			        ]);
 				}
 			}
 		}
@@ -256,7 +270,7 @@ trait UsersAccessAccountTrait
 	{
 		if( !is_null($request->method) ) {
 			foreach($request->method as $key => $value) {
-				$methodAccess = app('UsersWindowMethodAccess')
+				$methodAccess = (new UsersWindowMethodAccess)
 									->where('users_id',   decrypt($id))
 									->where('method_id',  decrypt($value['method_id']))
 									->where('menu_id',    decrypt($value['menu_id']))
@@ -264,13 +278,13 @@ trait UsersAccessAccountTrait
 									->where('company_id', decrypt($value['company_id']));
 				if( array_key_exists('checkbox', $value) ) { 
 					if( count($methodAccess->first()) == 0 ) {
-						app('UsersWindowMethodAccess')->insert([
-							'users_id'   => decrypt($id),
-							'method_id'  => decrypt($value['method_id']),
-							'menu_id'    => decrypt($value['menu_id']),
-							'module_id'  => decrypt($value['module_id']),
-							'company_id' => decrypt($value['company_id']),
-							'created_by' => $this->thisUser()->users_id,
+						(new UsersWindowMethodAccess)->insert([
+							'access_users_id'   => decrypt($id),
+							'access_window_method_id'  => decrypt($value['method_id']),
+							'access_window_menu_id'    => decrypt($value['menu_id']),
+							'access_module_id'  => decrypt($value['module_id']),
+							'access_company_id' => decrypt($value['company_id']),
+							'created_by' => $this->activeUser()->users_id,
 							'created_date' => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
 						]);
 					}
@@ -286,15 +300,15 @@ trait UsersAccessAccountTrait
 
 	public function accounts_toggle_users_account($method, $id = null, $request)
 	{
-	    if($this->thisUser()->users_id != decrypt($id)) {
+	    if($this->activeUser()->users_id != decrypt($id)) {
 
 	    	$collect = [
 	            'status'       => $request->status,
-	            'updated_by'   => $this->thisUser()->users_id,
+	            'updated_by'   => $this->activeUser()->users_id,
 	            'updated_date' => (new CommonService)->dateTimeToday('Y-m-d h:i:s'),
 	        ];
 
-	        app('Users')->where('users_id', decrypt($id))->update($collect);
+	        (new User)->where('users_id', decrypt($id))->update($collect);
 
 	        return response()->json(['message' => 'Account successfully updated']);
 

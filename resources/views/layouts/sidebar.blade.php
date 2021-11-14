@@ -1,15 +1,17 @@
 <aside class="main-sidebar">
     <section class="sidebar">
-        <div class="user-panel">
+        {{-- <div class="user-panel">
             <div class="pull-left image">
-                <img src="{{ Storage::url($thisUser->profile_path) }}" class="img-circle" alt="User Image" style="height: 45px;">
+                <img src="{{ Storage::url(Auth()->User()->profile_path) }}" class="img-circle" alt="User Image" style="height: 45px;">
             </div>
             <div class="pull-left info">
-                <p>{{ $thisUser->firstname }}</p>
-                <a href="{{ route('accounts.route',['path' => 'users-profile']) }}"><i class="fa fa-circle text-success"></i> {{ Str::ucfirst($thisUser->users_type) }} </a>
+                <p>{{ Auth()->User()->firstname }}</p>
+                <a href="{{ route('accounts.route',['path' => 'users-profile']) }}"><i class="fa fa-circle text-success"></i> 
+                    {{ Str::ucfirst(Auth()->User()->users_type) }} 
+                </a>
             </div>
-        </div>
-        <form action="#" method="get" class="sidebar-form">
+        </div> --}}
+        {{-- <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" id="search_autocomplete" name="search_sidenav" class="form-control" placeholder="Search...">
                 <span class="input-group-btn">
@@ -17,9 +19,9 @@
                     </button>
                 </span>
             </div>
-        </form>
+        </form> --}}
         <ul class="sidebar-menu" data-widget="tree" id="sidebar_menu_list">
-            @include('layouts.subsidebar', ['class' => module_sidebar()])
+            @include('layouts.subsidebar', ['class' => $usersMenus])
         </ul>
     </section>
 </aside>
